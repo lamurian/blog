@@ -1,5 +1,5 @@
 # Blacklist everything
-.
+*
 
-# Track changes on folder contents
-!/*
+# Whitelist folder contents
+!*/
