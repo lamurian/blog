@@ -75,3 +75,5 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   post = "/:year/:month/:slug/"
   note = "/:year/:slug/"
   read = "/:year/:slug/"
+
+highlightjsTheme = "Gruvbox Dark"
