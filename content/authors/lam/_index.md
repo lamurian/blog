@@ -43,6 +43,6 @@ user_groups:
 ---
 
 Currently assigned as an academic writer in Indonesia Medical Education and
-Research Institute (IMERI). Comfortable in scripting with python3 and R as well
-as slight familiarity with MATLAB. Highly interested in researching psychology
+Research Institute (IMERI). Comfortable in scripting with `python3` and `R` as well
+as slight familiarity with `MATLAB`. Highly interested in researching psychology
 and medicine.
