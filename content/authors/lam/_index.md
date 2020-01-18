@@ -27,9 +27,9 @@ social:
 - icon: envelope
   icon_pack: fas
   link: '#contact'
-- icon: twitter
+- icon: linkedin
   icon_pack: fab
-  link: https://twitter.com/lamuriam
+  link: https://www.linkedin.com/in/lamurian/
  #- icon: google-scholar
  #  icon_pack: ai
  #  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
@@ -43,6 +43,6 @@ user_groups:
 ---
 
 Currently assigned as an academic writer in Indonesia Medical Education and
-Research Institute (IMERI). Comfortable in scripting with `python3` and `R` as
-well as slight familiarity with `MATLAB`. Highly interested in conducting
-research on psychology and medicine.
+Research Institute (IMERI). Comfortable in scripting with python3 and R as well
+as slight familiarity with MATLAB. Highly interested in researching psychology
+and medicine.

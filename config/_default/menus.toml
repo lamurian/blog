@@ -8,10 +8,10 @@
   url = "/"
   weight = 1
 
-[[main]]
-  name = "Info"
-  url = "info/"
-  weight = 2
+#[[main]]
+#  name = "Opus"
+#  url = "publication/"
+#  weight = 2
 
 [[main]]
   name = "Note"
@@ -29,7 +29,7 @@
   weight = 5
 
 [[main]]
-  name = "Contact"
+  name = "Text"
   url = "#contact"
   weight = 6
 
