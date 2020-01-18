@@ -1,13 +1,17 @@
 ---
+categories:
+- course
+draft: false
 header:
   caption: ""
   image: ""
 layout: docs
-title: R and statistics
 slug: r-and-stat
-categories: ["course"]
-tags: ["R", "statistics", "science"]
-draft: false
+tags:
+- R
+- statistics
+- science
+title: R and statistics
 ---
 
 Online course hosted by edX on
