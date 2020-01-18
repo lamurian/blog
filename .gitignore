@@ -8,10 +8,11 @@
 !assets/**
 !config/**
 !content/**
+!data/**
+!R/**
 !resources/**
 !static/**
 !themes/**
-!data/**
 
 # File to publish on github
 !config.toml
