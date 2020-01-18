@@ -9,7 +9,13 @@ title = "lamurian ─ in nomine solis"
 
 # The URL of your site.
 # End your URL with a `/` trailing slash, e.g. `https://example.com/`.
-baseurl = "/"
+baseurl = "https://lamurian.netlify.com/"
+
+# Don't use relativeurl, set true only if intended for local deployment
+relativeurls = false
+
+# Set disqus
+disqusShortname = "lamurian"
 
 # Enter a copyright notice to display in the site footer.
 # To display a copyright symbol, type `&copy;`. For current year, type `{year}`.
@@ -76,4 +82,6 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   note = "/:year/:slug/"
   read = "/:year/:slug/"
 
-highlightjsTheme = "Gruvbox Dark"
+[params]
+  description = "Personal blog of Aly Lamuri, covering topic on neuroscience, psychology, psychiatry, cognitive science, philosophy, graph theory, artificial intelligence, machine learning, deep learning and mathematics. Updated as necessary."
+  highlightjsTheme = "Gruvbox Dark"
