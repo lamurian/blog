@@ -1,0 +1,19 @@
+# Theme metadata
+name = "Gruvbox"
+
+# Dark / ligth
+light = false
+
+# Primary colour
+primary = "#1d2021"
+
+# Menu
+menu_primary = "#1d2021"
+menu_text = "#ebdbb2"
+menu_text_active = "#928374"
+menu_title = "#fbf1c7"
+
+# Home rows
+background = "#1d2021"
+home_section_odd = "#1d2021"
+home_section_even = "#1d2021"

@@ -3,3 +3,14 @@
 
 # Whitelist folder contents
 !*/
+
+# Folder to publish on github
+!config/**
+!content/**
+!resources/**
+!static/**
+!themes/**
+
+# File to publish on github
+!config.toml
+!index.Rmd
