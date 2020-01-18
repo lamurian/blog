@@ -5,6 +5,7 @@
 !*/
 
 # Folder to publish on github
+!assets/**
 !config/**
 !content/**
 !resources/**
