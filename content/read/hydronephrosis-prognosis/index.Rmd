@@ -4,6 +4,7 @@ slug: hydronephrosis-prognosis
 date: 2019-03-02
 categories: ["science", "review"]
 tags: ["medicine", "urology", "prognosis"]
+reading_time: true
 title: |
   Predicting Hydronephrosis Prognosis in Obstructive and Nonobstructive Cases
 summary: >
