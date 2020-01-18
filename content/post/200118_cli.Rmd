@@ -6,7 +6,7 @@ date: 2020-01-18
 projects: []
 categories: ["technology"]
 tags: ["linux", "command line", "workflow"]
-draft: false
+draft: true
 summary: Why does it matter?
 ---
 
