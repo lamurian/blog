@@ -78,9 +78,9 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
 
 # Permalinks
 [permalinks]
-  post = "/:year/:month/:slug/"
-  note = "/:year/:slug/"
-  read = "/:year/:slug/"
+  post = "/post/:year/:month/:slug/"
+  note = "/note/:year/:slug/"
+  read = "/read/:year/:slug/"
 
 [params]
   description = "Personal blog of Aly Lamuri, covering topic on neuroscience, psychology, psychiatry, cognitive science, philosophy, graph theory, artificial intelligence, machine learning, deep learning and mathematics. Updated as necessary."
