@@ -126,7 +126,7 @@ information from pyramidal cells to apical dendrites. Meanwhile, Orch-OR theory
 proposed microtubules vibration, resulting in quantum interference
 superposition and collapse. Initially, quantum vibration starts due to ionic
 composition changes-related phosphorylation at a very short distance
-approaching zero $d: d \to 0$, where $d$ eventually widen during an
+approaching zero of $d: d \to 0$, where $d$ eventually widen during an
 infinitesimal amount of time, resulting in superposition. Subsequently,
 superposed mass-energy will accumulate and reaching a certain threshold of
 quantum gravity. Considering microtubule as a nanocomputer with
