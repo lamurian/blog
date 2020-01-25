@@ -149,3 +149,5 @@ quote from @Dennett2018 as follows:
 > is...both the problem and the solution...  
 >  
 > --- Daniel C. Dennett, *Facing up to the hard question of consciousness*
+
+# References
