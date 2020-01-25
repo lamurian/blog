@@ -3,11 +3,11 @@ author: lam
 title: Review on psychopathy
 slug: rev-psychopathy
 date: 2017-08-03
-draft: false
+draft: true
 categories: ["psychology"]
 tags: ["personality", "behaviour"]
 bibliography: ref.bib
-csl: ../default.csl
+csl: ../vancouver.csl
 ---
 
 # Biased Response in Self-report Psychopathy Scale[@Ray2013]
