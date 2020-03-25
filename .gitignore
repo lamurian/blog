@@ -17,3 +17,4 @@
 # File to publish on github
 !config.toml
 !index.Rmd
+!README.md
