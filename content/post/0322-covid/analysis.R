@@ -1,1 +1,0 @@
-/mnt/data/OneDrive/Documents/academy/playground/data/covid-19/analysis.R
