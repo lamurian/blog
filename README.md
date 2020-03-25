@@ -2,4 +2,4 @@
 
 # Personal Blog
 
-Personal blog, hosted by [https://lamurian.rbind.io/](rbind.io).
+Personal blog, hosted by [rbind.io](https://lamurian.rbind.io/).
