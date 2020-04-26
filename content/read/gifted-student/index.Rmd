@@ -87,9 +87,10 @@ students.
 
 # Final Excerpt
 
-Albeit several studies delineated biological properties on intelligence and
-giftedness, we are yet to understand the causality among underlying factors.
-Enrichment and acceleration programme may help furthering cognitive aptitude in
-well-defined problem space, but ill-defined problem space remains unresolved.
+While several studies delineated biological properties on intelligence and
+giftedness, the causality among underlying factors still require further
+investigations. Enrichment and acceleration programme may help furthering
+cognitive aptitude in well-defined problem space, but ill-defined problem space
+remains unresolved.
 
 # References
