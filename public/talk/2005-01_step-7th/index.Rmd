@@ -9,12 +9,9 @@ author:
 title: Psychological Distress among Greater Jakarta Area Residents
 subtitle: COVID-19 Pandemic and Community Containment
 output:
-  revealjs::revealjs_presentation:
-    theme: "solarized"
+  ioslides_presentation:
     self_contained: false
     widescreen: true
-    duration: 5
-bibliography: ref.bib
 ---
 
 ```{r init, echo=FALSE}
@@ -55,7 +52,7 @@ load("01-analysis.RData")
 * Immediate psychological impact: wariness and negative percepts
 - Community quarantine: induces distress
 - Socioeconomic instability during quarantine
- 
+
 ### Aim
 
 Quantify psychological distress among residents
@@ -69,7 +66,7 @@ Quantify psychological distress among residents
 
 - Study design
 - Addressing variables
-- Data analysis 
+- Data analysis
 
 ## Study Design
 
@@ -189,7 +186,6 @@ ggarrange(plt.sex1, plt.sex2, plt.sex3, plt.sex4, nrow=2, ncol=2)
 
 ```
 
-
 ## DASS-21 and Education
 
 ```{r plt.das.edu, fig.height=4}
@@ -211,7 +207,6 @@ ggarrange(plt.edu1, plt.edu2, plt.edu3, plt.edu4, nrow=2, ncol=2)
 
 ```
 
-
 ## DASS-21 and Age Group
 
 ```{r plt.das.age, fig.height=4}
@@ -232,7 +227,6 @@ plt.age4 <- plt.dass.age(var.list[[4]], lab.list[[4]])
 ggarrange(plt.age1, plt.age2, plt.age3, plt.age4, nrow=2, ncol=2)
 
 ```
-
 
 ## Multiple Regression
 
@@ -289,15 +283,15 @@ kable(tbl.dass.mv, "html") %>%
 - Adversities re-experiencing and hyper-arousal
 - Negative alterations: cognition and emotion
 - Gender-based violence
-- Tendency of having longer working period [@Hidrobo2020]
+- Tendency of having longer working period
 
 ## Educational Level {.smaller}
 
-- Depressive disorder is less prevalent in well-educated subjects [@Lee2015]
+- Depressive disorder is less prevalent in well-educated subjects
 - Subjects with lower education levels tends to have worse disease
-  comprehension [@Chen2019]
-- Education determines depression or anxiety risk [@Luo2019]
-- Lower educational status corresponds to elevated depressive symptoms [@Schlax2019]
+  comprehension
+- Education determines depression or anxiety risk
+- Lower educational status corresponds to elevated depressive symptoms
 
 ### Intervening Variables
 
@@ -309,8 +303,8 @@ kable(tbl.dass.mv, "html") %>%
 ## Age {.build .smaller}
 
 - Current finding does not follow previous studies
-- Suicide rate among elderly rises after SARS pandemic in Hongkong [@Cheung2008]
-- COVID-19-infected older adults complaint increased distress [@Lima2020]
+- Suicide rate among elderly rises after SARS pandemic in Hongkong
+- COVID-19-infected older adults complaint increased distress
 
 ### Rationale
 
@@ -318,8 +312,8 @@ kable(tbl.dass.mv, "html") %>%
 - An investigation by @Lima2020 only considered infected subjects, while we are evaluating
   healthy subjects
 - Referring to Maslow's hierarchy of needs, younger and productive subjects
-  perceive more distress [@Ryan2020]
-- Erik Erikson: quarantine as burdensome distress [@Johal2009]
+  perceive more distress
+- Erik Erikson: quarantine as burdensome distress
 
 ## Limitation
 
@@ -336,5 +330,3 @@ kable(tbl.dass.mv, "html") %>%
 - Generalizable? Yes, if we only consider VIF and HMC, but...
 - Policymaker should consider Maslow's hierarchy of needs in imposing
   quarantine
-
-## References {.smaller}

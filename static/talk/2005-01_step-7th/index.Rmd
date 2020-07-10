@@ -1,0 +1,332 @@
+---
+author:
+  - Sylvia D. Elvira
+  - Aly Lamuri
+  - Khamelia Malik
+  - Murdani Abdullah
+  - Petrin R. Lukman
+  - Hamzah Shatri
+title: Psychological Distress among Greater Jakarta Area Residents
+subtitle: COVID-19 Pandemic and Community Containment
+output:
+  ioslides_presentation:
+    self_contained: false
+    widescreen: true
+---
+
+```{r init, echo=FALSE}
+options(digits=2)
+options("kableExtra.html.bsTable" = T)
+knitr::opts_chunk$set(
+	fig.width=7, fig.height=4, results='asis', echo=F,
+	fig.align="center", message=F
+)
+```
+
+```{r load}
+pkgs <- c("magrittr", "kableExtra", "ggpubr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+load("01-analysis.RData")
+```
+
+# Introduction
+
+- What do we know about **COVID-19**?
+- How do we **solve** current issue?
+- Potentially arising **problem**?
+
+## COVID-19?
+
+- Current Pandemic
+- Widely affecting global population
+- Highly transmissible
+
+## Solution?
+
+- **Initial** public health measure: individual vs community-level
+- Drug and vaccine development
+- Convalescent plasma
+
+## Further Problem? {.build}
+
+* Immediate psychological impact: wariness and negative percepts
+- Community quarantine: induces distress
+- Socioeconomic instability during quarantine
+
+### Aim
+
+Quantify psychological distress among residents
+
+### Objectives
+
+- Measure **DASS-21** as an initial assessment of psychological distress
+- Collect socio-demographic data
+
+# Method
+
+- Study design
+- Addressing variables
+- Data analysis
+
+## Study Design
+
+- Cross-sectional, analytic-observational
+- Targeted respondents: Jakarta, Bogor, Depok, Tangerang, Bekasi
+- $\geq$ 18 years of age
+- Snowball sampling, stop at 2,000 entries
+
+### Socio-demographic data
+
+- Gender
+- Age
+- Educational Background
+
+## Addressing Variables {.build .smaller}
+
+### Gender
+
+Assumes binary gender classification
+
+### Age
+
+- Group: Early, prime, mature, elderly
+- Based on workforce participation age classification by the UN
+
+### Educational Background
+
+- Low: Elementary, Junior, High School and Vocational degree
+- Moderate: Bachelor's, Master's, Professional degree
+- High: Doctoral and Post-Doctoral
+- Grouping based on proportional convenient segregation
+
+## Data Analysis
+
+- Bivariate: Welch's T-Test and ANOVA
+- Generalized Linear Model:
+  - Gaussian family, identity link function
+  - Response variable underwent square-root transformation
+  - VIF: Assess multicollinearity
+  - Harrison-McCabe: Determine homogeneity
+
+# Results
+
+- Demographic
+- DASS-21 overview
+- DASS-21 and associated variables
+- Multiple regression
+
+## Demographic
+
+```{r demographic}
+edu.group <- df$edu.group %>% table
+edu.perc <- edu.group/sum(edu.group)*100
+income.group <- df
+```
+
+- Total `r dim(df)[1]` participants, `r sum(df$sex=="Male")` men and
+  `r sum(df$sex=="Female")` women
+- Participants spent `r mean(df$outside)` hours outside
+- Age median `r median(df$age)` (18--`r max(df$age)` years old)
+
+### Education
+
+- Low: **`r edu.group[["Low"]]`** (`r edu.perc[["Low"]]`%)
+- Moderate: **`r edu.group[["Moderate"]]`** (`r edu.perc[["Moderate"]]`%)
+- High: **`r edu.group[["High"]]`** (`r edu.perc[["High"]]`%)
+
+## DASS-21 Overview
+
+Mild distress to none at all; Low DASS-21 score
+
+```{r tbl.dass}
+tbl.dass <- data.frame(
+	"Depression" = c(
+		mean(df$dass$dep > 4)*100,
+		mean(df$dass$dep > 6)*100,
+		mean(df$dass$dep > 10)*100
+	),
+	"Anxiety" = c(
+		mean(df$dass$anx > 3)*100,
+		mean(df$dass$anx > 5)*100,
+		mean(df$dass$anx > 8)*100
+	),
+	"Stress" = c(
+		mean(df$dass$str > 7)*100,
+		mean(df$dass$str > 9)*100,
+		mean(df$dass$str > 12)*100
+	)
+) %>% set_rownames(c("Mild", "Moderate", "Severe"))
+
+kable(tbl.dass, "html") %>% kable_styling(position="left", font_size=18,
+	bootstrap_options="striped", row_label_position="c", full_width=FALSE
+) %>% footnote(general="Value as percentage") %>%
+	column_spec(2:4, width="8.5em")
+```
+
+## DASS-21 and Gender
+
+```{r plt.dass.sex, fig.height=4}
+
+var.list <- paste("dass", names(df$dass), sep="$")
+lab.list <- c("Depression", "Anxiety", "Stress", "All")
+plt.dass.sex <- function(var.list, lab.list) {
+	ggviolin(df, x="sex", y=var.list, color="#458588", fill="#458588",
+		xlab="Gender", ylab=lab.list,
+		add="mean_sd", add.params=list(color="white")
+	) +
+	stat_compare_means(size=3, label.x=1.2, method="t.test") +
+	font("axis.title", size=9) + font("axis.text", size=9) +
+	font("legend.title", size=9) + font("legend.text", size=9)
+}
+plt.sex1 <- plt.dass.sex(var.list[[1]], lab.list[[1]])
+plt.sex2 <- plt.dass.sex(var.list[[2]], lab.list[[2]])
+plt.sex3 <- plt.dass.sex(var.list[[3]], lab.list[[3]])
+plt.sex4 <- plt.dass.sex(var.list[[4]], lab.list[[4]])
+ggarrange(plt.sex1, plt.sex2, plt.sex3, plt.sex4, nrow=2, ncol=2)
+
+```
+
+## DASS-21 and Education
+
+```{r plt.das.edu, fig.height=4}
+
+plt.dass.edu <- function(var.list, lab.list) {
+	ggviolin(df, x="edu.group", y=var.list, color="#458588", fill="#458588",
+		xlab="Education Level", ylab=lab.list,
+		add="mean_sd", add.params=list(color="white")
+	) +
+	stat_compare_means(size=3, label.x=1.2, method="anova") +
+	font("axis.title", size=9) + font("axis.text", size=9) +
+	font("legend.title", size=9) + font("legend.text", size=9)
+}
+plt.edu1 <- plt.dass.edu(var.list[[1]], lab.list[[1]])
+plt.edu2 <- plt.dass.edu(var.list[[2]], lab.list[[2]])
+plt.edu3 <- plt.dass.edu(var.list[[3]], lab.list[[3]])
+plt.edu4 <- plt.dass.edu(var.list[[4]], lab.list[[4]])
+ggarrange(plt.edu1, plt.edu2, plt.edu3, plt.edu4, nrow=2, ncol=2)
+
+```
+
+## DASS-21 and Age Group
+
+```{r plt.das.age, fig.height=4}
+
+plt.dass.age <- function(var.list, lab.list) {
+	ggviolin(df, x="age.group", y=var.list, color="#458588", fill="#458588",
+		xlab="Age Group", ylab=lab.list,
+		add="mean_sd", add.params=list(color="white")
+	) +
+	stat_compare_means(size=3, label.x=2.5, method="anova") +
+	font("axis.title", size=9) + font("axis.text", size=9) +
+	font("legend.title", size=9) + font("legend.text", size=9)
+}
+plt.age1 <- plt.dass.age(var.list[[1]], lab.list[[1]])
+plt.age2 <- plt.dass.age(var.list[[2]], lab.list[[2]])
+plt.age3 <- plt.dass.age(var.list[[3]], lab.list[[3]])
+plt.age4 <- plt.dass.age(var.list[[4]], lab.list[[4]])
+ggarrange(plt.age1, plt.age2, plt.age3, plt.age4, nrow=2, ncol=2)
+
+```
+
+## Multiple Regression
+
+```{r dass.mv}
+lab.tbl.dass.mv <- "\\label{tbl.dass.mv} Summary of Generalized Linear Model
+with Maximum Likelihood Estimators"
+
+sum.dass.mv <- dass.mv %>% summary()
+aov.dass.mv <- anova(dass.mv, test="F")
+tbl.dass.mv <- data.frame(sum.dass.mv$coefficients) %>%
+	set_names(colnames(sum.dass.mv$coefficients))
+
+rownames(tbl.dass.mv) %<>% {gsub(
+	"sex|\\.group|age|edu",
+	"",
+	x=.
+)} %>% {gsub(":", " -- ", x=.)}
+
+tbl.sig <- tbl.dass.mv %>% subset(subset={.["Pr(>|t|)"] < 0.05})
+
+dass.vif <- car::vif(dass.mv) %>% as.data.frame()
+dass.hmc <- lmtest::hmctest(dass.mv)
+
+```
+
+```{r tbl.dass.mv}
+
+dass.fn <- list(
+	paste("VIF: {",
+		dass.vif$GVIF %>% round(2) %>% paste(collapse=", "),
+		"}", sep=""
+	),
+	paste("Harrison-McCabe, HMC: ", dass.hmc$statistic %>% round(2),
+		" p=", dass.hmc$p.value %>% round(2), sep=""
+	)
+)
+
+kable(tbl.dass.mv, "html") %>%
+	kable_styling(full_width=FALSE, font_size=16, position="left") %>%
+	pack_rows("Age Group", 3, 5, indent=T) %>%
+	pack_rows("Education", 6, 7, indent=T) %>%
+	footnote(general=dass.fn, general_title="")
+```
+
+# Discussion
+
+- **Sex** dimorphism on distress perception
+- **Socio-demographic** status and psychological well-being
+- **Age** and quality of life
+
+## Gender and Distress
+
+- We denoted higher psychological distress in women
+- Adversities re-experiencing and hyper-arousal
+- Negative alterations: cognition and emotion
+- Gender-based violence
+- Tendency of having longer working period
+
+## Educational Level {.smaller}
+
+- Depressive disorder is less prevalent in well-educated subjects
+- Subjects with lower education levels tends to have worse disease
+  comprehension
+- Education determines depression or anxiety risk
+- Lower educational status corresponds to elevated depressive symptoms
+
+### Intervening Variables
+
+- Situational comprehension
+- Planning
+- Perception
+- Information discernment
+
+## Age {.build .smaller}
+
+- Current finding does not follow previous studies
+- Suicide rate among elderly rises after SARS pandemic in Hongkong
+- COVID-19-infected older adults complaint increased distress
+
+### Rationale
+
+- Different cultural and demographic situation
+- An investigation by @Lima2020 only considered infected subjects, while we are evaluating
+  healthy subjects
+- Referring to Maslow's hierarchy of needs, younger and productive subjects
+  perceive more distress
+- Erik Erikson: quarantine as burdensome distress
+
+## Limitation
+
+- Non-probability sampling
+- Does not fully represent subjects of lower socioeconomic status
+- Potential intervening variables
+
+## Conclusion
+
+- Sub-groups at risk of having psychological distress:
+  - Women
+  - Early to prime age group
+  - Low to moderate education level
+- Generalizable? Yes, if we only consider VIF and HMC, but...
+- Policymaker should consider Maslow's hierarchy of needs in imposing
+  quarantine
