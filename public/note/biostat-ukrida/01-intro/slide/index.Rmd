@@ -283,7 +283,7 @@ class: split-30 center bg-main3
 ```{r tbl.param, echo=F}
 
 tbl <- data.frame(
-	Parameters = c(
+	Statistics = c(
 		"$x$", "$n$", "$p$", "$m$", "$\\bar{x}$", "$s$", "$s^2$", "$r$"
 	),
 	Meanings = c(
@@ -291,7 +291,7 @@ tbl <- data.frame(
 		"Average", "Standard deviation", "Variance",
 		"Correlation coefficient"
 	),
-	Statistics = c(
+	Parameters = c(
 		"$X$", "$N$", "$P$", "$M$", "$\\mu$", "$\\sigma$",
 		"$\\sigma^2$", "$\\rho$"
 	)
@@ -359,7 +359,7 @@ class: bg-main3
 
 # Number of Element
 
-- From previous example, we understood $x_{1..n} \in X$
+- From previous example, we understood $x_{1...n} \in X$
 
 --
 - ...and each $x$ as an element data
@@ -640,7 +640,7 @@ class: bg-main3
 --
 - Computed as follow:
 
-$$s = \frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2$$
+$$s^2 = \frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2$$
 
 --
 **Importance:**

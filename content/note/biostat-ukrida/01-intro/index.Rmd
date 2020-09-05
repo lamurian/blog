@@ -5,22 +5,255 @@ date: 2020-09-05
 categories: ["statistics"]
 tags: ["descriptive statistics", "R"]
 slug: 01-intro
-summary: >
-  How do we make sense of numbers in our daily livings? Statistics help us
-  understand and extrapolate numbers, so we may comprehend their general
-  context. Discussed in this post is the descriptive statistics and how to
-  compute them by hand and using `R`.
 csl: ../harvard.csl
 bibliography: ../ref.bib
 draft: false
 ---
 
-[Slide](https://lamurian.rbind.io/biostat-ukrida/01-intro/slide)
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/01-intro/slide)
+
+```{r init, echo=FALSE}
+pkgs <- c("kableExtra", "magrittr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE,
+	error=FALSE
+)
+options(digits=4)
+```
 
 # Population and Parameters
 
-We often regard the society we are living with as a population, but what is
+We often regard the society we are living in as a population, but what is
 exactly defining a population? In a layman term, we may surmise population as
 all observable subjects inhabiting a certain location. In research context,
 this interpretation may not present as the least imperfect definition, but we
-can generalize the idea of "subjects" into entities of interest.
+can generalize the idea of "subjects" into entities of interest. Parameters are
+quantitative summaries, where we derive a general value in interpreting certain
+aspects of such a population.
+
+However, collecting data from the population is an arduous task. We often left
+with an option to only gather specific information from a subset of population,
+i.e. a sample. Samples consider statistics as an approximation of parameters,
+which we will convey in further sections. Descriptively, both statistics and
+parameters may include, but not limited to, data element, number of element,
+proportion, median, average, standard deviation, variance and correlation
+coefficient.
+
+```{r tbl.param, echo=F}
+
+tbl <- data.frame(
+	Statistics = c(
+		"$x$", "$n$", "$p$", "$m$", "$\\bar{x}$", "$s$", "$s^2$", "$r$"
+	),
+	Meanings = c(
+		"Data element", "Number of element", "Proportion", "Median",
+		"Average", "Standard deviation", "Variance",
+		"Correlation coefficient"
+	),
+	Parameters = c(
+		"$X$", "$N$", "$P$", "$M$", "$\\mu$", "$\\sigma$",
+		"$\\sigma^2$", "$\\rho$"
+	)
+)
+
+tbl.lab <- "Differences in parameters and statistics"
+
+knitr::kable(tbl, format="html", escape=TRUE, caption=tbl.lab) %>%
+	kable_material_dark(bootstrap_options="hover", full_width=TRUE)
+
+```
+
+# Data Element
+
+Suppose we have height data from a particular student group, where we refer as
+$X$. Our data comprises of an array of many elements, where $X \ni \{x_1, x_2,
+..., x_n\}$. As denoted by the indices, each of $\{x_1, x_2, ..., x_n\}$ is the
+corresponding element of the data. To ease our imagination, we will generate a
+set of random numbers in aiding further explanation.
+
+```{r element, echo=T}
+set.seed(1)
+X <- rnorm(10, mean=160, sd=10)
+print(X)
+```
+
+We can refer each data point according to its index. If we were to extract a
+particular element, e.g. the 7^th^ element from $X$, we can do so by referring
+$x_7$, as such:
+
+```{r element.7, echo=T}
+print(X[7])
+```
+
+Understanding what data are and how we transform data into a mathematical array is
+an important aspect to comprehend how statistics work in general.
+
+# Number of Element
+
+Previous section has introduced us into the element of the data. Now we
+understand $x_{1...n} \in X$, which translates to $x$ with indices of $\{1, 2,
+..., n\}$ as elements of $X$. We already knew what $x$ and $X$ is, but what
+about $n$? It turns out $n$ is the total number of element. In `R`, we may know
+the exact number of element by running following code:
+
+```{r element.n, echo=T}
+length(X)
+```
+
+# Proportion
+
+By knowing the total number of element, we can infer something more exciting
+from our data. Suppose we have a threshold of 165, where a subject whose height
+taller than 165 cm considered as being tall. We can find a proportion of tall
+students compared to (*ahem*) not-so-tall students. We can simply regard $p =
+\frac{g}{n},\ where:$  
+$p$: Proportion  
+$g$: Group of interest  
+$n$: Number of element
+
+So, how many tall students do we have in our data?
+
+```{r element, echo=T}
+```
+
+```{r proportion, echo=T}
+sum(X > 165) / length(X)
+```
+
+# Mean
+
+In calculating the average value, we assume data presenting an even
+distribution. It means that, our data should have a roughly equal number of
+observation on both extreme ends (tails). We can calculate the average value as
+a general description of the given data using following equation:
+
+$$\bar{x} = \frac{1}{n}\displaystyle \sum_{i=1}^{n} x_i$$
+
+Of course, we can manually get the mean value in `R` by instructing:
+
+```{r mean.1, echo=T}
+sum(X) / length(X)
+```
+
+However, `R` has a nice built-in function to perform the calculation on our
+behalf. To calculate the mean, we need to use -wait for it- `mean`.
+
+```{r mean.2, echo=T}
+mean(X)
+```
+
+The problem is, not all data *distributed evenly*. A quick glance on our
+histogram and density plot, revealed following figure:
+
+```{r viz, fig.height=4}
+hist(X, prob=TRUE); density(X) %>% lines(col="red")
+```
+
+As we observed, some bins in the histogram presented with a higher probability
+density. We can interpret that the data does not follow an even distribution.
+As a solution, we may need to use another measure to infer the general property
+of our data, i.e. by using median.
+
+# Median
+
+In finding the median, first we need to sort the data, either ascendingly or
+descendingly. Often we use ascending sorting, since it is the default behaviour
+expected in `sort` function, and also easier for us to understand an ascending
+order. After sorting the data, we will need to find the middle index, which we
+will regard as our median. Mathematically, we can formulate the median as:
+
+$$m = \begin{cases} x_{\frac{n+1}{2}} & :n_{2\nmid} \\ \frac{1}{2} \left(x_{\frac{n}{2}} + x_{\frac{n}{2} + 1} \right) & :n_{2\mid} \end{cases}$$
+
+To visualize the process, let us demonstrate the sorting algorithm:
+
+```{r sorted, echo=T}
+sort(X)
+```
+
+Then computing the median location:
+
+```{r median, echo=T}
+median(X)
+```
+
+# Standard Deviation
+
+In a simple term, deviation tells us how far a data element $x_i$ is from our
+mean value $\mu$. So, we can parametrically calculate deviation as $d_i = x_i -
+\mu$. However, the deviation can be either negative or positive, as shown in
+following demonstration.
+
+```{r element, echo=T}
+```
+
+```{r deviation, echo=T}
+d <- X - mean(X)
+print(d, digits=2)
+```
+
+The presence of both values makes it harder for us to find their general
+property! It would not make sense to find the mean nor median in such cases,
+since we need an absolute distance as our value of deviation. We can
+potentially solve the issue by taking only the absolute value by:
+
+$$\bar{d} = \frac{1}{N} \displaystyle \sum_{i=1}^{N} |X_i - \mu|$$
+
+So, we may re-calculate the deviation as:
+
+
+```{r deviation.abs, echo=T}
+d <- abs(X - mean(X))
+print(d, digits=2)
+
+d.bar <- mean(d)
+print(d.bar, digits=2)
+```
+
+Now, it's easier to report our findings as $\bar{x} \pm \bar{d}$, or
+numerically as `r options(digits=2); mean(X)` $\pm$
+`r options(digits=2); d.bar`. Yet, such a practice is uncommon to see.
+
+A more robust alternative to calculate deviation is by finding the **root-mean
+square**, which define a standard deviation:
+
+$$\sigma = \sqrt{\frac{1}{N} \displaystyle \sum_{i=1}^N (X_i - \mu)^2}$$
+
+Transforming the equation into `R` code, we obtain following value:
+
+```{r std.dev1, echo=T}
+std.dev <- sqrt(sum({X - mean(X)}^2) / length(X))
+print(std.dev)
+```
+
+Pleased be advised, thus far we only calculate the *parametric* value of
+standard deviation. Since we only have a sample, we need to estimate the actual
+value by minimizing our bias. In doing so, we ought to apply **Bessel's
+correction**. In a simple term, Bessel's method will require a division to $n
+-1$ instead of $N$, in a way that produce:
+
+$$s = \sqrt{\frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2}$$
+
+Quickly run the code in our `R` session, we will obtain following result:
+
+```{r std.dev2, echo=T}
+{{std.dev <- sqrt(sum({X - mean(X)}^2) / {length(X) - 1})}}
+print(std.dev)
+sd(X) # Built-in function to calculate standard deviation
+```
+
+Please notice a slight difference prior to applying Bessel's correction.
+
+# Variance
+
+Variance is another measure to estimate deviation. Akin to standard deviation,
+variance will denote mean-squared differences from each data point to the mean
+value. However, it does not consider root square function, thus annotated as
+$\sigma^2$. To obtain the variance in sample data, we may use following
+equation:
+
+$$s^2 = \frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2$$
+
+Finding variance is important to make further inference in a more advanced
+statistical model, i.e. analysis of variance (ANOVA) or factor analysis. Such a
+topic is beyond the scope of current post, so we will look at it on future
+occasion.
