@@ -4,7 +4,7 @@ title: "A Gentle Introduction to Biostatistics"
 date: 2020-09-05
 categories: ["statistics"]
 tags: ["descriptive statistics", "R"]
-slug: intro-stat
+slug: 01-intro
 summary: >
   How do we make sense of numbers in our daily livings? Statistics help us
   understand and extrapolate numbers, so we may comprehend their general
@@ -15,7 +15,7 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-[Slide](https://lamurian.rbind.io/intro-stat/slide)
+[Slide](https://lamurian.rbind.io/biostat-ukrida/01-intro/slide)
 
 # Population and Parameters
 

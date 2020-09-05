@@ -14,4 +14,4 @@ tags:
 title: Biostatistics Module BME UKRIDA
 ---
 
-[A Gentle Introduction to Biostatistics](https://lamurian.rbind.io/biostat-ukrida/intro-stat/index.html)
+[A Gentle Introduction to Biostatistics](https://lamurian.rbind.io/note/2020/01-intro/index.html)
