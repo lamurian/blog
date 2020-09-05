@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="" xml:lang="">
-  <head>
-    <title>The Appeal of Big Data in Medical Research</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Aly Lamuri" />
-    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
-    <link href="index_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="index_files/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
-  </head>
-  <body>
-    <textarea id="source">
-class: center, middle, inverse, title-slide
-
-# The Appeal of Big Data in Medical Research
-### Aly Lamuri
-
 ---
-
+title: The Appeal of Big Data in Medical Research
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    self_contained: false
+    css:
+      - default
+      - default-fonts
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    nature:
+      countIncrementalSlides: false
+      highlightStyle: googlecode
+---
 
 class: animated, fadeInDown
 
@@ -195,11 +189,11 @@ H. Liao, M. Tang, L. Luo, et al. “A Bibliometric Analysis and Visualization of
 .pull-left[
 ![](_fig/article-01.png)
 
-&lt;br&gt;
+<br>
 
 ![](_fig/article-02.png)
 
-&lt;br&gt;
+<br>
 
 ![](_fig/article-03.png)
 ]
@@ -207,11 +201,11 @@ H. Liao, M. Tang, L. Luo, et al. “A Bibliometric Analysis and Visualization of
 .pull-right[
 ![](_fig/article-04.png)
 
-&lt;br&gt;
+<br>
 
 ![](_fig/article-05.png)
 
-&lt;br&gt;
+<br>
 
 ![](_fig/article-06.png)
 ]
@@ -287,7 +281,7 @@ H. Liao, M. Tang, L. Luo, et al. “A Bibliometric Analysis and Visualization of
 
 # Collaboration
 
-![](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.tradeshift.com%2Fwp-content%2Fuploads%2F2015%2F10%2Fcollaboration-illustration.jpg&amp;f=1&amp;nofb=1)
+![](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fblog.tradeshift.com%2Fwp-content%2Fuploads%2F2015%2F10%2Fcollaboration-illustration.jpg&f=1&nofb=1)
 
 - Inter-disciplinary research
 - Multicentre approach
@@ -353,7 +347,7 @@ Depicted is a network representation of data points connected to one another
 
 .pull-right[![](https://bugfender.com/wp-content/uploads/2018/10/automated.gif)]
 
-&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 
 A. Belle, R. Thiagarajan, S. M. R. Soroushmehr, et al. “Big Data Analytics in Healthcare”. In: _BioMed Research International_ 2015 (2015), pp. 1-16. DOI: 10.1155/2015/370194.
 
@@ -379,7 +373,7 @@ A. Belle, R. Thiagarajan, S. M. R. Soroushmehr, et al. “Big Data Analytics in 
 
 ![](https://vignette.wikia.nocookie.net/science/images/c/c9/Science_Lab.gif/revision/latest?cb=20150203114103)
 
-&lt;br&gt;
+<br>
 
 R. Vicente-Saez and C. Martinez-Fuentes. “Open Science now: A systematic literature review for an integrated definition”. In: _Journal of Business Research_ 88 (Jul. 2018), pp. 428-436. DOI: 10.1016/j.jbusres.2017.12.043
 
@@ -437,7 +431,7 @@ class: animated, fadeInLeft
 - Bottom: Arxiv, a preprint repository
 - Others to consider:
   - ResearchGate
-  - SSRN `\(\to\)` Preprint by Elsevier
+  - SSRN $\to$ Preprint by Elsevier
   - Open Science Framework
   - Gates Open Research
 
@@ -450,7 +444,7 @@ class: animated, fadeInLeft
 - Avoid redundant investigations
 - Design a **Responsible Research and Innovation** framework
 
-&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 
 M. Burget, E. Bardone, and M. Pedaste. “Definitions and Conceptual Dimensions of Responsible Research and Innovation: A Literature Review”. In: _Science and Engineering Ethics_ 23.1 (Apr. 2016), pp.  1-19. DOI: 10.1007/s11948-016-9782-1
 
@@ -485,108 +479,3 @@ class: inverse
   - Storage
   - Analysis
   - Visualization
-    </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"countIncrementalSlides": false,
-"highlightStyle": "googlecode"
-});
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
-})();
-(function() {
-  "use strict"
-  // Replace <script> tags in slides area to make them executable
-  var scripts = document.querySelectorAll(
-    '.remark-slides-area .remark-slide-container script'
-  );
-  if (!scripts.length) return;
-  for (var i = 0; i < scripts.length; i++) {
-    var s = document.createElement('script');
-    var code = document.createTextNode(scripts[i].textContent);
-    s.appendChild(code);
-    var scriptAttrs = scripts[i].attributes;
-    for (var j = 0; j < scriptAttrs.length; j++) {
-      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
-    }
-    scripts[i].parentElement.replaceChild(s, scripts[i]);
-  }
-})();
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
-      }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
-</script>
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-(function () {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
-  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
-    script.src  = script.src.replace(/^https?:/, '');
-  document.getElementsByTagName('head')[0].appendChild(script);
-})();
-</script>
-  </body>
-</html>

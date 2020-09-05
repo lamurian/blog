@@ -1,0 +1,26 @@
+---
+author: lam
+title: "A Gentle Introduction to Biostatistics"
+date: 2020-09-05
+categories: ["statistics"]
+tags: ["descriptive statistics", "R"]
+slug: intro-stat
+summary: >
+  How do we make sense of numbers in our daily livings? Statistics help us
+  understand and extrapolate numbers, so we may comprehend their general
+  context. Discussed in this post is the descriptive statistics and how to
+  compute them by hand and using `R`.
+csl: ../harvard.csl
+bibliography: ../ref.bib
+draft: false
+---
+
+[Slide](https://lamurian.rbind.io/intro-stat/slide)
+
+# Population and Parameters
+
+We often regard the society we are living with as a population, but what is
+exactly defining a population? In a layman term, we may surmise population as
+all observable subjects inhabiting a certain location. In research context,
+this interpretation may not present as the least imperfect definition, but we
+can generalize the idea of "subjects" into entities of interest.
