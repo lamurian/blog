@@ -1,8 +1,18 @@
 ---
 author: lam
 title: "A Gentle Introduction to Biostatistics"
+slide: test
+summary: >
+  We often regard the society we are living in as a population, but what is
+  exactly defining a population? In a layman term, we may surmise population as
+  all observable subjects inhabiting a certain location. In research context,
+  this interpretation may not present as the least imperfect definition, but we
+  can generalize the idea of "subjects" into entities of interest. Parameters are
+  quantitative summaries, where we derive a general value in interpreting certain
+  aspects of such a population.
 date: 2020-09-05
-categories: ["statistics"]
+slides: https://lamurian.rbind.io/note/biostat-ukrida/01-intro/slide
+categories: ["statistics", "ukrida"]
 tags: ["descriptive statistics", "R"]
 slug: 01-intro
 csl: ../harvard.csl
@@ -13,6 +23,8 @@ draft: false
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 <link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/bsTable/bootstrapTable.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/01-intro/slide">Slide</a></p>
@@ -32,7 +44,7 @@ which we will convey in further sections. Descriptively, both statistics and
 parameters may include, but not limited to, data element, number of element,
 proportion, median, average, standard deviation, variance and correlation
 coefficient.</p>
-<table class=" lightable-material-dark" style="font-family: &quot;Source Sans Pro&quot;, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
 (#tab:tbl.param)Differences in parameters and statistics
 </caption>
@@ -51,90 +63,90 @@ Parameters
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(x\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Data element
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(X\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(n\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Number of element
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(N\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(p\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Proportion
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(P\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(m\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Median
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(M\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(\bar{x}\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Average
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(\mu\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(s\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Standard deviation
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(\sigma\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(s^2\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Variance
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(\sigma^2\)</span>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(r\)</span>
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 Correlation coefficient
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;color: white !important;">
 <span class="math inline">\(\rho\)</span>
 </td>
 </tr>

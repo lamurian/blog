@@ -18,11 +18,11 @@ day_night = false
 #   Latest font sets (may require updating): https://sourcethemes.com/academic/themes/
 #   Browse built-in font sets in `themes/academic/data/fonts/`
 #   Browse user installed font sets in `data/fonts/`
-font = "rose"
+font = "inconsolata"
 
 # Choose a font size.
 # Sizes: XS (extra small), S (small), M (medium), L (large - DEFAULT), XL (extra large)
-font_size = "S"
+font_size = "M"
 
 ############################
 ## Basic Info
@@ -53,8 +53,8 @@ description =  "Personal blog web page of Aly Lamuri, covering topic on neurosci
 # Enable source code highlighting? true/false
 # Documentation: https://sourcethemes.com/academic/docs/writing-markdown-latex/#highlighting-options
 highlight = true
-highlight_languages = ["r", "python", "matlab"]  # Add support for highlighting additional languages
-highlight_style = "Gruvbox Dark"  # For supported styles, see https://cdnjs.com/libraries/highlight.js/
+highlight_languages = ["R", "python", "matlab"]  # Add support for highlighting additional languages
+highlight_style = "gruvbox-dark"  # For supported styles, see https://cdnjs.com/libraries/highlight.js/
 
 # Enable LaTeX math rendering? true/false
 #   If false, you can enable math on a per page basis as needed.

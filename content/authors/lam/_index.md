@@ -1,7 +1,7 @@
 ---
 authors:
 - lam
-bio: Interested in higher cognitive functions and psychiatric cases
+bio: Interested in higher cognitive functions and psychiatric research
 education:
   courses:
   - course: MSc in Computational Neuroscience and Neuroinformatics

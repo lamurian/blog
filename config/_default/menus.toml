@@ -8,10 +8,10 @@
   url = "/"
   weight = 1
 
-#[[main]]
-#  name = "Opus"
-#  url = "publication/"
-#  weight = 2
+[[main]]
+  name = "Opus"
+  url = "publication/"
+  weight = 2
 
 [[main]]
   name = "Note"

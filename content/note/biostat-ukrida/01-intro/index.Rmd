@@ -1,8 +1,18 @@
 ---
 author: lam
 title: "A Gentle Introduction to Biostatistics"
+slide: test
+summary: >
+  We often regard the society we are living in as a population, but what is
+  exactly defining a population? In a layman term, we may surmise population as
+  all observable subjects inhabiting a certain location. In research context,
+  this interpretation may not present as the least imperfect definition, but we
+  can generalize the idea of "subjects" into entities of interest. Parameters are
+  quantitative summaries, where we derive a general value in interpreting certain
+  aspects of such a population.
 date: 2020-09-05
-categories: ["statistics"]
+slides: https://lamurian.rbind.io/note/biostat-ukrida/01-intro/slide
+categories: ["statistics", "ukrida"]
 tags: ["descriptive statistics", "R"]
 slug: 01-intro
 csl: ../harvard.csl
@@ -18,7 +28,7 @@ pkgs.load <- sapply(pkgs, library, character.only=TRUE)
 knitr::opts_chunk$set(echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE,
 	error=FALSE
 )
-options(digits=4)
+options(digits=4, kableExtra.html.bsTable=TRUE)
 ```
 
 # Population and Parameters
@@ -59,7 +69,10 @@ tbl <- data.frame(
 tbl.lab <- "Differences in parameters and statistics"
 
 knitr::kable(tbl, format="html", escape=TRUE, caption=tbl.lab) %>%
-	kable_material_dark(bootstrap_options="hover", full_width=TRUE)
+	kable_paper(bootstrap_options="hover", full_width=TRUE,
+		position="center"
+	) %>%
+	row_spec(1:nrow(tbl), color="white")
 
 ```
 
