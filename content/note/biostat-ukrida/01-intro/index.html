@@ -294,3 +294,34 @@ statistical model, i.e. analysis of variance (ANOVA) or factor analysis. Such a
 topic is beyond the scope of current post, so we will look at it on future
 occasion.</p>
 </div>
+<div id="quantile" class="section level1">
+<h1>Quantile</h1>
+<p>Quantile is another measure of spread, where you assign each data element into
+a corresponding group. It creates a cut-off from a given probability
+distribution and divide the data into a continuous range. This method requires
+a sorted data, where it will segregate the data based on its order.</p>
+<p>Our ordered data:</p>
+<pre class="r"><code>sort(X)</code></pre>
+<pre><code>##  [1] 152 152 154 157 162 163 165 166 167 176</code></pre>
+<p>If we were to separate it into a quantile of 0.2, we will get groups as follow:</p>
+<pre class="r"><code>quantile(X, probs=seq(0, 1, 1/5))</code></pre>
+<pre><code>##   0%  20%  40%  60%  80% 100% 
+##  152  153  160  164  166  176</code></pre>
+<p><img src="/note/biostat-ukrida/01-intro/index_files/figure-html/hist.quantile1-1.png" width="672" /></p>
+<p>Quantile can take any value of <span class="math inline">\(q \in \rm I\!R: 0 \leqslant q \leqslant 1\)</span>.
+Quartile is a special case of quantile, where it considers <span class="math inline">\(q = \{0.25, 0.5, 0.75\}\)</span> to group the data.</p>
+<pre class="r"><code>quantile(X, probs=seq(0, 1, 1/4))</code></pre>
+<pre><code>##   0%  25%  50%  75% 100% 
+##  152  155  163  166  176</code></pre>
+<p><img src="/note/biostat-ukrida/01-intro/index_files/figure-html/hist.quantile2-1.png" width="672" /></p>
+<p>Quartile is an important measure in descriptive statistics. In reporting the
+mean, we usually state <span class="math inline">\(\bar{x} \pm s\)</span>. Meanwhile, we may report a median alongside
+its interquartile range as <span class="math inline">\(m\ (IQ1 - IQ3)\)</span>. <span class="math inline">\(IQ1\)</span> stands for the interquartile 1
+(quantile 0.25) as <span class="math inline">\(IQ3\)</span> for the interquartile 3 (quantile 0.75).</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>We can describe the data by looking into its central tendency and spread.
+Mean and median are common measures of central tendency, while we can use
+standard deviation, variance and quantile to measure the spread.</p>
+</div>

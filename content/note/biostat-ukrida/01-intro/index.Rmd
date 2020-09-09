@@ -270,3 +270,52 @@ Finding variance is important to make further inference in a more advanced
 statistical model, i.e. analysis of variance (ANOVA) or factor analysis. Such a
 topic is beyond the scope of current post, so we will look at it on future
 occasion.
+
+# Quantile
+
+Quantile is another measure of spread, where you assign each data element into
+a corresponding group. It creates a cut-off from a given probability
+distribution and divide the data into a continuous range. This method requires
+a sorted data, where it will segregate the data based on its order.
+
+Our ordered data:
+
+```{r sorted, echo=T}
+```
+
+If we were to separate it into a quantile of 0.2, we will get groups as follow:
+
+```{r quantile1, echo=T}
+quantile(X, probs=seq(0, 1, 1/5))
+```
+
+```{r hist.quantile1, fig.height=5}
+hist(X, freq=FALSE)
+density(X) %>% lines(col="red")
+abline(v=quantile(X, probs=seq(0, 1, 1/5)), col="blue", lty=2)
+```
+
+Quantile can take any value of $q \in \rm I\!R: 0 \leqslant q \leqslant 1$.
+Quartile is a special case of quantile, where it considers $q = \{0.25, 0.5,
+0.75\}$ to group the data.
+
+```{r quantile2, echo=T}
+quantile(X, probs=seq(0, 1, 1/4))
+```
+
+```{r hist.quantile2, fig.height=5}
+hist(X, freq=FALSE)
+density(X) %>% lines(col="red")
+abline(v=quantile(X, probs=seq(0, 1, 1/4)), col="blue", lty=2)
+```
+
+Quartile is an important measure in descriptive statistics. In reporting the
+mean, we usually state $\bar{x} \pm s$. Meanwhile, we may report a median alongside
+its interquartile range as $m\ (IQ1 - IQ3)$. $IQ1$ stands for the interquartile 1
+(quantile 0.25) as $IQ3$ for the interquartile 3 (quantile 0.75).
+
+# Conclusion
+
+We can describe the data by looking into its central tendency and spread.
+Mean and median are common measures of central tendency, while we can use
+standard deviation, variance and quantile to measure the spread.

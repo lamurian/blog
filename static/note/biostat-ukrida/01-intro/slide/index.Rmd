@@ -173,6 +173,59 @@ count: false
 
 ---
 
+layout: false
+class: bg-main3 font2
+
+# Agreement
+
+- Attend .amber[all] lectures (at minimum: .red[80%])
+
+--
+- Be .amber[on time], even if you are late make it no longer than .red[10 minutes]
+
+--
+- Turn on the .amber[front camera] during the beginning of each lecture.
+
+--
+And smile, because I'm taking a screenshot of your attendance :)
+
+--
+- Pay .amber[attention] during classes.
+
+--
+I may randomly ask you a question
+
+--
+- .amber[Actively] participate in class
+
+--
+- You may ask for .amber[permission] to temporarily leave the class.
+
+--
+But .red[please return], because the class is gonna miss you :(
+
+--
+- Turn on the front camera during .amber[presentation]
+
+--
+- Do the .amber[assignment]
+
+???
+
+Show the course layout  
+https://docs.google.com/document/d/1IE1H79-IQviC-vbHFSHvmMJNDbM8eiqZS69DkGHkPrY/edit?usp=sharing
+
+---
+
+class: bg-main3 middle center
+
+.amber.font5[HBU?]
+
+???
+- What's your expectation in attending this biostatistics course?
+
+---
+
 class: split-30 bg-main2 hide-slide-number
 layout: false
 count: false
@@ -608,7 +661,7 @@ print(std.dev)
 
 count: false
 
-In sample, we need to adjust the estimation by applying .amber[Bessel's correction].
+In statistics, we need to adjust the estimation by applying .amber[Bessel's correction].
 
 --
 Simply said, we find the mean by dividing into $n-1$ instead of $N$.
@@ -653,7 +706,266 @@ $$s^2 = \frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2$$
 
 ---
 
-layout: false
-class: bg-main1 center vmiddle
+name: quantile
+class: bg-main3
 
-<img src="https://blog.optimizely.com/wp-content/uploads/2015/02/stats-cat.jpg" width="60%">
+# Quantile
+
+- A .amber[cut-off] from a given probability distribution
+- Divide the data into a .amber[continuous] range
+
+--
+
+**Our data:**
+
+```{r sorted, echo=T}
+```
+
+---
+
+template: quantile
+class: split-two
+
+.column[.vmiddle.right.content[
+```{r hist.quantile1, fig.height=5}
+hist(X, freq=FALSE)
+density(X) %>% lines(col="red")
+abline(v=quantile(X, probs=seq(0, 1, 1/5)), col="blue", lty=2)
+```
+]]
+
+.column[.vmiddle.content[
+```{r quantile1, echo=T}
+quantile(X, probs=seq(0, 1, 1/5))
+```
+]]
+
+---
+
+template: quantile
+class: split-two
+
+Quartile: A special case of quantile
+
+.column[.vmiddle.right.content[
+```{r hist.quantile2, fig.height=5}
+hist(X, freq=FALSE)
+density(X) %>% lines(col="red")
+abline(v=quantile(X, probs=seq(0, 1, 1/4)), col="blue", lty=2)
+```
+]]
+
+.column[.vmiddle.content[
+```{r quantile2, echo=T}
+quantile(X, probs=seq(0, 1, 1/4))
+```
+]]
+
+---
+
+layout: false
+class: bg-main3 split-two
+
+.column[.vmiddle.right.content[
+.font5.amber[Conclusion]
+]]
+
+.column[.font2.content.vmiddle[
+- .amber[Central tendency:]
+  - Mean
+  - Median
+- .amber[Spread:]
+  - Standard deviation
+  - Variance
+  - Quantile
+]]
+
+---
+
+class: bg-main3 split-two
+
+.column[.vmiddle.center.content[
+<img src="https://blog.optimizely.com/wp-content/uploads/2015/02/stats-cat.jpg" width="100%">
+]]
+
+.column[.vmiddle.left.content[
+.font5.amber[Query?]
+]]
+
+
+---
+
+name: sally-clarke
+layout: true
+class: bg-main3 split-two
+
+.column.bg-white[.vmiddle.center.content[
+<img src="https://i.dailymail.co.uk/i/pix/2008/09/21/article-1059095-02BF33FE00000578-967_468x482.jpg" width="100%">
+]]
+
+.column[.vmiddle.content[
+# Sally Clarke
+
+{{content}}
+]]
+
+---
+
+template: sally-clarke
+
+- December **1996**, home alone with her newly born baby
+- Suddenly the baby stopped responding, Sally called the ambulance
+- Failed to resuscitate $\to$ Pronounced dead, diagnosed as SIDS
+- January **1998**, the same thing happened to her second child
+- Post-mortem: Retro-orbital and spinal bleeding
+
+---
+
+template: sally-clarke
+count: false
+
+- UK criminology: two infant murders in the same household is 1 in 2mil
+- An extremely rare chance, indeed
+
+---
+
+template: sally-clarke
+count: false
+
+- UK epidemiology: SIDS is about **1 in 8,500** healthy newborns
+- Probability of having two consecutive cases in a row?
+- Assuming independence, two consecutive cases may happen in 1:72mil
+- An even rarer case!
+
+---
+
+name: malcolm-collins
+layout: true
+class: bg-main3 split-two
+
+.column.bg-white[.vmiddle.center.content[
+<img src="https://image.freepik.com/free-photo/black-guy-blonde-woman-texting_102671-4270.jpg" width="100%">
+]]
+
+.column[.vmiddle.content[
+# Malcolm Collins
+
+{{content}}
+]]
+
+---
+
+template: malcolm-collins
+
+- In 1964, a young lady snatched Mrs. Juanita Brooks' purse
+- According to eye witnesses:
+  - The culprit was a woman in mid 20s
+  - Had light blond hair with a pony tail
+  - Went to a yellow motor car, driven by a black American
+  - The guy had beard and mustache
+
+(**Disclaimer:** Photo is just an illustration)
+
+---
+
+template: malcolm-collins
+count: false
+
+The chance of:
+
+- Black man with beard: **1 in 10**
+- Man with mustache: **1 in 4**
+- White woman with pony tail: **1 in 10**
+- White woman with blond hair: **1 in 3**
+- Yellow motor car: **1 in 10**
+- Interracial couple in car: **1 in 1,000**
+
+Overall probability of consecutive independent occurrence: **1 in 12mil** $\to$
+Rare!
+
+---
+
+layout: false
+class: bg-main3 font2
+
+# .amber[Similarities] of both cases?
+
+- Both relied on .amber[probability] theory.
+- Basically: .amber[statistics]
+
+--
+... More or less.
+
+--
+- Used in .amber[court room] to determine innocence.
+
+--
+- ... And both were .red[**grave mistakes**].
+
+--
+- Let's quickly reinvestigate both cases :)
+
+---
+
+template: sally-clarke
+
+- The occurrence of SIDS is not independent
+- Meaning that, there is a higher likelihood of having a second child affected
+  by SIDS
+- ... If your first child is
+- Since they are not independent, multiplying the proportion would not do
+  justice to estimate the chance
+
+---
+
+template: malcolm-collins
+
+- Just like in Sally Clarke's case
+- The chance of finding a black guy with beard and mustache... (and so on, as
+  previously described)... Is not an independent event
+
+---
+
+class: bg-main3
+
+# Then, is statistics .red[wrong]?
+
+  .font2[
+- Not always the case
+  ]
+
+--
+  .font2[
+- Sometimes, we unconsciously obscure the fact with numbers
+  ]
+
+???
+Example: 8 among 10 dentists recommend Colg*te
+
+--
+  .font2[
+- Now we will learn some examples where statistics help telling the truth
+  ]
+
+---
+
+class: bg-main3
+
+# How .amber[statistics] describe .red[mental health]
+
+  .font2[
+- .amber[28%] of HIV-positive participants were having .red[depressive]
+  symptoms $^1$
+- .amber[49%] of the French neurosurgical community reported .red[burnout]
+  $^2$
+- .amber[9.4%] of medical students in a study had .red[suicidal ideation]
+  within the past 12 months $^3$
+  ]
+
+<br> <br> <br> <br> <br> <br>
+
+.font1[
+1. S. K. Y. Choi, E. Boyle, J. Cairney, et al. .amber[“Prevalence, Recurrence, and Incidence owe Current Depressive Symptoms among People Living with HIV in Ontario, Canada: Results from the Ontario HIV Treatment Network Cohort Study”]. In: _PLOS ONE_ 11.11 (Nov. 2016). Ed.  by V. D. Lima, p. e0165816.  DOI: 10.1371/journal.pone.0165816.
+1. C. Baumgarten, E. Michinov, G. Rouxel, et al. .amber[“Personal and psychosocial factors of burnout: A survey within the French neurosurgical community”]. In: _PLOS ONE_ 15.5 (May. 2020). Ed. by S. A.  Useche, p. e0233137. DOI: 10.1371/journal.pone.0233137.
+1. L. N. Dyrbye, C. P. West, D. Satele, et al. .amber[“Burnout Among U.S.  Medical Students, Residents, and Early Career Physicians Relative to the General U.S. Population”]. In: _Academic Medicine_ 89.3 (Mar. 2014), pp. 443-451.  DOI: 10.1097/acm.0000000000000134.
+]
