@@ -1,5 +1,6 @@
 ---
 slides: "https://www.researchgate.net/publication/342864835_UNIVERSITAS_INDONESIA_Webinar_Sinergi_Mahadata_Menghadapi_Pandemi_di_Era_New_Normal"
+summary: In 2020, a collective body of scholars from the University of Indonesia (UI) conducted investigations on COVID-19. We disseminated our progress in a webinar on 15th of June, 2020. Aiding our research and analysis is Direktorat Inovasi dan Science Techno Park (DISTP) UI, which immensely contributed to our works. Uploaded presentation is available in Bahasa Indonesia.
 abstract: In 2020, a collective body of scholars from the University of Indonesia (UI) conducted investigations on COVID-19. We disseminated our progress in a webinar on 15th of June, 2020. Aiding our research and analysis is Direktorat Inovasi dan Science Techno Park (DISTP) UI, which immensely contributed to our works. Uploaded presentation is available in Bahasa Indonesia.
 authors:
 - Damar Susilaradeya
@@ -35,4 +36,5 @@ tags:
 - COVID-19
 - Medicine
 title: Webinar Sinergi Mahadata Menghadapi Pandemi di Era New Normal
+description: Webinar Sinergi Mahadata Menghadapi Pandemi di Era New Normal
 ---

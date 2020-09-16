@@ -283,7 +283,7 @@ value by minimizing our bias. In doing so, we ought to apply <strong>Bessel’s
 correction</strong>. In a simple term, Bessel’s method will require a division to <span class="math inline">\(n -1\)</span> instead of <span class="math inline">\(N\)</span>, in a way that produce:</p>
 <p><span class="math display">\[s = \sqrt{\frac{1}{n-1} \displaystyle \sum_{i=1}^n (x_i - \bar{x})^2}\]</span></p>
 <p>Quickly run the code in our <code>R</code> session, we will obtain following result:</p>
-<pre class="r"><code>{{std.dev &lt;- sqrt(sum({X - mean(X)}^2) / {length(X) - 1})}}
+<pre class="r"><code>std.dev &lt;- sqrt(sum({X - mean(X)}^2) / {length(X) - 1})
 print(std.dev)</code></pre>
 <pre><code>## [1] 7.8</code></pre>
 <pre class="r"><code>sd(X) # Built-in function to calculate standard deviation</code></pre>

@@ -2,9 +2,15 @@
 author: lam
 title: "From Aristotle to Dennett: on Consciousness and Wakefulness"
 date: 2020-01-25
+reading_time: true
 categories: ["neuroscience", "philosophy", "psychology"]
 tags: ["consciousness", "cognition"]
 slug: consciousness-wakefulness
+description: >
+  Consciousness, as a hard problem, first came as a philosophical enquiry.
+  Current endeavours on neuroscience and psychology start to elucidate the
+  essential building block on a conscious moment. Discussed in this review are
+  four theories on such a concept.
 summary: >
   Consciousness, as a hard problem, first came as a philosophical enquiry.
   Current endeavours on neuroscience and psychology start to elucidate the
