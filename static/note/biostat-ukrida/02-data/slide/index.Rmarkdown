@@ -667,7 +667,7 @@ Independent vs Identical? $\to$ I.I.D
 \begin{align}
 P(E=e) &= f(e) > 0: E \in S \tag{1} \\
 \displaystyle \sum_{e \in S} f(e) &= 1 \tag{2} \\
-P(E \in A) &= \displaystyle \sum_{e \in A} f(x) \tag{3}: A \subset S
+P(E \in A) &= \displaystyle \sum_{e \in A} f(e) \tag{3}: A \subset S
 \end{align}
 
 ???
