@@ -6,9 +6,9 @@ output:
     self_contained: false
     css: ["shinobi", "ninjutsu"]
     nature:
-      countIncrementalSlides: false
       ratio: "16:9"
       highlightLines: true
+      countIncrementalSlides: false
 ---
 
 ```{r init, echo=FALSE}
@@ -1529,7 +1529,7 @@ class: bg-main3
 # Central Limit Theorem
 
 .font2[
-$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma^2}{n} \bigg) as\ n \to \infty$$
+$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty$$
 ]
 
 ---

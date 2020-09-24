@@ -1556,7 +1556,7 @@ class: bg-main3
 # Central Limit Theorem
 
 .font2[
-`$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma^2}{n} \bigg) as\ n \to \infty$$`
+`$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty$$`
 ]
 
 ---
@@ -1646,9 +1646,9 @@ count: false
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"countIncrementalSlides": false,
 "ratio": "16:9",
-"highlightLines": true
+"highlightLines": true,
+"countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

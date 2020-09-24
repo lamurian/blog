@@ -250,7 +250,7 @@ Turns out, the probability of getting 4 is
 `r paste(sum(roll==4), length(roll), sep="/")`. As we have a fair dice, why is
 the probability not 1/6? The clue is a sample and the population. We only have
 a subset of its population. Ideally, we will need to roll the dice $n$ number
-of time, with $n \to infty$. The more sample we have, the closer it is to
+of time, with $n \to \infty$. The more sample we have, the closer it is to
 represent the population. What will we get with different number of rolls?
 
 ```{r roll.dice}
@@ -871,7 +871,7 @@ parameters. It just happened that the sample mean follows a normal
 distribution ;) Central Limit Theorem (CLT) delineates such an occurrence,
 applicable to both discrete and continuous distributions.
 
-$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma^2}{n} \bigg) as\ n \to \infty$$
+$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty$$
 
 The equation above basically tells us that the sample mean distribution
 $\bar{X}$ have a convergence upon random variables to follow a normal

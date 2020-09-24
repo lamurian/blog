@@ -1,0 +1,2 @@
+# Compile RMarkdown document in the static folder (recursively)
+blogdown::build_dir("static")

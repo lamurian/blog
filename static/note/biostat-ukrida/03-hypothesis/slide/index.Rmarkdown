@@ -1,0 +1,859 @@
+---
+title: Hypothesis and study design
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    seal: false
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "DiagrammeR", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, messages=FALSE, warning=FALSE,
+	error=FALSE, fig.width=8, fig.height=6, out.width="90%", dev="png"
+)
+options(digits=3)
+```
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[.amber[Hypothesis] and Study Design]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.font1.amber[Aly Lamuri]  
+.font1[Indonesia Medical Education and Research Institute]
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Variables: independent and dependent]
+- Formulating a hypothesis
+- Types of study design
+- Assessing hypothesis in published papers
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+.center[
+# Research in a nutshell
+
+<img src="https://i.pinimg.com/736x/16/47/a8/1647a81b28650ac3cf9c40a20819a3a4.jpg" width="80%">
+]
+
+---
+
+class: bg-main3
+count: false
+
+# What are...?
+
+- .font2[Cases]
+  - Observable .amber[subjects]
+  - Can be anything
+--
+
+- .font2[Variables]
+  - .pink[Characteristics] in observed cases
+  - Quantifiable
+
+--
+
+.font2[Example 1:]
+
+.amber[Ten schizophrenic patients] participated in a study on brain activity. 
+--
+They underwent computer-based tests on .pink[psychotic symptoms] and fMRI
+examination to observe the .pink[functional connectivity].
+
+--
+
+.font2[Example 2:]
+
+A group of botanists observed .amber[different species of molds] under
+conditioned environments. 
+--
+They set up different .pink[humidity levels] and
+.pink[temperature] to observe .pink[cellular viability].
+
+--
+
+.font2[Example 3:]
+
+The Ministry of Finance investigated an urban population. They considered age
+and ethnicity as a predictor of socioeconomic mobility.
+
+---
+
+class: bg-main3 middle
+
+.font2[
+# Independent variable
+
+- Unaffected by other variables
+- In experiment: under your direct control
+- Design-wise: A presumed .amber[cause]
+]
+
+--
+
+.font2[
+# Dependent variable
+
+- Affected by other variables
+- In experiment: under your indirect control
+- Design-wise: A presumed .amber[effect]
+]
+
+---
+
+class: bg-main3
+
+# Grouping the cases
+
+.font2[
+- Use categorical .amber[independent] variable
+- Separate each observation
+- Differentiate *within* and *between* subjects
+]
+
+--
+
+## Within?
+
+- Comparing the .amber[**same**] subject
+- When we test the subject multiple times
+- Temporal differences of $t_0$ and $t_1$
+- Using different measures
+
+--
+
+## Between?
+
+- Comparing .amber[**different**] subjects
+- When we use a test on multiple groups
+
+---
+
+class: bg-main3
+count: false
+
+# That's neat! 
+--
+But why?
+
+--
+
+.font2[
+- Enables inferential statistics
+- Describes an association
+- Significance?
+]
+
+--
+
+# Any catch?
+
+.font2[
+- We need to control .amber[confounding variables]
+- Reduce .amber[bias]
+- Minimize .amber[random error]
+]
+
+---
+
+class: bg-main3
+count: false
+
+# Confounding variable
+
+.font2[
+- Any variable: categoric or numeric
+- Causal association with either in- / dependent variables
+- .pink[**Reduces**] internal validity!
+]
+
+--
+
+```{r confounding, echo=FALSE, out.height="30%"}
+
+grViz("
+  digraph confounding {
+    graph [overlap = true, fontsize = 10, bgcolor = '#ffffff00']
+    node [shape = box, fontname = Helvetica, color = lightseagreen, style = filled]
+    {rank = same; Independent; Dependent}
+    node [shape = circle, fontname = Helvetica, color = lightcoral, style = filled]
+    Confounding
+    # Set edges
+    Independent->Dependent [color = lightseagreen, style = bold]
+    edge [color = lightcoral, arrowhead = diamond, style = bold]
+    Confounding->{Independent; Dependent}
+  }
+")
+
+```
+
+---
+
+class: bg-main3 split-two
+
+.column[.vmiddle.content[
+<img src="https://i.ytimg.com/vi/0xKklLplngs/maxresdefault.jpg" width="100%">
+]]
+
+.column[.vmiddle.content[
+# Cognitive bias $\to$ .amber[partiality]
+
+.font2[
+- Selection
+- Information
+- Detection
+- Performance
+- Attrition
+- Reporting
+
+.pink[**Reduces**] internal validity!
+]]]
+
+???
+
+Bias is a systematic error in research
+- Selection bias: the proportion of selected subjects does not represent the population
+  - Undercoverage
+  - Overcoverage
+- Information bias: the information does not represent the truth:
+  - Recall bias
+  - Interviewer bias
+  - Response bias (vaguely interpreted questions)
+  - Confirmation bias (only confirm what conforms)
+- Detection bias: only detecting outcome in a group with certain characteristics
+- Performance bias: a tendency to give different treatment to favour an outcome
+- Attrition bias: due to drop out and lost to follow-up
+- Reporting bias: only report significant findings and neglect insignificant ones
+
+---
+
+class: bg-main3
+count: false
+
+# Handling bias
+
+.font2[
+- Random sampling
+- Random assignment
+- Blinding:
+  - Participant
+  - Investigator
+  - Mediating parties
+]
+
+---
+
+class: bg-main3
+
+# Systematic error
+
+.font2[
+- Both confounding variables and bias contribute to .pink[systematic errors]
+- We have a hunch how they will affect our data
+- So we can prevent them
+- Often have a mathematical solution
+- Example: offset and scale factor errors
+]
+
+--
+
+.font2[Is there any .pink[error] we cannot completely handle?]
+
+--
+
+.font2[Yes.]
+
+---
+
+class: bg-main3
+count: false
+
+# Random error
+
+.font2[
+- A.K.A: unsystematic error, .pink[system noise], random variation
+- Unpredictable and unreplicable
+- Thus, no mathematical solution
+]
+
+--
+
+# Handling random error
+
+.font2[
+- Take the average measurement value
+- Increase sample size
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Variables: independent and dependent
+- .amber[Formulating a hypothesis]
+- Types of study design
+- Assessing hypothesis in published papers
+]]
+
+---
+
+class: bg-main3
+
+# Hypothesis: definition
+
+.font2[
+- Assumptions about the population parameter
+- Stated as the *null* $H_0$ and *alternative* $H_a$ hypothesis
+- Requires a formal procedure to reject $H_0$
+]
+
+--
+
+## Null hypothesis
+
+.font2[
+Observed results happened purely .amber[from chance]
+]
+
+--
+
+## Alternative hypothesis
+
+.font2[
+Observed results happened due to some .amber[non-random causes]
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Hypothesis: example
+
+---
+
+.font2[Remember when we flipped the coin last times?]
+
+```{r coin}
+set.seed(1)
+coin <- sample(c("H", "T"), 10, replace=TRUE, prob=rep(1/2, 2)) %T>% print()
+```
+
+--
+
+.font2[Let's state a hypothesis on our coin flip!]
+
+.font2[
+$H_0:$ The probability of having the head is $P = 0.5$  
+$H_a:$ The probability of having the head is $P \neq 0.5$
+]
+
+--
+
+.font2[
+coineeing the proportion being `r sum(coin=="H") / length(coin)`, can we .pink[reject] the $H_0$?
+]
+
+---
+
+count: false
+
+.font2[
+Not quite! ;) We need a .amber[formal] process to reject $H_0$
+]
+
+--
+
+```{r coin.test}
+binom.test(x={sum(coin=="H")}, n=length(coin), p=0.5) %>%
+	broom::tidy() %>% knitr::kable() %>% kable_minimal()
+```
+
+--
+
+.font2[
+Seeing the p-value > 0.05, we can .amber[formally] state the failure on rejecting $H_0$
+]
+
+---
+
+layout: false
+count: false
+class: bg-main3 center
+
+<img src="https://www.thoughtco.com/thmb/ecEpNtO4nzukTc7bnwZMHhEfwjQ=/1500x1000/filters:fill(auto,1)/null-hypothesis-examples-609097_FINAL-100262e70b70426fb0633304eb2f49f4.png" width="90%">
+
+---
+
+layout: true
+class: bg-main3
+
+# Hypothesis: formal test
+
+.font2[
+- Does our data correspond to the $H_0$?
+- Sample data are .amber[consistent] with $H_0 \to$ do .pink[not reject] $H_0$
+- Sample data are .amber[inconsistent] with $H_0 \to$ .pink[reject] $H_0$
+]
+
+---
+
+--
+
+# Type of test
+
+.font2[
+- Two-tailed: $H_0 \neq H_a$
+- Right-tailed: $H_0 > H_a$
+- Left-tailed: $H_0 < H_a$
+]
+
+---
+
+count: false
+
+# Rejecting hypothesis
+
+.font2[
+- Region of acceptance with critical value (older)
+- P-value (newer)
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Hypothesis: interpretation
+
+.font2[
+- We start from the assumption that $H_0$ is true
+- Collect evidence to show otherwise
+- We then .amber[reject] or .amber[fail to reject] the $H_0$ based on p-value
+- When testing the hypothesis we may happen to see .pink[statistical errors]
+]
+
+--
+
+# .pink[Statistical error]
+
+.font2[
+- Type I: False Reject Rate $\alpha \to$ false positive
+- Type II: False Accept Rate $\beta \to$ false negative
+]
+
+---
+
+class: bg-main3 center middle
+count: false
+
+<img src="https://4.bp.blogspot.com/-wmZzvsY_Tec/Vws0f4MJn9I/AAAAAAAAORs/gipKxA7aDboP0gx2vSmyQS_ZoVBPzqaWA/s1600/Type%2BI%2Band%2BII%2Berror.jpg" width="100%">
+
+---
+
+class: bg-main3
+
+# Hypothesis: p-value
+
+.font2[
+- Reflect the probability of making a type I error
+- Lower p-value $\to$ lower chance of $H_0$ occurred by chance
+- Lower p-value $\to$ higher significance
+- Common cut-off: .amber[0.05]
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Variables: independent and dependent
+- Formulating a hypothesis
+- .amber[Types of study design]
+- Assessing hypothesis in published papers
+]]
+
+---
+
+class: bg-main3
+
+# Study design
+
+.font2[
+- Cross-sectional
+- Cohort
+- Case-control
+- Randomized controlled trial
+- Systematic review
+]
+
+---
+
+class: bg-main3
+
+# Cross-sectional
+
+.font2[
+- A .amber[snapshot] of outcome and associated characteristics
+- No intervention, inferencing .amber[existing differences]
+- Relatively .amber[inexpensive and quick] to conduct
+- .pink[Static,] reveal no temporal context
+- .pink[Unable] to establish .pink[causality]
+- Different time frame may lead to .pink[different result]
+]
+
+---
+
+class: bg-main3
+
+# Cohort
+
+.font2[
+- .amber[Longitudinal] study to see an effect overtime
+- .amber[Prospective / retrospective:] observing the future or looking back in time
+- Starting from a .amber[potential cause]
+- Involving at least .amber[two groups] of interest
+- Cannot completely control the .pink[confounding variables]
+- No randomization $\to$ lower .pink[external validity]
+- .pink[Long] completion period
+]
+
+---
+
+class: bg-main3
+
+# Case-control
+
+.font2[
+- .amber[Longitudinal] study to see an effect overtime
+- .amber[Retrospective] in nature
+- Starting from an .amber[outcome of interest]
+- Involving at least .amber[two groups]
+- Usually employed to investigate .amber[rare conditions]
+- Assessing multiple .amber[risk factors]
+- Difficult to find a .pink[suitable] control group
+- Inadequate to establish a .pink[diagnostic study]
+- Should carefully address .pink[confounding variables]
+]
+
+---
+
+class: bg-main3
+
+# Randomized controlled trial
+
+.font2[
+- Randomization to control bias $\to$ higher .amber[external validity]
+- Akin to an experimental study, can effectively employ .amber[blinding methods]
+- Statistically .amber[efficient]
+- .amber[Clearly] identified population
+- .pink[Expensive] to conduct
+- Risk to have a .pink[volunteer bias]
+- Loss to follow up $\to$ .pink[attrition bias]
+]
+
+---
+
+class: bg-main3
+
+# Systematic review
+
+.font2[
+- Concatenate findings from .amber[multiple studies]
+- Critical appraisal .amber[removes redundancies] and .amber[addresses inconsistencies]
+- Delineate where knowledge is lacking to .amber[guide] future research
+- Does not establish .pink[novelty]
+- .pink[Variation] among published articles is a challenge to overcome
+- .pink[Potential bias] for including unreviewed articles
+]
+
+--
+
+# Meta-analysis
+
+.font2[
+- Takes systematic review to another level :)
+- Analyzing .amber[previous] analysis (thus the name: meta-analysis)
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Variables: independent and dependent
+- Formulating a hypothesis
+- Types of study design
+- .amber[Assessing hypothesis in published papers]
+]]
+
+---
+
+class: bg-main3 center middle
+
+.img-fill[![](article.png)]
+
+Source: [10.1371/journal.pone.0165816](https://doi.org/10.1371/journal.pone.0165816)
+
+---
+
+class: bg-main3
+
+# Reading scientific articles
+
+.font2[
+- Look for its underlying .amber[structure]
+- Abstract
+  - I: Introduction
+  - M: Methods
+  - R: Results
+  - D: Discussion
+- Introduction
+  - .amber[S:] Situation
+  - .amber[P:] Problem
+  - .amber[Q:] Question
+  - .pink[R: Resolution]
+]
+
+???
+
+- By knowing the structure, you can extract information more efficiently
+- When reading the abstract, focus on introduction and methods first
+- Then shift into conclusions, since it contains the summary
+- Finally, you may want to read the results and discussion as well
+- Introduction usually elaborates the background and hypothesis
+- You can look for the study design in methods
+- Discussion part will help you understand current limitation and further suggestions
+
+---
+
+class: bg-main3
+
+# Abstract - Introduction
+
+.font2[
+.pink[Current studies] of depression among people .amber[living with HIV] focus on
+describing its .pink[point prevalence]. Given the .pink[fluctuating nature] of
+depression and its profound impacts on clinical and quality-of-life outcomes,
+this study .amber[**aimed**] to examine the .amber[**prevalence**], recurrence
+and incidence of current depressive symptoms and its underlying
+.amber[**catalysts** longitudinally] and systematically among these
+individuals.
+]
+
+---
+
+class: bg-main3
+
+# Abstract - Methods
+
+.font2[
+We conducted a .amber[**prospective cohort**] study between October 1, 2007 and
+December 31, 2012 using longitudinal linked data sources. Current depressive
+symptoms was .amber[identified] using the Centre for Epidemiologic Studies
+.pink[Depression Scale] or the Kessler Psychological .pink[Distress Scale],
+first at .amber[**baseline**] and again during .amber[**follow-up**]
+interviews. Multivariable regressions were used to characterize the three
+outcomes.
+]
+
+---
+
+class: bg-main3
+
+# Abstract - Conclusion
+
+.font2[
+.amber[Depressive] symptoms are prevalent and .amber[**likely to recur**] among
+people living with HIV. Our results support the direction of Ontario’s HIV/AIDS
+Strategy to 2026, which addresses medical concerns associated with HIV (such as
+depression) and the .pink[**social drivers**] of health in order to enhance the
+overall well-being of people living with or at risk of HIV. Our findings
+.pink[reinforce] the importance of providing effective .amber[mental health care]
+and demonstrate the need for long-term .amber[support] and routine
+management of depression, particularly for individuals at high risk.
+]
+
+---
+
+class: bg-main3
+
+# Abstract - Results
+
+.font2[
+Of the 3,816 HIV-positive participants, the .amber[point prevalence] of depressive
+symptoms was estimated at .amber[28%]. Of the 957 participants who were identified with
+depressive symptoms at baseline and who had at least two years of follow-up,
+.amber[43% had a recurrent episode]. The .amber[cumulative incidence] among 1,745 previously
+depressive symptoms free participants (at or prior to baseline) was .amber[14%]. During
+the five-year follow-up, our multivariable models showed that participants with
+greater risk of .pink[recurrent cases] were more likely to feel .amber[worried] about their
+housing situation. Participants at .pink[risk of developing] incident cases were also
+likely to be .amber[younger, gay or bisexual], and .amber[unable to afford] housing-related
+expenses.
+]
+
+---
+
+class: bg-main3
+
+# Introduction - Situation
+
+.font2[
+
+(par. 1)
+
+.amber[Depression] affects up to half of people living with HIV, a prevalence that is
+.amber[two to four times higher] than that found in the general population [1]. Over
+50% of people living with HIV and depression do not receive treatment for their
+depression [2–9], and this failure to treat contributes to significant .amber[negative]
+clinical and quality-of-life .amber[outcomes] [10–14].
+
+]
+
+---
+
+class: bg-main3
+
+# Introduction - Situation
+
+.font2[
+(par. 2)
+
+Growing evidence supports a bi-directional .amber[relationship] between .amber[HIV] and
+.amber[depression] involving a number of .pink[biological, psychosocial and social] .amber[factors]
+[1,14–16]. The persistent viral presence in the central nervous system may
+release toxic viral proteins that induce depression-like symptoms [17,18];
+people living with HIV may possess a negative self-image or experience stigma
+[1,15,19–21]; and people living with HIV are more likely to struggle with
+stressors such as financial insecurity and unstable housing [22–25]. Recent
+reviews also suggest that people who suffer from severe mental illnesses
+(including depression) and/or co-occurring substance use disorder are more
+likely to engage in risky sexual behaviour, thereby elevating their risk of HIV
+acquisition [26–34].
+
+]
+
+---
+
+class: bg-main3
+
+# Introduction - Problem
+
+(par. 3)
+
+To date, most studies about the prevalence of depression among people living
+with HIV have used cross-sectional designs [1,15]. Six studies have documented
+the incidence [35–38] and persistence (or recurrence) [39,40] of depression
+over time among people living with HIV. In Canada, information describing the
+epidemiology of depression among people living with HIV is scarce. In Canada,
+information describing the epidemiology of depression among people living with
+HIV is scarce. There have been two small convenience sample studies describing
+the prevalence of depression among people living with HIV. Williams et al.
+(2005), employing a small convenience sample of 297 individuals, described the
+prevalence of depressive symptoms at 54% among people living with HIV based on
+a self-report screening instrument [41]. Logie, James, Tharao, and Loutfy
+(2013), employing a sample of 173 Africa, Caribbean, and Black women, described
+the prevalence of depressive symptoms as 64% [42]. .amber[Thus, the epidemiology of this condition is not yet well documented in Canada.]
+
+---
+
+class: bg-main3
+
+# Introduction - Question
+
+(par. 4)
+
+Given the .amber[fluctuating nature of depression over the life span and its profound impacts on clinical and quality-of-life outcomes,] our study aimed to examine the prevalence, recurrence, and incidence of current depressive symptoms longitudinally and systematically among people living with HIV. We also characterized these three outcomes by HIV-positive participants’ socio-demographic characteristics, housing and neighbourhood conditions, substance-use behaviours and health status over a five-year follow-up period.  Understanding change in the burden of depressive symptoms and the underlying catalysts of the condition from a longitudinal perspective would be important to program planners, policy-makers, and health care providers when planning and implementing effective mental-health programs and interventions for people living with HIV.
+
+---
+
+class: bg-main3
+
+# Introduction - Resolution
+
+(par. 4)
+
+Given the fluctuating nature of depression over the life span and its profound impacts on clinical and quality-of-life outcomes, our study .amber[aimed to examine the prevalence, recurrence, and incidence] of current depressive symptoms longitudinally and systematically among people living with HIV. We also .pink[characterized] these three .pink[outcomes] by HIV-positive participants’ .amber[socio-demographic characteristics, housing and neighbourhood conditions, substance-use behaviours and health status over a five-year follow-up period.] Understanding change in the burden of depressive symptoms and the underlying catalysts of the condition from a longitudinal perspective would be important to program planners, policy-makers, and health care providers when planning and implementing effective mental-health programs and interventions for people living with HIV.
+
+---
+
+class: bg-main3
+
+# Extracted information
+
+.font2[
+- Case: people living with HIV
+- Variables
+  - .amber[Independent]: depressive symptoms prevalence, recurrence, incidence
+  - .amber[Dependent]: younger, gay or bisexual, unable to afford expenses
+  - Potential .amber[confounding]: worrying their household situation
+- Study design: cohort prospective
+- Hypothesis
+  - $H_0$: Depressive symptoms are not likely to recur
+  - $H_a$: Depressive symptoms are likely to recur
+]
+
+---
+
+class: bg-main3 middle center
+
+.amber.font5[Query?]
+
+---
+
+class: bg-main3
+
+# Quick assignment
+
+.font2[
+In completing this assignment, you will:
+
+- Read two articles we briefly discussed in the first lecture
+- Identify their underlying structures (abstract and introduction)
+- Succintly describe the case, variables and study design
+- Determine the hypotheses and formulate them as $H_0$ and $H_a$
+- Make a presentation on the abstract, introduction and extracted information
+]
+
+--
+
+.font2[
+Articles:
+- [10.1371/journal.pone.0233137](https://doi.org/10.1371/journal.pone.0233137)
+- [10.1097/acm.0000000000000134](https://doi.org/10.1097/acm.0000000000000134)
+]

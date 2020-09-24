@@ -210,7 +210,7 @@ roll &lt;- dice(10) %T&gt;% print()</code></pre>
 1/10. As we have a fair dice, why is
 the probability not 1/6? The clue is a sample and the population. We only have
 a subset of its population. Ideally, we will need to roll the dice <span class="math inline">\(n\)</span> number
-of time, with <span class="math inline">\(n \to infty\)</span>. The more sample we have, the closer it is to
+of time, with <span class="math inline">\(n \to \infty\)</span>. The more sample we have, the closer it is to
 represent the population. What will we get with different number of rolls?</p>
 <pre class="r"><code>roll &lt;- c(10, 100, 1000, 10000, 100000, 1000000, 10000000)
 prob &lt;- sapply(roll, function(n) {
@@ -603,7 +603,7 @@ We are also able to compute the mean and standard deviation based on their
 parameters. It just happened that the sample mean follows a normal
 distribution ;) Central Limit Theorem (CLT) delineates such an occurrence,
 applicable to both discrete and continuous distributions.</p>
-<p><span class="math display">\[\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma^2}{n} \bigg) as\ n \to \infty\]</span></p>
+<p><span class="math display">\[\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty\]</span></p>
 <p>The equation above basically tells us that the sample mean distribution
 <span class="math inline">\(\bar{X}\)</span> have a convergence upon random variables to follow a normal
 distribution with mean of <span class="math inline">\(\mu\)</span> and standard deviation of <span class="math inline">\(\frac{\sigma^2}{n}\)</span>.
