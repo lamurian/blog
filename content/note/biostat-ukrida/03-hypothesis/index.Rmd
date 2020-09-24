@@ -31,7 +31,7 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-[Slide](https://lamurian.rbind.io/note/biostat-ukrida/02-hypothesis/slide)
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/03-hypothesis/slide)
 
 ```{r init, echo=FALSE}
 pkgs <- c("magrittr", "DiagrammeR", "kableExtra")
