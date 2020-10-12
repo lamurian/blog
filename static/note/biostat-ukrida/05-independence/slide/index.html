@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Hypotheiss Test: Proportional Difference</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <script src="index_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="index_files/jquery-1.12.4/jquery.min.js"></script>
+    <link href="index_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="index_files/datatables-binding-0.15/datatables.js"></script>
+    <link href="index_files/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="index_files/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="index_files/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="index_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="index_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[Hypothesis Test: .amber[Proportional Difference]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Proportional difference]
+- Exact test
+- Approximation
+- Paired sample
+- Applying Yates' correction
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Proportional difference
+
+.font2[
+- Concept recall: proportion in population and sample?
+- So far, we relied on the binomial test
+- It is an *exact* measure of .amber[one] proportion
+- Another test to consider: .amber[proportion test]
+]
+
+---
+
+???
+
+- An exact measure: we exactly measure the p-value
+- It is computationally demanding
+- Hard to conduct with a large sample size
+- In such cases, we may want to choose approximation
+
+---
+
+count: false
+
+# Example?
+
+`$$Let X \sim B(n, p)$$`
+`$$\texttt{Test the probability of having: } P(X=6 \ |\ 10, 0.5)$$`
+
+--
+
+`\begin{align}
+H_0 &amp;: P(X=6) = 0.5 \\
+H_a &amp;: P(X=6) \neq 0.5
+\end{align}`
+
+---
+
+count: false
+
+.bg-white.content[
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Binomial test&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; parameter &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.754 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.262 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.878 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Exact binomial test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two.sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Proportion test&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; parameter &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.752 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.274 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.863 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1-sample proportions test with continuity correction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two.sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+count: false
+
+# Another example?
+
+`$$Let X \sim B(n, p)$$`
+`$$\texttt{Test the probability of having: } P(X=60 \ |\ 100, 0.5)$$`
+
+--
+
+`\begin{align}
+H_0 &amp;: P(X=60) = 0.5 \\
+H_a &amp;: P(X=60) \neq 0.5
+\end{align}`
+
+---
+
+count: false
+
+.bg-white.content[
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Binomial test&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; parameter &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.497 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.697 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Exact binomial test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two.sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Proportion test&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; parameter &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.low &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; conf.high &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.61 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.497 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.695 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1-sample proportions test with continuity correction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two.sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+count: false
+
+# What do we learn?
+
+.font2[
+- With a low sample size, an exact test is more .amber[appropriate]
+- When sample size `\(n \to \infty:\)` approximation gives closer estimates
+- An approximation relies on lower computational power
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# But...
+
+.font2[
+- Often we are more interested in multiple variables
+- We may want to see .amber[proportional differences] in multiple groups
+- In such cases, neither binomial test nor proportion test can help us!
+]
+
+--
+
+# What can we do?
+
+.font2[
+- Visualize our problem as a .amber[contingency table]
+- Use a more appropriate statistical test:
+  - Fisher's exact test
+  - Pearson's Chi-square
+]
+
+???
+
+- Remember the last time we talked about Chi-square distribution?
+- We'll use a lot of them in later sections :)
+
+---
+
+layout: true
+class: bg-main3
+
+# Contingency table
+
+.font2[ 
+- A table outlining our problem :)
+- Each element represents a .amber[count] of variables in our interest
+]
+
+---
+
+# How does it look like?
+
+???
+
+Fun fact: The contingency table is also called a cross tabulation
+
+--
+
+.bg-white[
+&lt;br&gt;
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Outcome 1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Outcome 2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Exposure 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; a &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; b &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Exposure 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; c &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; d &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+]
+
+---
+
+count: false
+
+# Example?
+
+--
+
+.font2[
+We are conducting a market research in Jakarta, where we aim to see how people
+express their preferences in choosing chain store outlets. We categorized
+participants based on their place of residency, i.e. in .amber[suburban] and
+.amber[urban] area. The mini-market chain of our interest would be
+.amber[Indomaret] and .amber[Alfamart]. We observed .pink[30 out of 50]
+respondents in suburban area choose Indomaret, compared to .pink[20 out of 50]
+respondents in urban area.
+]
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Indomaret &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Alfamart &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suburban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Urban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+]
+
+--
+
+.font2[How do we test for differences?]
+
+???
+
+- We can do exact test and approximation
+- Fisher's exact test
+- Pearson's Chi-square (Approximation)
+- We will see what limitation each approach has and their use cases
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Proportional difference
+- .amber[Exact test]
+- Approximation
+- Paired sample
+- Applying Yates' correction
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Fisher's exact test
+
+.font2[
+- Follows a hypergeometric distribution
+- Concept recall: what is a geometric distribution?
+- Extending previous concepts: what is a hypergeometric distribution?
+]
+
+???
+
+- Geometric distribution: get 1 success after `\(n\)` number of trials *with*
+  replacement
+- Hypergeometric distribution: get `\(k\)` successes after `\(n\)` number of trials
+  *without* replacement
+- We shall see the hypergeometric distribution as an extension to binomial
+  distribution
+- In binomial distribution, we only consider *identical* probability
+  (probability of an event with replacement)
+
+--
+
+# How do we formulate the hypothesis?
+
+--
+
+.font2[
+`\begin{align}
+H_0 &amp;: \hat{p_1} = \hat{p_2} \\
+H_a &amp;: \hat{p_1} \neq \hat{p_2} \\
+\end{align}`
+]
+
+???
+
+- `\(\hat{p_i}:\)` Proportion in group i
+
+---
+
+class: bg-main3
+
+# How do we calculate the probability?
+
+`\begin{align}
+P &amp;= \frac{\binom{a + b}{a} \binom{a + b}{b}} {\binom{n}{a + b}} \tag{1} \\
+  \\
+  &amp;= \frac{\binom{c + d}{c} \binom{c + d}{d}} {\binom{n}{c + d}} \tag{2} \\
+  \\
+  &amp;= \frac{(a+b)!\ (c+d)!\ (a+c)!\ (b+d)!} {a!\ b!\ c!\ d!\ n!} \tag{3} \\
+  \\
+  \\
+  \\
+n &amp;= a + b + c + d
+\end{align}`
+
+???
+
+You may choose any of those equations
+
+---
+
+class: bg-main3
+
+# In code, please?
+
+
+```r
+fisher.eq &lt;- function(abcd) { # abcd is a list of 4 elements
+	a &lt;- abcd[1]; b &lt;- abcd[2]; c &lt;- abcd[3]; d &lt;- abcd[4]
+	choose(a+b, a) * choose(a+b, b) / choose(a+b+c+d, a+b)
+}
+```
+
+--
+
+# Let's solve our case!
+
+.bg-white[
+&lt;br&gt;
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Indomaret &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Alfamart &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suburban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Urban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+]
+
+???
+
+- Fisher's is an exact test
+- Which mean, we need take ALL possible outcomes into account
+
+---
+
+class: bg-main3
+count: false
+
+# Fisher's equation solution
+
+.bg-white[
+&lt;br&gt;
+
+<div id="htmlwidget-7cd897f160b37ecb9936" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7cd897f160b37ecb9936">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21"],[30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50],[20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0],[20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0],[30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50],[0.0220153934585849,0.00916353525851611,0.00323050412922296,0.000961141724396915,0.000240285431099229,5.02147513154306e-05,8.71783877004004e-06,1.24813469607586e-06,1.46076706119681e-07,1.38297473249402e-08,1.04587464144861e-09,6.22174087714816e-11,2.85692183134354e-12,9.88875052493168e-14,2.50283458533911e-15,4.44948370726954e-17,5.25695144998764e-19,3.80766062470811e-21,1.48736743152661e-23,2.47791325535461e-26,9.91165302141845e-30]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>a<\/th>\n      <th>b<\/th>\n      <th>c<\/th>\n      <th>d<\/th>\n      <th>probability<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+&lt;br&gt;
+]
+
+---
+
+class: bg-main3
+
+# Calculate the p-value
+
+## One-tailed test
+
+
+```r
+sum(tbl$probability)
+```
+
+```
+## [1] 0.0357
+```
+
+--
+
+## Two-tailed test
+
+
+```r
+sum(tbl$probability) * 2
+```
+
+```
+## [1] 0.0713
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Let `R` do the hard stuff for us
+
+---
+
+count: false
+
+## One-tailed test
+
+
+```r
+fisher.test(survey, alternative="greater")
+```
+
+```
+## 
+## 	Fisher's Exact Test for Count Data
+## 
+## data:  survey
+## p-value = 0.04
+## alternative hypothesis: true odds ratio is greater than 1
+## 95 percent confidence interval:
+##  1.06  Inf
+## sample estimates:
+## odds ratio 
+##       2.23
+```
+
+---
+
+count: false
+
+## Two-tailed test
+
+
+```r
+fisher.test(survey, alternative="two.sided")
+```
+
+```
+## 
+## 	Fisher's Exact Test for Count Data
+## 
+## data:  survey
+## p-value = 0.07
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.94 5.41
+## sample estimates:
+## odds ratio 
+##       2.23
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# A wild .pink[homework] has appeared!
+
+### Perform Fisher's exact test on following scenario:
+
+- `\(a:\)` 40
+- `\(b:\)` 15
+- `\(c:\)` 15
+- `\(d:\)` 20
+
+### Task:
+
+- Find the p-value for .abmer[one-tailed] test
+- Find the p-value for .amber[two-tailed] test
+
+--
+
+### Rules:
+
+- Apply Fisher's equation to solve the problem
+- You may use calculator or code on your own
+- Present me the table of your calculation
+- .pink[Do not] use pre-existing package! (`numpy` is allowed though)
+
+---
+
+class: bg-main3
+count: false
+
+# Can you get similar solution when computing by hands?
+
+
+```r
+c(40, 15, 15, 20) %&gt;% matrix(nrow=2) %&gt;% fisher.test()
+```
+
+```
+## 
+## 	Fisher's Exact Test for Count Data
+## 
+## data:  .
+## p-value = 0.007
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  1.33 9.58
+## sample estimates:
+## odds ratio 
+##        3.5
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Proportional difference
+- Exact test
+- .amber[Approximation]
+- Paired sample
+- Applying Yates' correction
+]]
+
+---
+
+class: bg-main3
+
+# Approximating Fisher's solution
+
+.font2[
+- There are several approaches we may follow
+- Pearson's Chi-square and G-test are popular ones
+- We will only look into Chi-square
+]
+
+???
+
+- Different method of Chi-square computation exists
+- We have *goodness of fit* and *test of independence*
+- Choose your method wisely
+
+---
+
+class: bg-main3
+count: false
+
+# Why an approximation?
+
+.font2[
+- As we have seen, an exact calculation is .amber[arduous]
+- Larger sample size requires a higher .amber[computational power]
+- And it often applies only for `\(2 \times 2\)` contingency table
+- An approximation is more flexible
+- It can do even an `\(m \times n\)` contingency table
+]
+
+---
+
+class: bg-main3
+
+# Chi-square test of independence
+
+.font2[
+`$$stat \sim \chi^2(k)$$`
+
+- Statistical computation follows a Chi-square distribution
+- Degree of freedom `\(k\)` depends on the number of classes `\(X, Y\)`
+]
+
+--
+
+# Example
+
+- Outcome 1: 2 classes, outcome 2: 2 classes `\(\to k=1\)`
+- Outcome 1: 2 classes, outcome 2: 3 classes `\(\to k=2\)`
+- Outcome 1: 3 classes, outcome 2: 3 classes `\(\to k=4\)`
+
+---
+
+class: bg-main3
+
+# Calculating Chi-square
+
+.font2[
+`\begin{align}
+\chi^2 &amp;= \displaystyle \sum_{i, j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} \\
+E_{ij} &amp;= \frac{\sum O_i \cdot \sum O_j}{\sum O_i + O_j}
+\end{align}`
+
+`\(O:\)` Observed outcome  
+`\(E:\)` Expected outcome  
+`\(i, j:\)` Elements in the contingency table
+]
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+.bg-white.column[.vmiddle.content[
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Outcome 1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Outcome 2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Exposure 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; a &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; b &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Exposure 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; c &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; d &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]]
+
+.column[.vmiddle.center.content[
+## Calculating Expected outcome
+
+.font2[
+`$$E_{ij} = \frac{\sum O_i \cdot \sum O_j}{\sum O_i + O_j}$$`
+
+{{content}}
+]
+
+]]
+
+---
+
+count: false
+
+`$$E_{11} = \frac{(a + b) \cdot (a + c)}{a + b + c + d}$$`
+
+---
+
+count: false
+
+`$$E_{12} = \frac{(a + b) \cdot (b + d)}{a + b + c + d}$$`
+
+---
+
+count: false
+
+`$$E_{21} = \frac{(c + d) \cdot (a + c)}{a + b + c + d}$$`
+
+---
+
+count: false
+
+`$$E_{22} = \frac{(c + d) \cdot (b + d)}{a + b + c + d}$$`
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+.bg-white.column[.vmiddle.content[
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Indomaret &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Alfamart &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Suburban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Urban &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]]
+
+.column[.vmiddle.center.content[
+{{content}}
+]]
+
+---
+
+## Calculating Expected outcome
+
+`\begin{align}
+E_{ij} &amp;= \frac{\sum O_i \cdot \sum O_j}{\sum O_i + O_j} \\
+\\
+E_{11} &amp;= 25 \\
+E_{12} &amp;= 25 \\
+E_{21} &amp;= 25 \\
+E_{22} &amp;= 25
+\end{align}`
+
+---
+
+# Calculating `\(\chi^2\)` statistics
+
+`\begin{align}
+\chi^2 &amp;= \displaystyle \sum_{i, j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} \\
+       &amp;= \frac{(30-25)^2}{25} + \frac{(20-25)^2}{25} + \frac{(30-25)^2}{25} + \frac{(20-25)^2}{25} \\
+       &amp;= 4
+\end{align}`
+
+---
+
+count: false
+
+# Determining p-value
+
+
+```r
+1 - pchisq(4, df=1)
+```
+
+```
+## [1] 0.0455
+```
+
+---
+
+count: false
+
+# Built-in function in `R`
+
+
+```r
+chisq.test(survey, correct=FALSE)$p.value
+```
+
+```
+## [1] 0.0455
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Proportional difference
+- Exact test
+- Approximation
+- .amber[Paired sample]
+- Applying Yates' correction
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Paired samples in the contingency table
+
+.font2[
+- What is a paired sample?
+- Why use different measure?
+- How do we solve it?
+]
+
+???
+
+- When we do a longitudinal study
+- We have the same sample, but measured in different time
+- We need to take into account differences occurring overtime
+- Pearson's Chi-square could not address this issue
+- Solution: McNemar's Chi-square
+
+--
+
+# Example?
+
+.font2[
+Suppose we continue our market research, where we ask .amber[**exactly same**]
+subjects *three months* later. We expected no changes in their preferences of
+chain-store outlets. It turned out, regardless of their area of residence,
+.pink[25 people] who previously preferred go to Indomaret now shop in Alfamart.
+Meanwhile, .pink[20 people] who used to visit Alfamart now prefer Indomaret.
+]
+
+---
+
+class: bg-main3 split-two
+couht: false
+
+.column[.vmiddle.center.content[
+# Contingency table
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Indomaret &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Alfamart &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Indomaret &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Alfamart &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+]]
+
+.column[.vmiddle.center.content[
+# Hypothesis
+
+.font2[
+`\begin{align}
+H_0 &amp;: \hat{p_{t_0}} = \hat{p_{t_1}} \\
+H_1 &amp;: \hat{p_{t_0}} \neq \hat{p_{t_1}}
+\end{align}`
+]
+]]
+
+---
+
+class: bg-main3
+
+# McNemar's Chi-square
+
+.font2[
+`$$\chi^2 = \frac{(b-c)^2}{b+c}$$`
+]
+
+--
+
+
+```r
+mcnemar.test(survey2)
+```
+
+```
+## 
+## 	McNemar's Chi-squared test with continuity correction
+## 
+## data:  survey2
+## McNemar's chi-squared = 0.4, df = 1, p-value = 0.6
+```
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Proportional difference
+- Exact test
+- Approximation
+- Paired sample
+- .amber[Applying Yates' correction]
+]]
+
+---
+
+class: bg-main3
+
+# Yates' correction
+
+.font2[
+- Only applied to approximation test
+- Alleviates bias in a `\(2 \times 2\)` contingency table
+- Especially useful when having low count (&lt; 10)
+- In extremely low sample count (&lt; 5), use an exact test instead
+]
+
+--
+
+.font2[
+`$$\chi^2 = \displaystyle \sum_{i, j} \frac{(|O_{ij} - E_{ij}| - 0.5)^2}{E_{ij}} \\$$`
+]
+
+---
+
+class: bg-main3
+
+# Lesson learnt
+
+.font2[
+- Large sample (&gt; 10 in each cell) `\(\to\)` use approximation
+- Low sample `\(\to\)` use an exact test
+- `\(2 \times 2\)` contingency with approximation `\(\to\)` apply Yates' correction
+- Low sample with `\(m \times n\)` contingency table `\(\to\)` split or do simulation
+]
+
+---
+
+class: bg-main3 hide-slide-number center middle
+count: false
+
+.amber.font5[Query?]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"countIncrementalSlides": false,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
