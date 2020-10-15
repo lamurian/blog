@@ -25,7 +25,7 @@ summary: >
 date: 2020-10-15
 categories: ["statistics", "ukrida"]
 tags: ["R", "hypothesis"]
-slug: 06-meandiff
+slug: 06-par-meandiff
 csl: ../harvard.csl
 bibliography: ../ref.bib
 draft: false
