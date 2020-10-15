@@ -358,7 +358,7 @@ following situation:
 
 set.seed(5)
 tbl <- data.frame(
-	"height" = c(rnorm(30, 170, 12), rnorm(25, 155, 15)),
+	"height" = c(rnorm(30, 170, 8), rnorm(25, 155, 16)),
 	"sex" = c(rep("male", 30), rep("female", 25))
 )
 

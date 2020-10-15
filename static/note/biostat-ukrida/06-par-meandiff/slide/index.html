@@ -621,7 +621,7 @@ count: false
 ```r
 set.seed(5)
 tbl &lt;- data.frame(
-	"height" = c(rnorm(30, 170, 12), rnorm(25, 155, 15)),
+	"height" = c(rnorm(30, 170, 8), rnorm(25, 155, 16)),
 	"sex" = c(rep("male", 30), rep("female", 25))
 )
 
@@ -631,11 +631,11 @@ tapply(tbl$height, tbl$sex, summary)
 ```
 ## $female
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     125     146     154     158     172     188 
+##     123     146     154     158     173     190 
 ## 
 ## $male
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     144     162     168     170     181     190
+##     152     165     168     170     177     184
 ```
 
 ```r
@@ -644,7 +644,7 @@ tapply(tbl$height, tbl$sex, sd)
 
 ```
 ## female   male 
-##   16.9   11.9
+##  17.98   7.93
 ```
 
 ---
@@ -696,9 +696,9 @@ car::leveneTest(tbl$height ~ tbl$sex)
 
 ```
 ## Levene's Test for Homogeneity of Variance (center = median)
-##       Df F value Pr(&gt;F)  
-## group  1    3.13  0.083 .
-##       53                 
+##       Df F value  Pr(&gt;F)    
+## group  1    14.3 0.00039 ***
+##       53                    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -719,10 +719,10 @@ t.test(height ~ sex, data=tbl, var.equal=FALSE)
 ## 	Welch Two Sample t-test
 ## 
 ## data:  height by sex
-## t = -3, df = 42, p-value = 0.004
+## t = -3, df = 32, p-value = 0.004
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -20.30  -4.12
+##  -19.87  -4.07
 ## sample estimates:
 ## mean in group female   mean in group male 
 ##                  158                  170
@@ -742,10 +742,10 @@ t.test(height ~ sex, data=tbl, var.equal=TRUE)
 ## 	Two Sample t-test
 ## 
 ## data:  height by sex
-## t = -3, df = 53, p-value = 0.003
+## t = -3, df = 53, p-value = 0.002
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -20.01  -4.41
+##  -19.27  -4.67
 ## sample estimates:
 ## mean in group female   mean in group male 
 ##                  158                  170
