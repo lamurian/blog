@@ -31,7 +31,7 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-[Slide](https://lamurian.rbind.io/note/biostat-ukrida/06-meandiff/slide)
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/06-par-meandiff/slide)
 
 ```{r init, echo=FALSE}
 pkgs <- c("magrittr", "ggplot2", "ggpubr")
