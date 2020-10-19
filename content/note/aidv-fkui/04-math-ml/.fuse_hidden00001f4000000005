@@ -135,7 +135,7 @@ It looks horrible! But rest easy, we can read it this way:
 > Let there be a sequence of vector **X** and scalar $A$, there exists a
 > function defining the sum of product between **x** and $\alpha$
 
-Now, they do not seem as bad as they were :) We can simplify the concept
+Now, they does not seem as bad as they were :) We can simplify the concept
 using a quick example:
 
 \begin{align}
