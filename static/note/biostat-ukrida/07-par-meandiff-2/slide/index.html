@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Parametric: Mean in Multiple Groups</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[Parametric: .amber[Mean] in Multiple Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[One-way ANOVA]
+- Two-way ANOVA
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# One-Way ANOVA
+
+.font2[
+- A generalization of two-sample T-Test
+- We can consider multiple groups at once
+- What does .amber[one-way] mean?
+- Follows an F-distribution
+]
+
+---
+
+???
+
+- One-way refer to how many group we use as a reference to separate the data
+- We will see on the next section how to perform ANOVA if we have multiple
+  grouping variables
+- In such cases, we are conducting two-way ANOVA / often referred as factorial ANOVA
+- Use sum of square to measure within and between differences
+- The denominator is a residual
+
+---
+
+count: false
+
+## Hypothesis
+
+.font2[
+- `\(H_0:\)` The population mean of all groups are all equal
+- `\(H_a:\)` The population mean of all groups are not all equal
+]
+
+???
+
+Please notice the slight difference between .amber[are not all equal] and
+.amber[are all unequal]
+
+---
+
+count: false
+
+## Statistics
+
+`$$F = \frac{\displaystyle \sum_{j=1}^{k} n_j (\bar{X}_j - \bar{X})^2 / (k-1)}{\displaystyle \sum_{j=1}^k \sum_{i=1}^N (X_i - \bar{X}_j)^2 / (N-k)}$$`
+
+???
+
+- `\(\bar{X}_j:\)` Mean of a group
+- `\(\bar{X}:\)` Mean of all sampled groups
+- F-Test is a quotient of *between* to *within* differences, both measured as mean squared
+- Mean square is the sum square divided by the degree of freedom
+- `\(\nu = k-1\)` for between comparison and `\(\nu = N-k\)` for within comparison
+- `\(k\)`: Number of groups
+- `\(N\)`: total number of sample
+
+---
+
+count: false
+
+## Assumptions
+
+.font2[
+- I.I.D
+- Normally distributed
+- Homogeneity of variance
+]
+
+???
+
+- Shapiro-Wilk test
+- Levene's test
+
+---
+
+layout: false
+class: bg-main3
+
+# F- Distribution
+
+.font2[
+- Define a ratio of two variances
+- Derived from the `\(\chi^2\)` distribution
+]
+
+???
+
+Concept recall: `\(\chi^2\)` distribution comes from a gamma distribution
+
+--
+
+`\begin{align}
+P(X=x) &amp; = \frac{(\frac{r_1}{r_2})^{\frac{r_1}{2}} \Gamma[(r_1 + r_2) / 2] x^{\frac{r_1}{2}-1}}{\Gamma(\frac{r_1}{2}) \Gamma(\frac{r_2}{2}) [1 + (\frac{r_1 \cdot x}{r_2})]^{\frac{(r_1+r_2)}{2}}} \\
+X &amp; \sim F(r_1, r_2) \\
+F &amp; = \frac{U / r_1}{V / r_2}
+\end{align}`
+
+???
+
+- `\(r_i\)` is the degree of freedom
+- `\(U\)` and `\(V\)` are `\(\chi^2\)` distribution
+
+---
+
+class: bg-main3
+
+# Relationship with the T-Test
+
+.font2[
+- Their statistics follow different probability function
+- But they have similar aim, i.e. to measure mean differences
+- Remember how `\(X^2 \sim \chi^2(1) : X \sim N(0, 1)\)`?
+- It turned out: `\(T^2 = F\)`.amber[*]
+]
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;
+.amber[*]Terms and conditions applied
+
+???
+
+- `\(T^2=F\)` only happens when we have a two-sample T-Test with **equal
+  variance**. In other cases, `\(T^2 \neq F\)`.
+- F-distribution is a derivation of Gamma and `\(\chi^2\)` distribution
+- While T-distribution is a derivation of a standardized normal distribution
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- Throughout the lecture, we will use example datasets from `R`
+- For this example, we are using a `PlantGrowth` datasset
+- It simply describes dried plants weight measured in multiple groups
+- Group: control (`ctrl`), treatment 1 (`trt1`), treatment 2 (`trt2`)
+]
+
+---
+
+count: false
+
+## Initial inspection
+
+
+```r
+# Data structure
+str(PlantGrowth)
+```
+
+```
+## 'data.frame':	30 obs. of  2 variables:
+##  $ weight: num  4.17 5.58 5.18 6.11 4.5 4.61 5.17 4.53 5.33 5.14 ...
+##  $ group : Factor w/ 3 levels "ctrl","trt1",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+```r
+# Descriptive statistics
+with(PlantGrowth, tapply(weight, group, summary)) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##      Min. 1st Qu. Median Mean 3rd Qu. Max.
+## ctrl 4.17    4.55   5.15 5.03    5.29 6.11
+## trt1 3.59    4.21   4.55 4.66    4.87 6.03
+## trt2 4.92    5.27   5.44 5.53    5.73 6.31
+```
+
+---
+
+count: false
+
+## Assumption checks
+
+
+```r
+with(PlantGrowth, tapply(weight, group, shapiro.test)) %&gt;%
+	lapply(broom::tidy) %&gt;% lapply(data.frame) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##      statistic p.value                      method
+## ctrl     0.957   0.747 Shapiro-Wilk normality test
+## trt1     0.930   0.452 Shapiro-Wilk normality test
+## trt2     0.941   0.564 Shapiro-Wilk normality test
+```
+
+```r
+car::leveneTest(weight ~ group, data=PlantGrowth)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  2    1.12   0.34
+##       27
+```
+
+---
+
+count: false
+
+## Perform ANOVA
+
+
+```r
+aov.res1 &lt;- aov(weight ~ group, data=PlantGrowth)
+anova(aov.res1)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: weight
+##           Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## group      2   3.77   1.883    4.85  0.016 *
+## Residuals 27  10.49   0.389                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+count: false
+
+## Evaluate model goodness of fit
+
+&lt;img src="index_files/figure-html/one.way4-1.png" width="100%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.one.way-1.png" width="100%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+# Steps to perform ANOVA
+
+.font2[
+1. Normality `\(\to\)` Shapiro-Wilk or Anderson-Darling test
+1. Homogeneity of variance `\(\to\)` Levene's test
+1. Do modelling and interpretation
+1. Check model goodness of fit
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- .amber[Two-way ANOVA]
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Two-Way ANOVA
+
+.font2[
+- One-way ANOVA is enough, why two?
+- Sometimes we want to consider other groups into our analysis
+- We can also control for interaction among groups
+- Two-way ANOVA often referred as .amber[factorial] ANOVA
+]
+
+--
+
+## Assumptions
+
+.font2[
+- I.I.D
+- Normality
+- Homogeneity of variance
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- We will conduct the test using a dataset in `R`
+- This data just happen to exist in JASP as well (give it a try!)
+- Dataset `ToothGrowth` has three variables of:
+  - `len`: Tooth length
+  - `supp`: Supplement given
+  - `dose`: Supplement dose
+]
+
+---
+
+count: false
+
+## Initial inspection
+
+
+```r
+# Data structure
+str(ToothGrowth)
+```
+
+```
+## 'data.frame':	60 obs. of  3 variables:
+##  $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
+##  $ supp: Factor w/ 2 levels "OJ","VC": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ dose: Factor w/ 3 levels "0.5","1","2": 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+```r
+# Set dose as a factor
+ToothGrowth$dose %&lt;&gt;% factor(levels=c(0.5, 1.0, 2.0))
+```
+
+---
+
+count: false
+
+## Descriptive statistics
+
+
+```r
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, summary)) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##    Min. 1st Qu. Median Mean 3rd Qu. Max.
+## OJ  8.2    15.5   22.7 20.7    25.7 30.9
+## VC  4.2    11.2   16.5 17.0    23.1 33.9
+```
+
+```r
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, summary)) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##     Min. 1st Qu. Median Mean 3rd Qu. Max.
+## 0.5  4.2    7.22   9.85 10.6    12.2 21.5
+## 1   13.6   16.25  19.25 19.7    23.4 27.3
+## 2   18.5   23.53  25.95 26.1    27.8 33.9
+```
+
+---
+
+count: false
+
+## Normality test
+
+
+```r
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, shapiro.test)) %&gt;%
+	lapply(broom::tidy) %&gt;% lapply(data.frame) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##    statistic p.value                      method
+## OJ     0.918  0.0236 Shapiro-Wilk normality test
+## VC     0.966  0.4284 Shapiro-Wilk normality test
+```
+
+```r
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, shapiro.test)) %&gt;%
+	lapply(broom::tidy) %&gt;% lapply(data.frame) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##     statistic p.value                      method
+## 0.5     0.941   0.247 Shapiro-Wilk normality test
+## 1       0.931   0.164 Shapiro-Wilk normality test
+## 2       0.978   0.902 Shapiro-Wilk normality test
+```
+
+---
+
+count: false
+
+## Data in `OJ` is not  normal, what to do?
+
+--
+
+.font2[Keep calm. ]
+--
+.font2[We can try a visual examination.]
+--
+
+&lt;img src="index_files/figure-html/two.way4-1.png" width="100%" /&gt;
+
+---
+
+count: false
+
+## Homogeneity of variance
+
+
+```r
+# Grouped by supplement type
+car::leveneTest(len ~ supp, data=ToothGrowth)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  1    1.21   0.28
+##       58
+```
+
+```r
+# Grouped by prescribed dose
+car::leveneTest(len ~ dose, data=ToothGrowth)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  2    0.65   0.53
+##       57
+```
+
+---
+
+count: false
+
+## Conducting factorial ANOVA
+
+
+```r
+aov.res2 &lt;- aov(len ~ supp + dose, data=ToothGrowth)
+anova(aov.res2)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: len
+##           Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+## supp       1    205     205    14.0 0.00043 ***
+## dose       2   2426    1213    82.8 &lt; 2e-16 ***
+## Residuals 56    820      15                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+count: false
+
+## Evaluate model goodness of fit
+
+&lt;img src="index_files/figure-html/two.way7-1.png" width="100%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.two.way-1.png" width="100%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- .amber[Repeated measure ANOVA]
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Repeated measure ANOVA
+
+.font2[
+- An extension to paired T-Test
+- As in the unpaired variant, we can perform one-way or factorial ANOVA
+]
+
+--
+
+## Assumptions
+
+.font2[
+- Normality
+- Sphericity `\(\to\)` Mauchly's test 
+- No extreme outlier
+]
+
+???
+
+- Sphericity: homogeneity of between group differences variance
+- Outlier: Q3 + 1.5 IQR (or Q1 - 1.5 IQR)
+- Extreme point: Q3 + 3 IQR (or Q1 - 3 IQR)
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- We are pretty much accustomed to measuring mean differences
+- We also know how ANOVA works (practically)
+- Now we shall use `ChickWeight` dataset to apply repeated ANOVA
+]
+
+--
+
+## What's in the data?
+
+.font2[
+- `weight`: chicken weight in grams
+- `Time`: number of days since birth
+- `Chick`: unique identifier on the chicken
+- `Diet`: type of diet given 
+]
+
+---
+
+count: false
+
+
+```r
+# Data structure
+str(ChickWeight)
+```
+
+```
+## Classes 'nfnGroupedData', 'nfGroupedData', 'groupedData' and 'data.frame':	578 obs. of  4 variables:
+##  $ weight: num  42 51 59 64 76 93 106 125 149 171 ...
+##  $ Time  : num  0 2 4 6 8 10 12 14 16 18 ...
+##  $ Chick : Ord.factor w/ 50 levels "18"&lt;"16"&lt;"15"&lt;..: 15 15 15 15 15 15 15 15 15 15 ...
+##  $ Diet  : Factor w/ 4 levels "1","2","3","4": 1 1 1 1 1 1 1 1 1 1 ...
+##  - attr(*, "formula")=Class 'formula'  language weight ~ Time | Chick
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+##  - attr(*, "outer")=Class 'formula'  language ~Diet
+##   .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+##  - attr(*, "labels")=List of 2
+##   ..$ x: chr "Time"
+##   ..$ y: chr "Body weight"
+##  - attr(*, "units")=List of 2
+##   ..$ x: chr "(days)"
+##   ..$ y: chr "(gm)"
+```
+
+---
+
+count: false
+
+## Data normality
+
+
+```r
+with(ChickWeight, tapply(weight, Time, shapiro.test)) %&gt;%
+	lapply(broom::tidy) %&gt;% lapply(data.frame) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##    statistic  p.value                      method
+## 0      0.890 2.22e-04 Shapiro-Wilk normality test
+## 2      0.873 6.86e-05 Shapiro-Wilk normality test
+## 4      0.973 3.15e-01 Shapiro-Wilk normality test
+## 6      0.982 6.48e-01 Shapiro-Wilk normality test
+## 8      0.980 5.77e-01 Shapiro-Wilk normality test
+## 10     0.981 6.16e-01 Shapiro-Wilk normality test
+## 12     0.983 6.86e-01 Shapiro-Wilk normality test
+## 14     0.973 3.25e-01 Shapiro-Wilk normality test
+## 16     0.986 8.30e-01 Shapiro-Wilk normality test
+## 18     0.991 9.75e-01 Shapiro-Wilk normality test
+## 20     0.991 9.68e-01 Shapiro-Wilk normality test
+## 21     0.986 8.69e-01 Shapiro-Wilk normality test
+```
+
+--
+
+.font2[
+Hmm.. Data in `\(t_0\)` and `\(t_2\)` does not seem right
+]
+
+???
+
+Option:
+- Transformation: standardization, normalization
+- Filter and delete rows
+
+---
+
+count: false
+
+
+```r
+*tbl &lt;- subset(ChickWeight, subset=!{ChickWeight$Time==0 | ChickWeight$Time==2})
+with(tbl, tapply(weight, Time, shapiro.test)) %&gt;%
+	lapply(broom::tidy) %&gt;% lapply(data.frame) %&gt;% {do.call(rbind, .)}
+```
+
+```
+##    statistic p.value                      method
+## 4      0.973   0.315 Shapiro-Wilk normality test
+## 6      0.982   0.648 Shapiro-Wilk normality test
+## 8      0.980   0.577 Shapiro-Wilk normality test
+## 10     0.981   0.616 Shapiro-Wilk normality test
+## 12     0.983   0.686 Shapiro-Wilk normality test
+## 14     0.973   0.325 Shapiro-Wilk normality test
+## 16     0.986   0.830 Shapiro-Wilk normality test
+## 18     0.991   0.975 Shapiro-Wilk normality test
+## 20     0.991   0.968 Shapiro-Wilk normality test
+## 21     0.986   0.869 Shapiro-Wilk normality test
+```
+
+--
+
+.font2[Now that looks better]
+
+---
+
+count: false
+
+## Checking extreme outliers
+
+
+```r
+# Use `weight` variable as a reference to identify outliers
+rstatix::identify_outliers(tbl, variable="weight")
+```
+
+```
+##   weight Time Chick Diet is.outlier is.extreme
+## 1    331   21    21    2       TRUE      FALSE
+## 2    327   20    34    3       TRUE      FALSE
+## 3    341   21    34    3       TRUE      FALSE
+## 4    332   18    35    3       TRUE      FALSE
+## 5    361   20    35    3       TRUE      FALSE
+## 6    373   21    35    3       TRUE      FALSE
+## 7    321   21    40    3       TRUE      FALSE
+## 8    322   21    48    4       TRUE      FALSE
+```
+
+--
+
+.font2[Outliers exist, but none is extreme. Safe to proceed!]
+
+---
+
+count: false
+
+## Perform repeated measure one-way ANOVA
+
+
+```r
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time)
+```
+
+```
+## ANOVA Table (type III tests)
+## 
+## $ANOVA
+##   Effect DFn DFd   F         p p&lt;.05   ges
+## 1   Time   9 396 196 8.03e-140     * 0.617
+## 
+## $`Mauchly's Test for Sphericity`
+##   Effect        W         p p&lt;.05
+## 1   Time 6.67e-13 1.48e-209     *
+## 
+## $`Sphericity Corrections`
+##   Effect   GGe     DF[GG]    p[GG] p[GG]&lt;.05   HFe      DF[HF]    p[HF]
+## 1   Time 0.136 1.22, 53.7 3.46e-21         * 0.137 1.24, 54.43 1.92e-21
+##   p[HF]&lt;.05
+## 1         *
+```
+
+---
+
+count: false
+
+## Perform repeated measure factorial ANOVA
+
+
+```r
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time, between=Diet)
+```
+
+```
+## ANOVA Table (type III tests)
+## 
+## $ANOVA
+##      Effect DFn DFd      F         p p&lt;.05   ges
+## 1      Diet   3  41   5.01  5.00e-03     * 0.185
+## 2      Time   9 369 234.20 1.21e-146     * 0.685
+## 3 Diet:Time  27 369   3.52  2.77e-08     * 0.089
+## 
+## $`Mauchly's Test for Sphericity`
+##      Effect        W         p p&lt;.05
+## 1      Time 8.13e-13 1.97e-190     *
+## 2 Diet:Time 8.13e-13 1.97e-190     *
+## 
+## $`Sphericity Corrections`
+##      Effect  GGe      DF[GG]    p[GG] p[GG]&lt;.05   HFe      DF[HF]    p[HF]
+## 1      Time 0.14 1.26, 51.64 9.97e-23         * 0.142 1.28, 52.51 4.53e-23
+## 2 Diet:Time 0.14 3.78, 51.64 1.40e-02         * 0.142 3.84, 52.51 1.40e-02
+##   p[HF]&lt;.05
+## 1         *
+## 2         *
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Lesson learnt
+
+.font2[
+- Assumptions to fulfill
+- Differences between one-way and factorial ANOVA
+- Repeated measure: in case of violation in independency
+]
+
+???
+
+- Assumptions: normality, homogeneity of variance, sphericity (in case repeated measures)
+- Good practice: check for outliers and extreme points
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- Repeated measure ANOVA
+- .amber[Post-Hoc analysis]
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Post-Hoc test
+
+.font2[
+- Definition?
+- Why post-hoc test?
+- What type of test to consider?
+- Any further assumption?
+]
+
+???
+
+- In the original `\(H_ a\)`, we did not assume which mean differences may reject the `\(H_0\)`
+- Post-hoc test aims to measure pairwise difference from assigned groups
+- Important to see which one contributed to `\(H_0\)` rejection
+
+---
+
+class: bg-main3
+
+# Tukey's Honestly Significant Difference
+
+.font2[
+- Often abbreviated as the Tukey's HSD test or Tukey's range test
+- Measure pairwise differences after conducting ANOVA
+- .amber[Why not use two-sample T-Test?]
+]
+
+???
+
+- Offer protection against type-I error inflation
+- More comparison `\(\to\)` higher chance of having a statistical error in ANOVA
+- Tukey's HSD adjust the critical value based on the number of groups assigned
+- Meaning that, with more group Tukey's will find it harder to produce a significant p-value
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+aov.res1 %&gt;% anova() %&gt;% broom::tidy()
+```
+
+```
+## # A tibble: 2 x 6
+##   term         df sumsq meansq statistic p.value
+##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 group         2  3.77  1.88       4.85  0.0159
+## 2 Residuals    27 10.5   0.389     NA    NA
+```
+
+```r
+TukeyHSD(aov.res1) %&gt;% broom::tidy()
+```
+
+```
+## # A tibble: 3 x 7
+##   term  contrast  null.value estimate conf.low conf.high adj.p.value
+##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 group trt1-ctrl          0   -0.371   -1.06      0.320      0.391 
+## 2 group trt2-ctrl          0    0.494   -0.197     1.19       0.198 
+## 3 group trt2-trt1          0    0.865    0.174     1.56       0.0120
+```
+
+---
+
+count: false
+
+
+```r
+aov.res2 %&gt;% anova() %&gt;% broom::tidy()
+```
+
+```
+## # A tibble: 3 x 6
+##   term         df sumsq meansq statistic   p.value
+##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 supp          1  205.  205.       14.0  4.29e- 4
+## 2 dose          2 2426. 1213.       82.8  1.87e-17
+## 3 Residuals    56  820.   14.7      NA   NA
+```
+
+```r
+TukeyHSD(aov.res2) %&gt;% broom::tidy()
+```
+
+```
+## # A tibble: 4 x 7
+##   term  contrast null.value estimate conf.low conf.high adj.p.value
+##   &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 supp  VC-OJ             0    -3.7     -5.68     -1.72    4.29e- 4
+## 2 dose  1-0.5             0     9.13     6.22     12.0     1.32e- 9
+## 3 dose  2-0.5             0    15.5     12.6      18.4     7.31e-12
+## 4 dose  2-1               0     6.37     3.45      9.28    6.98e- 6
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- .amber[Effect size]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Effect size
+
+.font2[
+- Concept recall: Cohen's `\(d\)`
+- `\(d\)` is limited to measure distance in a two-sample mean difference
+- ANOVA requires something more general
+- Solution: Eta-square `\(\eta^2\)`
+]
+
+--
+
+.font2[
+`\begin{align}
+\eta^2 &amp;= \frac{SS_{effect}}{SS_{total}} \\
+Partial\ \eta^2 &amp;= \frac{SS_{effect}}{SS_{effect} + SS_{error}}
+\end{align}`
+]
+
+???
+
+- `\(\eta^2\)`: in ANOVA
+- Partial `\(\eta^2\)`: in repeated-measure ANOVA
+
+---
+
+class: bg-main3
+
+# Example, please?
+
+
+```r
+heplots::etasq(aov.res1, partial=FALSE)
+```
+
+```
+##           eta^2
+## group     0.264
+## Residuals    NA
+```
+
+```r
+heplots::etasq(aov.res2, partial=FALSE)
+```
+
+```
+##            eta^2
+## supp      0.0595
+## dose      0.7029
+## Residuals     NA
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Power analysis
+
+---
+
+
+```r
+pwr::pwr.anova.test(k=3, n=10, f=0.264)
+```
+
+```
+## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 10
+##               f = 0.264
+##       sig.level = 0.05
+##           power = 0.213
+## 
+## NOTE: n is number in each group
+```
+
+---
+
+count: false
+
+
+```r
+pwr::pwr.anova.test(k=2, n=30, f=0.0595)
+```
+
+```
+## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 2
+##               n = 30
+##               f = 0.0595
+##       sig.level = 0.05
+##           power = 0.0739
+## 
+## NOTE: n is number in each group
+```
+
+---
+
+count: false
+
+
+```r
+pwr::pwr.anova.test(k=3, n=20, f=0.7029)
+```
+
+```
+## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 20
+##               f = 0.703
+##       sig.level = 0.05
+##           power = 0.999
+## 
+## NOTE: n is number in each group
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3 hide-slide-number middle center
+
+.font5.amber[Query?]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

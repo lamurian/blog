@@ -1,0 +1,769 @@
+---
+title: "Parametric: Mean in Multiple Groups"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "ggpubr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[Parametric: .amber[Mean] in Multiple Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[One-way ANOVA]
+- Two-way ANOVA
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# One-Way ANOVA
+
+.font2[
+- A generalization of two-sample T-Test
+- We can consider multiple groups at once
+- What does .amber[one-way] mean?
+- Follows an F-distribution
+]
+
+---
+
+???
+
+- One-way refer to how many group we use as a reference to separate the data
+- We will see on the next section how to perform ANOVA if we have multiple
+  grouping variables
+- In such cases, we are conducting two-way ANOVA / often referred as factorial ANOVA
+- Use sum of square to measure within and between differences
+- The denominator is a residual
+
+---
+
+count: false
+
+## Hypothesis
+
+.font2[
+- $H_0:$ The population mean of all groups are all equal
+- $H_a:$ The population mean of all groups are not all equal
+]
+
+???
+
+Please notice the slight difference between .amber[are not all equal] and
+.amber[are all unequal]
+
+---
+
+count: false
+
+## Statistics
+
+$$F = \frac{\displaystyle \sum_{j=1}^{k} n_j (\bar{X}_j - \bar{X})^2 / (k-1)}{\displaystyle \sum_{j=1}^k \sum_{i=1}^N (X_i - \bar{X}_j)^2 / (N-k)}$$
+
+???
+
+- $\bar{X}_j:$ Mean of a group
+- $\bar{X}:$ Mean of all sampled groups
+- F-Test is a quotient of *between* to *within* differences, both measured as mean squared
+- Mean square is the sum square divided by the degree of freedom
+- $\nu = k-1$ for between comparison and $\nu = N-k$ for within comparison
+- $k$: Number of groups
+- $N$: total number of sample
+
+---
+
+count: false
+
+## Assumptions
+
+.font2[
+- I.I.D
+- Normally distributed
+- Homogeneity of variance
+]
+
+???
+
+- Shapiro-Wilk test
+- Levene's test
+
+---
+
+layout: false
+class: bg-main3
+
+# F- Distribution
+
+.font2[
+- Define a ratio of two variances
+- Derived from the $\chi^2$ distribution
+]
+
+???
+
+Concept recall: $\chi^2$ distribution comes from a gamma distribution
+
+--
+
+\begin{align}
+P(X=x) & = \frac{(\frac{r_1}{r_2})^{\frac{r_1}{2}} \Gamma[(r_1 + r_2) / 2] x^{\frac{r_1}{2}-1}}{\Gamma(\frac{r_1}{2}) \Gamma(\frac{r_2}{2}) [1 + (\frac{r_1 \cdot x}{r_2})]^{\frac{(r_1+r_2)}{2}}} \\
+X & \sim F(r_1, r_2) \\
+F & = \frac{U / r_1}{V / r_2}
+\end{align}
+
+???
+
+- $r_i$ is the degree of freedom
+- $U$ and $V$ are $\chi^2$ distribution
+
+---
+
+class: bg-main3
+
+# Relationship with the T-Test
+
+.font2[
+- Their statistics follow different probability function
+- But they have similar aim, i.e. to measure mean differences
+- Remember how $X^2 \sim \chi^2(1) : X \sim N(0, 1)$?
+- It turned out: $T^2 = F$.amber[*]
+]
+
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+.amber[*]Terms and conditions applied
+
+???
+
+- $T^2=F$ only happens when we have a two-sample T-Test with **equal
+  variance**. In other cases, $T^2 \neq F$.
+- F-distribution is a derivation of Gamma and $\chi^2$ distribution
+- While T-distribution is a derivation of a standardized normal distribution
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- Throughout the lecture, we will use example datasets from `R`
+- For this example, we are using a `PlantGrowth` datasset
+- It simply describes dried plants weight measured in multiple groups
+- Group: control (`ctrl`), treatment 1 (`trt1`), treatment 2 (`trt2`)
+]
+
+---
+
+count: false
+
+## Initial inspection
+
+```{r one.way1}
+# Data structure
+str(PlantGrowth)
+
+# Descriptive statistics
+with(PlantGrowth, tapply(weight, group, summary)) %>% {do.call(rbind, .)}
+```
+
+---
+
+count: false
+
+## Assumption checks
+
+```{r one.way2}
+with(PlantGrowth, tapply(weight, group, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+car::leveneTest(weight ~ group, data=PlantGrowth)
+```
+
+---
+
+count: false
+
+## Perform ANOVA
+
+```{r one.way3}
+aov.res1 <- aov(weight ~ group, data=PlantGrowth)
+anova(aov.res1)
+```
+
+---
+
+count: false
+
+## Evaluate model goodness of fit
+
+```{r one.way4, echo=F}
+par(mfrow=c(2, 2)); plot(aov.res1)
+```
+
+---
+
+count: false
+
+```{r plt.one.way, echo=FALSE}
+
+polar.night <- "#4C566A"
+snow.storm <- "#E5E9F0"
+ggviolin(PlantGrowth, x="group", y="weight", color=polar.night, fill=polar.night,
+	add="mean_sd", add.params=list(color=snow.storm)
+) + theme_minimal() + stat_compare_means(method="anova", label.y=7.1)
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Steps to perform ANOVA
+
+.font2[
+1. Normality $\to$ Shapiro-Wilk or Anderson-Darling test
+1. Homogeneity of variance $\to$ Levene's test
+1. Do modelling and interpretation
+1. Check model goodness of fit
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- .amber[Two-way ANOVA]
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Two-Way ANOVA
+
+.font2[
+- One-way ANOVA is enough, why two?
+- Sometimes we want to consider other groups into our analysis
+- We can also control for interaction among groups
+- Two-way ANOVA often referred as .amber[factorial] ANOVA
+]
+
+--
+
+## Assumptions
+
+.font2[
+- I.I.D
+- Normality
+- Homogeneity of variance
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- We will conduct the test using a dataset in `R`
+- This data just happen to exist in JASP as well (give it a try!)
+- Dataset `ToothGrowth` has three variables of:
+  - `len`: Tooth length
+  - `supp`: Supplement given
+  - `dose`: Supplement dose
+]
+
+---
+
+count: false
+
+## Initial inspection
+
+```{r two.way1}
+# Data structure
+str(ToothGrowth)
+
+# Set dose as a factor
+ToothGrowth$dose %<>% factor(levels=c(0.5, 1.0, 2.0))
+```
+
+---
+
+count: false
+
+## Descriptive statistics
+
+```{r two.way2}
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, summary)) %>% {do.call(rbind, .)}
+
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, summary)) %>% {do.call(rbind, .)}
+```
+
+---
+
+count: false
+
+## Normality test
+
+```{r two.way3}
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+---
+
+count: false
+
+## Data in `OJ` is not  normal, what to do?
+
+--
+
+.font2[Keep calm. ]
+--
+.font2[We can try a visual examination.]
+--
+
+```{r two.way4, echo=FALSE, fig.height=4}
+tmp <- car::qqPlot(ToothGrowth$len[ToothGrowth$supp=="OJ"], ylab="")
+```
+
+---
+
+count: false
+
+## Homogeneity of variance
+
+```{r two.way5}
+# Grouped by supplement type
+car::leveneTest(len ~ supp, data=ToothGrowth)
+
+# Grouped by prescribed dose
+car::leveneTest(len ~ dose, data=ToothGrowth)
+```
+
+---
+
+count: false
+
+## Conducting factorial ANOVA
+
+```{r two.way6}
+aov.res2 <- aov(len ~ supp + dose, data=ToothGrowth)
+anova(aov.res2)
+```
+
+---
+
+count: false
+
+## Evaluate model goodness of fit
+
+```{r two.way7, echo=F}
+par(mfrow=c(2,2))
+plot(aov.res2)
+```
+
+---
+
+count: false
+
+```{r plt.two.way, echo=FALSE}
+
+ggviolin(ToothGrowth, x="dose", y="len", facet.by="supp",
+	color=polar.night, fill=polar.night,
+	add="mean_sd", add.params=list(color=snow.storm)
+) + theme_minimal()
+
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- .amber[Repeated measure ANOVA]
+- Post-Hoc analysis
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Repeated measure ANOVA
+
+.font2[
+- An extension to paired T-Test
+- As in the unpaired variant, we can perform one-way or factorial ANOVA
+]
+
+--
+
+## Assumptions
+
+.font2[
+- Normality
+- Sphericity $\to$ Mauchly's test 
+- No extreme outlier
+]
+
+???
+
+- Sphericity: homogeneity of between group differences variance
+- Outlier: Q3 + 1.5 IQR (or Q1 - 1.5 IQR)
+- Extreme point: Q3 + 3 IQR (or Q1 - 3 IQR)
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+- We are pretty much accustomed to measuring mean differences
+- We also know how ANOVA works (practically)
+- Now we shall use `ChickWeight` dataset to apply repeated ANOVA
+]
+
+--
+
+## What's in the data?
+
+.font2[
+- `weight`: chicken weight in grams
+- `Time`: number of days since birth
+- `Chick`: unique identifier on the chicken
+- `Diet`: type of diet given 
+]
+
+---
+
+count: false
+
+```{r repeated1}
+# Data structure
+str(ChickWeight)
+```
+
+---
+
+count: false
+
+## Data normality
+
+```{r repeated2}
+with(ChickWeight, tapply(weight, Time, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+--
+
+.font2[
+Hmm.. Data in $t_0$ and $t_2$ does not seem right
+]
+
+???
+
+Option:
+- Transformation: standardization, normalization
+- Filter and delete rows
+
+---
+
+count: false
+
+```{r repeated3}
+{{tbl <- subset(ChickWeight, subset=!{ChickWeight$Time==0 | ChickWeight$Time==2})}}
+with(tbl, tapply(weight, Time, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+--
+
+.font2[Now that looks better]
+
+---
+
+count: false
+
+## Checking extreme outliers
+
+```{r repeated4}
+# Use `weight` variable as a reference to identify outliers
+rstatix::identify_outliers(tbl, variable="weight")
+```
+
+--
+
+.font2[Outliers exist, but none is extreme. Safe to proceed!]
+
+---
+
+count: false
+
+## Perform repeated measure one-way ANOVA
+
+```{r repeated5}
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time)
+```
+
+---
+
+count: false
+
+## Perform repeated measure factorial ANOVA
+
+```{r repeated6}
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time, between=Diet)
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Lesson learnt
+
+.font2[
+- Assumptions to fulfill
+- Differences between one-way and factorial ANOVA
+- Repeated measure: in case of violation in independency
+]
+
+???
+
+- Assumptions: normality, homogeneity of variance, sphericity (in case repeated measures)
+- Good practice: check for outliers and extreme points
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- Repeated measure ANOVA
+- .amber[Post-Hoc analysis]
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Post-Hoc test
+
+.font2[
+- Definition?
+- Why post-hoc test?
+- What type of test to consider?
+- Any further assumption?
+]
+
+???
+
+- In the original $H_ a$, we did not assume which mean differences may reject the $H_0$
+- Post-hoc test aims to measure pairwise difference from assigned groups
+- Important to see which one contributed to $H_0$ rejection
+
+---
+
+class: bg-main3
+
+# Tukey's Honestly Significant Difference
+
+.font2[
+- Often abbreviated as the Tukey's HSD test or Tukey's range test
+- Measure pairwise differences after conducting ANOVA
+- .amber[Why not use two-sample T-Test?]
+]
+
+???
+
+- Offer protection against type-I error inflation
+- More comparison $\to$ higher chance of having a statistical error in ANOVA
+- Tukey's HSD adjust the critical value based on the number of groups assigned
+- Meaning that, with more group Tukey's will find it harder to produce a significant p-value
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r tukey1}
+aov.res1 %>% anova() %>% broom::tidy()
+TukeyHSD(aov.res1) %>% broom::tidy()
+```
+
+---
+
+count: false
+
+```{r tukey2}
+aov.res2 %>% anova() %>% broom::tidy()
+TukeyHSD(aov.res2) %>% broom::tidy()
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- One-way ANOVA
+- Two-way ANOVA
+- Repeated measure ANOVA
+- Post-Hoc analysis
+- .amber[Effect size]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Effect size
+
+.font2[
+- Concept recall: Cohen's $d$
+- $d$ is limited to measure distance in a two-sample mean difference
+- ANOVA requires something more general
+- Solution: Eta-square $\eta^2$
+]
+
+--
+
+.font2[
+\begin{align}
+\eta^2 &= \frac{SS_{effect}}{SS_{total}} \\
+Partial\ \eta^2 &= \frac{SS_{effect}}{SS_{effect} + SS_{error}}
+\end{align}
+]
+
+???
+
+- $\eta^2$: in ANOVA
+- Partial $\eta^2$: in repeated-measure ANOVA
+
+---
+
+class: bg-main3
+
+# Example, please?
+
+```{r eta.sq}
+heplots::etasq(aov.res1, partial=FALSE)
+heplots::etasq(aov.res2, partial=FALSE)
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Power analysis
+
+---
+
+```{r power.anova1}
+pwr::pwr.anova.test(k=3, n=10, f=0.264)
+```
+
+---
+
+count: false
+
+```{r power.anova2}
+pwr::pwr.anova.test(k=2, n=30, f=0.0595)
+```
+
+---
+
+count: false
+
+```{r power.anova3}
+pwr::pwr.anova.test(k=3, n=20, f=0.7029)
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3 hide-slide-number middle center
+
+.font5.amber[Query?]
