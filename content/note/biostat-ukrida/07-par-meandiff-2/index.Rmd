@@ -1,0 +1,52 @@
+---
+author: lam
+title: "Parametric: Mean in Multiple Groups"
+weight: 7
+description: >
+
+  When we have a normally-distributed data, parameters $\mu$ and $\sigma$ from
+  our PDF can completely explain the behaviour seen in our sample. With $\mu$
+  represents the central tendency and $\sigma$ the spread, we can directly
+  compare similarly distributed samples. Often, we need to confirm how much our
+  average value differs from other observations. In doing so, we are facing a
+  mean difference problem in our venture of statistics. This lecture will help
+  us proving mean differences in one-sample and two-sample problems.
+
+summary: >
+
+  When we have a normally-distributed data, parameters $\mu$ and $\sigma$ from
+  our PDF can completely explain the behaviour seen in our sample. With $\mu$
+  represents the central tendency and $\sigma$ the spread, we can directly
+  compare similarly distributed samples. Often, we need to confirm how much our
+  average value differs from other observations. In doing so, we are facing a
+  mean difference problem in our venture of statistics. This lecture will help
+  us proving mean differences in one-sample and two-sample problems.
+
+date: 2020-10-15
+categories: ["statistics", "ukrida"]
+tags: ["R", "hypothesis"]
+slug: 06-par-meandiff
+csl: ../harvard.csl
+bibliography: ../ref.bib
+draft: false
+---
+
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/07-par-meandiff-2/slide)
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "ggpubr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+When we obtain a normally-distributed data, parameters $\mu$ and $\sigma$ from
+our PDF can completely explain the behaviour seen in our sample. With $\mu$
+represents the central tendency and $\sigma$ the spread, we can directly
+compare similarly distributed samples. Often, we need to confirm how much our
+average value differs from other observations. In doing so, we are facing a
+mean difference problem in our venture of statistics. This lecture will help us
+proving mean differences in one-sample and two-sample problems.
+
