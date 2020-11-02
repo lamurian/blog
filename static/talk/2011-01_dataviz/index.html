@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics to Understand the Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="index_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="index_files/jquery-1.12.4/jquery.min.js"></script>
+    <link href="index_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="index_files/datatables-binding-0.15/datatables.js"></script>
+    <link href="index_files/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="index_files/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="index_files/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="index_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="index_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+    <script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[.amber[Statistics] to Understand the Data]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Type of data]
+- Descriptive statistics
+- Data distribution
+- Visual examination
+- Goodness of fit test
+]]
+
+---
+
+layout: true
+class: split-two bg-main3
+
+.bg-main5.column[.vmiddle.center.content[
+{{content}}
+]]
+
+.column[.vmiddle.content[
+# Type of data
+
+.font2[
+- Categorical
+- Numeric
+]
+]]
+
+---
+
+&lt;img src="https://image.freepik.com/free-vector/choosing-healthy-unhealthy-food_23-2148584074.jpg" width="100%"&gt;
+Nominal
+
+???
+
+- Example: healthy vs unhealthy food
+- In nominal data, we *identify* what distinguishes one data from another
+- No applicable mathematical operation
+- Does not provide direct comparison
+
+---
+
+count: false
+
+&lt;img src="https://thumbs.dreamstime.com/b/vector-illustration-horizontal-banner-student-growth-chart-climbing-up-to-higher-level-help-books-graduating-99222118.jpg" width="100%"&gt;
+Ordinal
+
+???
+
+- Example: education status
+- There exists a natural order
+- Stratified
+- No applicable mathematical operation
+- Enable direct comparison
+
+--
+
+???
+
+Why does it matter?
+
+- To apply a correct contrast
+- Example: when performing a statistical test / model requiring the sum of
+  square (e.g. ANOVA or GLM)
+- Nominal: Treatment contrast
+- Ordinal: Polynomial orthogonal contrast
+- A contrast determines the value of your estimates in GLM
+
+---
+
+count: false
+
+&lt;img src="https://image.freepik.com/free-vector/vector-illustration-counting-hand_29937-2444.jpg" width="100%"&gt;
+Discrete
+
+???
+
+- Countable data
+- Limited arithmetical operation: addition and subtraction
+- Example: finding a frequency
+
+---
+
+count: false
+
+&lt;img src="https://blog.beamex.com/hs-fs/hubfs/Beamex_blog_pictures/Temperature-graph---2018-06-18-v2.jpg?width=1200&amp;name=Temperature-graph---2018-06-18-v2.jpg" width="100%"&gt;
+Numeric
+
+???
+
+- Measurable data
+- All arithmetical operation
+- Interval: No absolute zero, e.g. Fahrenheit, Celsius and Reaumur
+- Ratio: Has an absolute zero, e.g. Kelvin and Rankine
+
+---
+
+layout: false
+class: bg-main3
+
+.amber[
+# Recap
+]
+
+.font2[
+Categorical:
+- Nominal
+- Ordinal
+]
+
+--
+
+.font2[
+Numeric:
+- Discrete
+- Continuous:
+  - Interval
+  - Ratio
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Type of data
+- .amber[Descriptive statistics]
+- Data distribution
+- Visual examination
+- Goodness of fit test
+]]
+
+---
+
+class: bg-main3
+
+# What does .pink[statistics] do?
+
+.font2[
+- Measures a .amber[sample]
+- .amber[Approximates] parameters in the population
+- Tells us how the data .amber[behave]
+]
+
+???
+
+- Statistics describes a sample
+- It estimates the parameter in a given population
+- Parameter is the measures of a population
+- We often do not know what the parameter is
+- Behaviour of a data as reflected by its probability function
+
+---
+
+count: false
+class: bg-main3
+
+# What does .pink[statistics] measure?
+
+.font2[
+- General description of a data point
+- .amber[Central] tendency
+- The .amber[spread]
+]
+
+---
+
+class: bg-main3
+
+# Central Tendency
+
+.font2[
+- Mean
+- Median
+- Mode
+]
+
+???
+
+- Mean = sum of all data divided by `\(n\)`, describes ratio and interval
+- Median = the midpoint of a data, describes ordinal and all numeric data
+- Mode = the most occurring element in a data
+- A mean highly depends on symmetricity
+- Symmetric data `\(\to \mu = M\)`
+- Asymmetric data `\(\to \mu \neq M\)`
+
+---
+
+class: bg-main3
+
+# Spread
+
+.font2[
+- Interquartile Range (IQR)
+- Variance
+- Standard deviation
+]
+
+???
+
+- As its name suggest, the spread indicates (ahem) the spread of your data
+- You can divide your data into `\(k\)` parts, in which you regards group of `\(k\)` as quantile
+- Quartile is a specific case of quantile, where you separate your data into four groups
+- There are others too: decentile, percentile, etc
+- Interquartile range measure a range in your quartile
+- Variance (and consequently standard deviation) in statistics is a bit
+  different from their parameter
+
+---
+
+layout: true
+class: bg-main3
+
+# Variance
+
+---
+
+count: false
+
+.font2[
+`\begin{align}
+\sigma^2 &amp;= \frac{\displaystyle \sum_{i=1}^n(x_i - \mu)^2}{n} \\
+\end{align}`
+]
+
+???
+
+- At first, estimating the parameter using statistics seems straightforward
+- Let's dig into the equation :)
+
+---
+
+count: false
+
+`\begin{align}
+&amp;= \frac{\displaystyle \sum_{i=1}^n \bigg(x_i - \frac{1}{n}\sum_{i=1}^n x_i \bigg)^2}{n} \\
+&amp;= \frac{\displaystyle \sum_{i=1}^n \bigg(x_i - \frac{x_1 + ... + x_n}{n} \bigg)^2}{n} \\
+&amp;= \frac{\displaystyle \sum_{i=1}^n \bigg(\frac{n \cdot x_i - (x_1 + ... + x_n)}{n} \bigg)^2}{n} \\
+\end{align}`
+---
+
+count: false
+
+.font2[
+`\begin{align}
+\frac{\bigg(\frac{\color{#E91E63}{(n-1)} \cdot x_1 - (x_2 + ... + x_n)}{n} + ... + \frac{\color{#E91E63}{(n-1)} \cdot x_n - (x_1 + ... + x_{n-1})}{n} \bigg)^2}{n} \\
+\end{align}`
+]
+
+--
+
+.font2[
+With a small sample size, `\((n-1)\)` introduces .pink[**bias**]!
+]
+
+--
+
+.font2[
+Solution `\(\to\)` .amber[Bessel's] correction
+]
+
+???
+
+Bessel's correction: change the denominator `\(n \to (n-1)\)`
+
+---
+
+count: false
+
+`\begin{align}
+\sigma^2 &amp;= \frac{\displaystyle \sum_{i=1}^n(x_i - \mu)^2}{n} \tag{Parameter in the population}\\
+\\
+s^2     &amp;= \frac{\displaystyle \sum_{i=1}^n(x_i - \color{#FFC107}{\bar{x}})^2}{\color{#FFC107}{n-1}} \tag{Statistics in sample}\\
+\end{align}`
+
+???
+
+- In a population with `\(n \to infty\)`, we do not need Bessel's correction
+- In a sample with a finite element, we need to apply Bessel's correction
+
+--
+
+### How about .amber[standard deviation]?
+
+--
+
+### Simply take the .amber[square root] :)
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Type of data
+- Descriptive statistics
+- .amber[Data distribution]
+- Visual examination
+- Goodness of fit test
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Data distribution
+
+.font2[
+- Probability function
+- Discrete: binomial, geometry, hypergeometry, Poisson, ...
+- .amber[Continuous]: .amber[normal], gamma, `\(\color{#FFC107}{\chi^2}\)`, exponential, ...
+]
+
+???
+
+- Probability function takes a parameter to define how a distribution behave
+- We will focus on continuous distributions
+- Or more specifically on normal and `\(\chi^2\)` distribution (and their variants!)
+
+---
+
+class: bg-main3
+
+# Normal distribution
+
+.font2[
+`\begin{align}
+P(X=x) &amp;= \frac{1}{\color{#FFC107}{\sigma}\sqrt{2\pi}}e^{-\frac{1}{2} \bigg( \frac{x - \color{#FFC107}{\mu}}{\color{#FFC107}{\sigma}} \bigg)^2} \\
+X &amp; \sim N(\color{#FFC107}{\mu}, \color{#FFC107}{\sigma})
+\end{align}`
+]
+
+--
+
+.font2[
+- Parameters `\(\color{#FFC107}{\mu}\)` and `\(\color{#FFC107}{\sigma}\)` completely describes the distribution
+- What makes it so special?
+]
+
+???
+
+- Its statistics (or parameter in population) describes the probability density
+- Meaning that, both the central tendency and spread fully explain the
+  distribution
+- Normal distribution is ubiquitous
+- `\(X \in \mathbb{R}: - \infty &lt; x &lt; \infty\)`
+- 68-95-99 rule in all normally-distributed data
+
+---
+
+count: false
+class: bg-main3
+
+&lt;img src="index_files/figure-html/dist.norm.mu-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+class: bg-main3
+
+&lt;img src="index_files/figure-html/dist.norm.sigma-1.jpeg" width="90%" /&gt;
+
+---
+
+class: bg-main3
+
+# Standardized normal distribution
+
+.font2[
+- A variant of normal distribution
+- Has a specified value of `\(\mu=0\)` and `\(\sigma=1\)`
+- `\(Z \sim N(0, 1)\)`
+- Standardization `\(\to\)` scaling &amp; centering
+]
+
+???
+
+- Scaling: Division by the standard deviation
+- Centering: A subtraction to the mean
+
+---
+
+count: false
+class: bg-main3
+
+&lt;img src="index_files/figure-html/dist.std.norm-1.jpeg" width="90%" /&gt;
+
+---
+
+class: bg-main3
+
+# `\(\chi^2\)` distribution
+
+.font2[
+`\begin{align}
+P(X=x) &amp;= \frac{1}{\color{#E91E63}{\Gamma}(\frac{\color{#FFC107}{\nu}}{2})}x^{\frac{\color{#FFC107}{\nu}}{2}-1} e^{-\frac{x}{2}} \\
+X &amp; \sim \chi^2(\color{#FFC107}{\nu})
+\end{align}`
+
+- Only depends on `\(\color{#FFC107}{\nu}\)` degree of freedom
+- A special case of Gamma distribution (notice the .pink[Gamma] function `\(\color{#E91E63}{\Gamma}\)`)
+- What makes it so special?
+]
+
+???
+
+- One of the mostly used distribution in statistics
+- Example: Pearson's `\(\chi^2\)`, non-parametric test (Mann-Whitney U, Kruskal-Wallis H, etc.)
+- `\(Z^2 \sim \chi^2(1)\)`
+- Sum of square of `\(\nu\)` independent variables `\(N_{1..\nu} \sim N(0,1)\)`
+- Nice to know: Gamma function describes a factorial of positive complex real numbers
+
+---
+
+count: false
+class: bg-main3
+
+&lt;img src="index_files/figure-html/dist.chisq-1.jpeg" width="90%" /&gt;
+
+???
+
+- More variable `\(\to\)` higher degree of freedom `\(\to\)` adjust the critical value
+  to determine significance
+
+---
+
+class: bg-main3
+
+# T distribution
+
+.font2[
+`\begin{align}
+P(X=x) &amp;= \frac{\Gamma(\frac{\color{#FFC107}{\nu} + 1}{2})}{\sqrt{\color{#FFC107}{\nu} \pi} \cdot \Gamma(\frac{\color{#FFC107}{\nu}}{2})} \bigg(1 + \frac{x^2}{\color{#FFC107}{\nu}} \bigg)^{- \frac{\color{#FFC107}{\nu}+1}{2}} \\
+X &amp; \sim T(\color{#FFC107}{\nu})
+\end{align}`
+
+- Approximating a standardized normal distribution
+- Only depends on `\(\color{#FFC107}{\nu}\)` degree of freedom
+- What makes it so special?
+]
+
+???
+
+- Estimate population mean `\(\mu\)`
+- Small sample size, unknown population standard deviation `\(\sigma\)`
+- The null distribution in T-Test (both one- and two-sample T-Test)
+- With `\(\nu \to \infty\)`, `\(T \sim Z\)`
+
+---
+
+count: false
+class: bg-main3
+
+&lt;img src="index_files/figure-html/dist.t-1.jpeg" width="90%" /&gt;
+
+???
+
+Higher tails on lower degree of freedom allows better critical value adjustment
+to avoid statistical error
+
+---
+
+class: bg-main3
+
+# Summary
+
+&lt;img src="https://i.stack.imgur.com/HgpO4.jpg" width="98%"&gt;
+
+Leemis LM, McQueston JT. Univariate distribution relationships. The American Statistician. 2008 Feb 1;62(1):45-53. doi:10.1198/000313008x270448
+
+???
+
+- What does it have anything to do with data visualization?
+- By transforming our data, it may follow a different distribution
+- Such a transformation is potentially essential to present a more coherent
+  visualization
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Type of data
+- Descriptive statistics
+- Data distribution
+- .amber[Visual examination]
+- Goodness of fit test
+]]
+
+---
+
+class: bg-main3
+
+# Visually examining your data
+
+.font2[
+- Histogram
+- Density plot
+- QQ-plot
+]
+
+???
+
+- Visual examination is the first step when conducting an exploratory analysis
+- It aims to look for visual cues of how your data looks like
+- It helps you to determine which test is more suitable to conduct
+
+---
+
+layout: true
+class: bg-main3
+
+# Data, please?
+
+---
+
+count: false
+
+.font2[
+For illustrative purposes, we will use the `iris` dataset
+]
+
+
+```
+## 'data.frame':	150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+--
+
+.font2[
+Limit our observation to `Sepal.Width` and `Petal.Width`
+]
+
+???
+
+- Iris dataset has five columns describing iris flowers
+- The first four are measurement of its petal and sepal
+- The last column is the species of iris flower
+
+---
+
+count: false
+
+.bg-white.content[
+&lt;br&gt;
+<div id="htmlwidget-e6937f9f0d53a5680180" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e6937f9f0d53a5680180">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5,7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7,6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3,3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8,3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5,1.5,1.6,1.4,1.1,1.2,1.5,1.3,1.4,1.7,1.5,1.7,1.5,1,1.7,1.9,1.6,1.6,1.5,1.4,1.6,1.6,1.5,1.5,1.4,1.5,1.2,1.3,1.4,1.3,1.5,1.3,1.3,1.3,1.6,1.9,1.4,1.6,1.4,1.5,1.4,4.7,4.5,4.9,4,4.6,4.5,4.7,3.3,4.6,3.9,3.5,4.2,4,4.7,3.6,4.4,4.5,4.1,4.5,3.9,4.8,4,4.9,4.7,4.3,4.4,4.8,5,4.5,3.5,3.8,3.7,3.9,5.1,4.5,4.5,4.7,4.4,4.1,4,4.4,4.6,4,3.3,4.2,4.2,4.2,4.3,3,4.1,6,5.1,5.9,5.6,5.8,6.6,4.5,6.3,5.8,6.1,5.1,5.3,5.5,5,5.1,5.3,5.5,6.7,6.9,5,5.7,4.9,6.7,4.9,5.7,6,4.8,4.9,5.6,5.8,6.1,6.4,5.6,5.1,5.6,6.1,5.6,5.5,4.8,5.4,5.6,5.1,5.1,5.9,5.7,5.2,5,5.2,5.4,5.1],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1,0.2,0.2,0.1,0.1,0.2,0.4,0.4,0.3,0.3,0.3,0.2,0.4,0.2,0.5,0.2,0.2,0.4,0.2,0.2,0.2,0.2,0.4,0.1,0.2,0.2,0.2,0.2,0.1,0.2,0.2,0.3,0.3,0.2,0.6,0.4,0.3,0.2,0.2,0.2,0.2,1.4,1.5,1.5,1.3,1.5,1.3,1.6,1,1.3,1.4,1,1.5,1,1.4,1.3,1.4,1.5,1,1.5,1.1,1.8,1.3,1.5,1.2,1.3,1.4,1.4,1.7,1.5,1,1.1,1,1.2,1.6,1.5,1.6,1.5,1.3,1.3,1.3,1.2,1.4,1.2,1,1.3,1.2,1.3,1.3,1.1,1.3,2.5,1.9,2.1,1.8,2.2,2.1,1.7,1.8,1.8,2.5,2,1.9,2.1,2,2.4,2.3,1.8,2.2,2.3,1.5,2.3,2,2,1.8,2.1,1.8,1.8,1.8,2.1,1.6,1.9,2,2.2,1.5,1.4,2.3,2.4,1.8,1.8,2.1,2.4,2.3,1.9,2.3,2.5,2.3,1.9,2,2.3,1.8],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","versicolor","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica","virginica"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Histogram
+
+---
+
+&lt;img src="index_files/figure-html/hist.iris1-1.jpeg" width="90%" /&gt;
+
+???
+
+- `Setosa` occupies the right tail
+- `Versicolor` occupies the left tail
+- `Virginica` in the middle
+- The problem with histogram: the number of bin determine how the data looks like
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/hist.iris2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/hist.iris3-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+.font2[
+- Histogram relies on how we set the bin width
+- What can we do to circumvent the problem?
+]
+
+--
+
+&lt;img src="_fig/density-plot.jpeg" width="70%"&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Density plot
+
+---
+
+&lt;img src="index_files/figure-html/density.iris1-1.jpeg" width="90%" /&gt;
+
+???
+
+There, there. We are almost done :) Now we need to visualize `Petal.Width` as well.
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/density.iris2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+.font2[
+- It seems `Sepal.Width` has an approximately normal distribution
+- While `Petal.Width` looks slightly off
+- .amber[Conclusion:] We need to further investigate this issue
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# QQ-Plot
+
+---
+
+.font2[
+- Sort your data based on its quantile
+- Fit to a theoretical quantile
+- You can use .amber[any] distribution to fit in your data
+]
+
+???
+
+Meaning: you can use QQ-Plot to assess your data against any distribution
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/qq.iris1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/qq.iris2-1.jpeg" width="90%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Type of data
+- Descriptive statistics
+- Data distribution
+- Visual examination
+- .amber[Goodness of fit test]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Goodness of fit
+
+.font2[
+- Measure how good our data fit a certain distribution
+- .amber[Recall:] there are a plethora of distribution to test on
+- Normality test is only a subset of it!
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Kolmogorov-Smirnov Test
+
+.font2[
+- Non-parametric and distribution agnostic
+- The most commonly used .amber[goodness of fit] test
+- Has a favourable statistical power
+- Often applicable to a small dataset
+]
+
+---
+
+???
+
+- Also known as KS-Test
+- It measures the maximum distances between quantiles of two distributions
+- The first distribution is *always* coming from our data (observable)
+- The second distribution may come from our data
+- ...or we can use a theoretical distribution (theoretical quantiles)
+- The distance `\(D\)` follows a Kolmogorov distribution
+- We calculate the critical value using such a distribution
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Sepal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9892759 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9772499 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9860966 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Petal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; alternative &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5398278 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.8413447 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9192433 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; One-sample Kolmogorov-Smirnov test &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; two-sided &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Shapiro-Wilk Test
+
+.font2[
+- Non-parametric
+- The most commonly used .amber[normality] test
+- Good statistical power, quite robust in handling outliers
+- Often applicable to a large dataset
+]
+
+---
+
+???
+
+- Practical question: how large is large enough for Shapiro-Wilk?
+- No consensus on such a matter, usually KS-Test is good enough to handle up to
+  100 sample size
+- But we often employ KS-Test when we have `\(n \leqslant 30\)`
+- With a higher number of data point `\(\to\)` more chance to produce significant
+  results in KS-Test compared to Shapiro-Wilk `\(\to\)` type-I statistical error?
+- Hint: in `R`, SW-Test can measure normality in a sample up to 5000 elements
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Sepal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9717195 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2715264 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9741333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3379951 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9673905 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1808960 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Petal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7997645 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9476263 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0272778 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9597715 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0869542 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Shapiro-Wilk normality test &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Anderson-Darling Test
+
+.font2[
+- Non-parametric
+- Often used in econometrics
+- Able to handle .amber[higher counts on tails]
+]
+
+---
+
+???
+
+- More lenient to accept probability deviation compared to the Shapiro-Wilk
+  test
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Sepal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4909560 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2101787 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5597552 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1406016 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.6182051 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1018338 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+---
+
+count: false
+
+.bg-white[
+&lt;br&gt;
+
+&lt;table class=" lightable-paper" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+&lt;caption&gt;Petal width&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; method &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.7148306 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; versicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.9568508 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0144329 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; virginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7387858 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0507617 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Anderson-Darling normality test &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;br&gt;
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"countIncrementalSlides": false,
+"highlightSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
