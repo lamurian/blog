@@ -131,7 +131,7 @@ Discrete
 count: false
 
 <img src="https://blog.beamex.com/hs-fs/hubfs/Beamex_blog_pictures/Temperature-graph---2018-06-18-v2.jpg?width=1200&name=Temperature-graph---2018-06-18-v2.jpg" width="100%">
-Numeric
+Continuous
 
 ???
 
@@ -413,7 +413,8 @@ tbl <- data.frame(
 
 ggplot(tbl, aes(x=x, y=y)) + theme_minimal() +
 	geom_line(aes(linetype=mu, color=sigma), size=rep(c(0.8, 2, 2, 2, 0.8), each=length(x))) +
-	labs(x="Observable data", y="Probability")
+	labs(x="Observable data", y="Probability") +
+	scale_linetype_manual(values=c(2, 1, 2))
 
 ```
 
@@ -426,7 +427,8 @@ class: bg-main3
 
 ggplot(tbl, aes(x=x, y=y)) + theme_minimal() +
 	geom_line(aes(linetype=sigma, color=mu), size=rep(c(0.8, 2, 2, 2, 0.8), each=length(x))) +
-	labs(x="Observable data", y="Probability")
+	labs(x="Observable data", y="Probability") +
+	scale_linetype_manual(values=c(2, 1, 2))
 
 ```
 
