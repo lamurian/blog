@@ -336,6 +336,33 @@ s^2     &= \frac{\displaystyle \sum_{i=1}^n(x_i - \color{#FFC107}{\bar{x}})^2}{\
 
 ---
 
+layout: false
+class: bg-main3
+
+# Standard Error
+
+.font2[
+$$\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$$
+]
+
+???
+
+- Higher $n \to$ Lower S.E.
+- Higher $\sigma \to$ Higher S.E.
+
+--
+
+.font2[
+Measure variability in a distribution of sampled means
+]
+
+???
+
+When we are replicating our observation, the standard error estimates how much
+our findings will deviate from one another
+
+---
+
 template: overview
 count: false
 
