@@ -4,28 +4,28 @@ title: "Parametric: Mean in Multiple Groups"
 weight: 7
 description: >
 
-  When we have a normally-distributed data, parameters $\mu$ and $\sigma$ from
-  our PDF can completely explain the behaviour seen in our sample. With $\mu$
-  represents the central tendency and $\sigma$ the spread, we can directly
-  compare similarly distributed samples. Often, we need to confirm how much our
-  average value differs from other observations. In doing so, we are facing a
-  mean difference problem in our venture of statistics. This lecture will help
-  us proving mean differences in one-sample and two-sample problems.
+  The limitation  when using T-Test is its inability to directly compare multiple
+  group at once. Often times, we are interested to see whether our groups of
+  interest present with at least on differing average value. To alleviate this
+  issue, we can assign a generalized form of a T-Test. We will do so by analyzing
+  between and within group variances. This analysis resulted in the sum of square
+  with two degree of freedoms, one coming from the number of groups and another
+  from the calculation of withing group variability.
 
 summary: >
 
-  When we have a normally-distributed data, parameters $\mu$ and $\sigma$ from
-  our PDF can completely explain the behaviour seen in our sample. With $\mu$
-  represents the central tendency and $\sigma$ the spread, we can directly
-  compare similarly distributed samples. Often, we need to confirm how much our
-  average value differs from other observations. In doing so, we are facing a
-  mean difference problem in our venture of statistics. This lecture will help
-  us proving mean differences in one-sample and two-sample problems.
+  The limitation  when using T-Test is its inability to directly compare multiple
+  group at once. Often times, we are interested to see whether our groups of
+  interest present with at least on differing average value. To alleviate this
+  issue, we can assign a generalized form of a T-Test. We will do so by analyzing
+  between and within group variances. This analysis resulted in the sum of square
+  with two degree of freedoms, one coming from the number of groups and another
+  from the calculation of withing group variability.
 
-date: 2020-10-15
+date: 2020-11-09
 categories: ["statistics", "ukrida"]
 tags: ["R", "hypothesis"]
-slug: 06-par-meandiff
+slug: 07-par-meandiff-2
 csl: ../harvard.csl
 bibliography: ../ref.bib
 draft: false
@@ -42,11 +42,404 @@ knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=
 options(digits=3)
 ```
 
-When we obtain a normally-distributed data, parameters $\mu$ and $\sigma$ from
-our PDF can completely explain the behaviour seen in our sample. With $\mu$
-represents the central tendency and $\sigma$ the spread, we can directly
-compare similarly distributed samples. Often, we need to confirm how much our
-average value differs from other observations. In doing so, we are facing a
-mean difference problem in our venture of statistics. This lecture will help us
-proving mean differences in one-sample and two-sample problems.
+The limitation  when using T-Test is its inability to directly compare multiple
+group at once. Often times, we are interested to see whether our groups of
+interest present with at least on differing average value. To alleviate this
+issue, we can assign a generalized form of a T-Test. We will do so by analyzing
+between and within group variances. This analysis resulted in the sum of square
+with two degree of freedoms, one coming from the number of groups and another
+from the calculation of withing group variability.
 
+# One-Way ANOVA
+
+ANOVA, as it stands for the Analysis of Variance, calculates the relative
+variability observed within and between the groups. The perk of using ANOVA is
+its ability to distinguish mean difference among multiple groups at once. As it
+measures the sum of square differences, the statistics result in ANOVA follows
+an F-distribution. One-way ANOVA is a specific type which you only assign one
+grouping mechanism as your independent variable.  As we have previously done,
+we will first declare the hypotheses to test on.
+
+- $H_0:$ The population mean of all groups are all equal
+- $H_a:$ The population mean of all groups are not all equal
+
+Please note that on the following equation the denominator is a residual of our
+observation. F-Test is a quotient of between to within differences, both
+measured as a mean square, basically a sum of square divided by the degree of
+freedom. In our equation, $\bar{X}_j$ is the mean of a group while $\bar{X}$ is
+the mean of all sampled groups. The value of $\nu = k-1$ for between comparison
+and $\nu = N-k$ for within comparison, where $k$ stands for the number of
+groups and n $N$ for the total number of sample.
+
+$$F = \frac{\displaystyle \sum_{j=1}^{k} n_j (\bar{X}_j - \bar{X})^2 / (k-1)}{\displaystyle \sum_{j=1}^k \sum_{i=1}^N (X_i - \bar{X}_j)^2 / (N-k)}$$
+
+In performing a one-way ANOVA, we need to ascertain the following assumptions:
+
+- I.I.D
+- Normally distributed
+- Homogeneity of variance
+
+As we may recall, we can use Shapiro-Wilk's statistics as a normality test and
+Levene's as homogeneity of variance test.
+
+## F-Distribution
+
+As the T-distribution derives from the normal distribution to estimate the
+mean, the F-distribution derives from the $\chi^2$ distribution to define a
+ratio of two variances. We may have a vague recollection that the $\chi^2$
+distribution is a specific case of Gamma distribution from the exponential
+family. Interestingly, when we have a data $X \sim N(0, 1)$, then
+$X^2 \sim \chi^2(1)$. Similarly, when both of normality and homogeneity of
+variance assumptions fulfilled, the statistics $T^2 = F$. That is an
+interesting relationship you may occur to observe when performing an one-way
+ANOVA in two groups and comparing the result to the Student's T-Test.
+
+\begin{align}
+P(X=x) & = \frac{(\frac{r_1}{r_2})^{\frac{r_1}{2}} \Gamma[(r_1 + r_2) / 2] x^{\frac{r_1}{2}-1}}{\Gamma(\frac{r_1}{2}) \Gamma(\frac{r_2}{2}) [1 + (\frac{r_1 \cdot x}{r_2})]^{\frac{(r_1+r_2)}{2}}} \tag{PDF}\\
+X & \sim F(r_1, r_2) \tag{notation} \\
+F & = \frac{U / r_1}{V / r_2}
+\end{align}
+
+Previous equations describe the PDF and notation we can use in defining the
+F-distribution, where $r_i$ is the degree of freedom, while $U$ and $V$ are
+$\chi^2$ distribution.
+
+## Example, please?
+
+Throughout the lecture, we will use example datasets from `R`. To demonstrate
+the one-way ANOVA, we are using a `PlantGrowth` dataset. This dataset simply
+describes dried plants weight measured under multiple conditions:
+
+- `ctrl` for the control (no treatment)
+- `trt1` is the group receiving treatment 1
+- `trt2` is the group receiving treatment 2
+
+We shall first examine our dataset:
+
+```{r one.way1}
+# Data structure
+str(PlantGrowth)
+
+# Descriptive statistics
+with(PlantGrowth, tapply(weight, group, summary)) %>% {do.call(rbind, .)}
+```
+
+Then assessed our assumptions of normality and homogeneity of intergroup
+variance:
+
+```{r one.way2}
+with(PlantGrowth, tapply(weight, group, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+car::leveneTest(weight ~ group, data=PlantGrowth)
+```
+
+Seeing both p-value from Shapiro-Wilk and Levene's test being greater than
+0.05, we can conclude that our data follow a normal distribution with roughly
+equal variances. We may conduct ANOVA by issuing the following command:
+
+```{r one.way3}
+aov.res1 <- aov(weight ~ group, data=PlantGrowth)
+anova(aov.res1)
+```
+
+We obtain a significant result, brilliant! But we still need to further analyze
+its residual by plotting them against the fitted value:
+
+```{r one.way4}
+par(mfrow=c(2, 2)); plot(aov.res1)
+```
+
+The residual of our model roughly follows a normal distribution, despite the
+presence of outliers in data index number 4, 15 and 17 (see in figure entitled
+normal Q-Q). On the left side of our figure, we can observe a homogeneous
+residual variances, indicated by the absence of megaphone nor fan effect, i.e.
+the residual distributed evenly for all measured groups. Of course we need to
+present our data visually as to make it easier for our reader to understand:
+
+```{r plt.one.way, echo=FALSE}
+
+polar.night <- "#4C566A"
+snow.storm <- "#E5E9F0"
+ggviolin(PlantGrowth, x="group", y="weight", color=polar.night, fill=polar.night,
+	add="mean_sd", add.params=list(color=snow.storm)
+) + theme_minimal() + stat_compare_means(method="anova", label.y=7.1)
+
+```
+
+So far, we can conclude that conducting ANOVA requires the following steps to
+take:
+
+1. Normality $\to$ Shapiro-Wilk or Anderson-Darling test
+1. Homogeneity of variance $\to$ Levene's test
+1. Do modelling and interpretation
+1. Check model goodness of fit
+
+In the next section we will see how to apply such steps to perform two-way and
+repeated measure ANOVA.
+
+# Two-Way ANOVA
+
+After demonstrating one-way ANOVA, we are quite satisfied with how it measures
+mean differences across multiple groups. However, in some cases, we may need to
+consider more than one grouping mechanism. This way, we can also control for
+interaction happening among groups. Two-way ANOVA provides a way to perform
+such a tedious task. As a side note, we can refer a two-way ANOVA as a
+factorial ANOVA. Since it is an extension to one-way ANOVA, it has similar
+assumptions of:
+
+- I.I.D
+- Normality
+- Homogeneity of variance
+
+## Example, please?
+
+To establish an understanding on conducting a factorial ANOVA, we will use
+`ToothGrowth` dataset as it is readily available in `R`. This dataset also
+presents in JASP if you prefer to use them for a convenient purpose.
+The `ToothGrwoth` dataset has three variables of 
+
+- `len`: Tooth length
+- `supp`: Supplement given
+- `dose`: Supplement dose
+
+As we previously did in one-way ANOVA, we shall start our inference by
+inspecting the data:
+
+```{r two.way1}
+# Data structure
+str(ToothGrowth)
+
+# Set dose as a factor
+ToothGrowth$dose %<>% factor(levels=c(0.5, 1.0, 2.0))
+```
+
+Then we may want to measure the descriptive statistics:
+
+```{r two.way2}
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, summary)) %>% {do.call(rbind, .)}
+
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, summary)) %>% {do.call(rbind, .)}
+```
+
+And of course, a normality test:
+
+```{r two.way3}
+# Grouped by supplement type
+with(ToothGrowth, tapply(len, supp, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+
+# Grouped by prescribed dose
+with(ToothGrowth, tapply(len, dose, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+Oh no! The data in `OJ` group does not follow a normal distribution, what
+should we do? Fret not ;) With an increasing number of sample, we often see
+that our data will not follow a normal distribution. In such a case, it is
+always good to perform a visual examination to determine whether our data
+contains outliers. In case of extreme outliers, we may opt to remove such an
+entry so that we can safely conduct an ANOVA.
+
+```{r two.way4, echo=FALSE, fig.height=4}
+tmp <- car::qqPlot(ToothGrowth$len[ToothGrowth$supp=="OJ"], ylab="")
+```
+
+We have outliers in data index 7 and 8, but it is still within a safe boundary
+of normal distribution theoretical quantiles. So it is alright to continue our
+inference and fulfilling the homogeneity of variance assumption.
+
+```{r two.way5}
+# Grouped by supplement type
+car::leveneTest(len ~ supp, data=ToothGrowth)
+
+# Grouped by prescribed dose
+car::leveneTest(len ~ dose, data=ToothGrowth)
+```
+
+The data presents with a homogeneous intergroup variance, so we can fit an
+ANOVA model to understand the mean difference.
+
+```{r two.way6}
+aov.res2 <- aov(len ~ supp + dose, data=ToothGrowth)
+anova(aov.res2)
+```
+
+Next, we will do a goodness of fit evaluation by analyzing the residual.
+
+```{r two.way7, echo=T}
+par(mfrow=c(2,2)); plot(aov.res2)
+```
+
+Then we can plot our statistically-proven mean difference using a nice figure.
+
+```{r plt.two.way, echo=FALSE}
+
+ggviolin(ToothGrowth, x="dose", y="len", facet.by="supp",
+	color=polar.night, fill=polar.night,
+	add="mean_sd", add.params=list(color=snow.storm)
+) + theme_minimal()
+
+```
+
+# Repeated Measure ANOVA
+
+When the independence assumption violated, we need to perform a paired instead
+of unpaired test. It is the same thing in ANOVA, where we can apply both of
+one-way and factorial repeated measure ANOVA. However, please bear in mind that
+we still assume normality without the presence of an extreme outlier. Instead
+of homogeneity of variance, we need to prove a sphericity assumption, a
+homogeneity of between group variances.
+
+## Example, please?
+
+Up to this point, we are pretty much accustomed to measuring mean differences
+and have a practical knowledge on how ANOVA works. For this demonstration, we
+will use `ChickWeight` dataset to conduct a repeated measure ANOVA. In this
+dataset, we have an observation of chicken weight in grams measured overtime.
+As we will se on the initial inspection, the dataset contains following
+variables:
+
+- `weight`: chicken weight in grams
+- `Time`: number of days since birth
+- `Chick`: unique identifier on the chicken
+- `Diet`: type of diet given 
+
+```{r repeated1}
+# Data structure
+str(ChickWeight)
+```
+
+As previously conducted, we shall test for data normality.
+
+```{r repeated2}
+with(ChickWeight, tapply(weight, Time, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+The data in $t_0$ and $t_2$ does not seem right. We have a few options to
+select on:
+
+- Transform the data, at the cost of losing information on measured units
+- Filter and delete row entry with existing outliers contributing to skewness
+- Drop out observed variables (columns) not fulfilling the normality assumption
+
+Since we have so many observation of interest, it will not be a problem to drop
+two columns out of 12 observation periods. Of course, you may want to suit your
+choice with how you would like to interpret your data. But here we shall
+demonstrate a convenient method of handling non-normal variables.
+
+```{r repeated3}
+tbl <- subset(ChickWeight, subset=!{ChickWeight$Time==0 | ChickWeight$Time==2})
+with(tbl, tapply(weight, Time, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)}
+```
+
+Now they look better :) Next, we will check for any extreme outlier.
+
+```{r repeated4}
+# Use `weight` variable as a reference to identify outliers
+rstatix::identify_outliers(tbl, variable="weight")
+```
+
+Sure there are outliers, but none of them are extreme. With a large number of
+observation, ANOVA is quite robust against data not following a normal
+distribution. However, the presence of extreme outliers or severely-skewed data
+compromise this robustness. We have fulfilled two of the three assumptions, now
+we need to fit in our ANOVA model and assess for its sphericity assumption
+using Mauchly's test.
+
+```{r repeated5}
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time)
+```
+
+Interpreting the Mauchly's test, we may conclude that our data violated the
+sphericity assumption. As such, we will use the corrected p-value as presented
+at the bottom of our results.
+
+```{r repeated6}
+rstatix::anova_test(data=tbl, dv=weight, wid=Chick, within=Time, between=Diet)
+```
+
+What have we learnt so far? We know that to conduct a parametric hypothesis
+test we need to fulfill some stringent assumptions. Our demonstration so far
+has delineated the difference between a one-way and factorial ANOVA. In case of
+independence assumption violation, we need to employ a repeated measure ANOVA.
+
+# Post-Hoc Analysis
+
+When assessing the mean difference across multiple groups, it might be
+intriguing to further infer which pairwise comparison actually present with a
+statistically significant mean difference. After conducting an ANOVA, it is
+always a good practice to apply a post-hoc analysis using Tukey's range test,
+or also called a Tukey's Honest Significant Difference (HSD). After
+understanding the role of T-test and ANOVA, it is reasonably tempting to use
+T-test right after ANOVA. However, it turned out we have a higher probability
+of getting a type-I statistical error when applying multiple T-Test as a
+post-hoc analysis.
+
+Tukey's HSD alleviates such a problem by calculating the actual mean difference
+between two groups and dividing the residual by a square root of a quotient
+between the mean square within and the number of samples in one of observed
+group. Please note that Tukey's HSD is best applied for cases where numbers of
+observation for each group are equal. In case you have differing number of
+sample size, we need to use a Tukey-Kramer method. You may also want to
+consider using the Scheffe test in the case of unequal sample size. However, to
+keep this post brief, we will stick with Tukey's HSD and Tukey-Kramer.
+
+## Example, please?
+
+We will have the previous result of one-way ANOVA as our example. By imputing
+the model into `TukeyHSD` function in `R`, we will have the following output.
+
+```{r tukey1}
+aov.res1 %>% anova() %>% broom::tidy()
+TukeyHSD(aov.res1) %>% broom::tidy()
+```
+
+As another demonstration, we can also use the our second model using factorial
+ANOVA.
+
+```{r tukey2}
+aov.res2 %>% anova() %>% broom::tidy()
+TukeyHSD(aov.res2) %>% broom::tidy()
+```
+
+# Effect Size
+
+When conducting a mean difference using T-test methods (note the plural), we
+also computed the effect size using Cohen's $d$. However, $d$ is limited to
+measure distance in a two-sample mean difference. As ANOVA is a generalized
+form of a T-test, measuring its effect size also requires a different approach.
+Here we shall discuss $\eta^2$ and partial $\eta^2$ to measure the effect size
+on ANOVA and repeated ANOVA, respectively.
+
+\begin{align}
+\eta^2 &= \frac{SS_{effect}}{SS_{total}} \\
+Partial\ \eta^2 &= \frac{SS_{effect}}{SS_{effect} + SS_{error}}
+\end{align}
+
+## Example, please?
+
+```{r eta.sq}
+heplots::etasq(aov.res1, partial=FALSE)
+heplots::etasq(aov.res2, partial=FALSE)
+```
+
+After acquiring the effect size, we can use it to calculate the power of our
+statistical inference.
+
+## Power analysis
+
+```{r power.anova1}
+pwr::pwr.anova.test(k=3, n=10, f=0.264)
+```
+
+```{r power.anova2}
+pwr::pwr.anova.test(k=2, n=30, f=0.0595)
+```
+
+```{r power.anova3}
+pwr::pwr.anova.test(k=3, n=20, f=0.7029)
+```

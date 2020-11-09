@@ -137,7 +137,7 @@ count: false
 layout: false
 class: bg-main3
 
-# F- Distribution
+# F-Distribution
 
 .font2[
 - Define a ratio of two variances
