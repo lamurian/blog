@@ -1,0 +1,697 @@
+---
+title: "Non-parametric: Difference Between Two Groups"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+count: false
+class: bg-main1 hide-slide-number split-70
+
+.column[.right.vmiddle.content[
+.font3[.amber[Differences] Between Two Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+count: false
+class: bg-main3
+
+# .amber[Recap]
+
+.font2[
+- Test of .amber[proportional difference]
+  - Exact test
+  - Approximation
+- Test of .amber[mean difference]
+  - One sample
+  - Two samples
+  - Multiple samples
+]
+
+???
+
+- Differences between Fisher's exact and Pearson's $\chi^2$
+- One sample mean difference: Z-Test, T-Test
+- Two samples mean difference: unpaired and paired T-Test
+- Multiple samples mean difference: one-way, factorial, repeated measure ANOVA
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Non-parametric test]
+- One-sample test
+- Two-sample test
+- Paired test
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Non-parametric test
+
+.font2[
+- Parametric tests assume normality
+- Small sample size $\to$ hard to assess normality
+- Severe skewness $\to$ impair parametric tests
+- What defines a parametric test anyway?
+]
+
+???
+
+- In parametric test, we are trying to estimate the population parameter using
+  the data we have
+- Example: in T-test, we hypothesize both groups come from the same population,
+  thus having a roughly equal mean value
+
+--
+
+.font2[
+.amber[Solution:] Use a non-parametric test
+]
+
+???
+
+- In non-parametric test we are not assuming the parameter
+- We just want to measure whether our sample has a roughly similar presentation
+
+---
+
+count: false
+class: bg-main3 split-two
+
+# Skewness
+
+.column[.vmiddle.content[
+```{r plt.data, echo=FALSE}
+
+x <- seq(-3, 3, 0.05)
+y <- dnorm(x, 0, 1)
+tbl <- data.frame(x=x, y=y)
+ggplot(tbl, aes(x=x, y=y)) + theme_minimal() + geom_line() +
+	geom_vline(xintercept=mean(x), linetype=2) +
+	annotate("text", label=c("mu", "M"), x=mean(x)+0.1, y=c(0.3, 0.28), hjust="left", parse=TRUE) +
+	labs(title="Standardized normal distribution", y="Probability", x="Observed event")
+
+```
+]]
+
+.column[.vmiddle.content[
+
+```{r plt.data.skew, echo=FALSE}
+
+set.seed(1)
+x <- rchisq(300, 5)
+tbl <- data.frame(x=x)
+ggplot(tbl, aes(x=x, y=..density..)) + theme_minimal() +
+	geom_density() +
+	geom_vline(xintercept=c(mean(x), median(x)), linetype=2) +
+	annotate("text", label=c("mu", "M"), x=c(mean(x), median(x))+0.1, y=(0.1), hjust="left", parse=TRUE) +
+	labs(title="Skewed data", y="Probability", x="Observed event")
+
+```
+
+]]
+
+---
+
+class: bg-main3
+
+# When should we use a non-parametric test?
+
+.font2[
+- Small sample size
+- Data is not .pink[asymptotically] normal
+- The presence of extreme outliers or severe skewness
+- We cannot ascertain the .pink[parameter] of its population
+]
+
+???
+
+- Using a non-parametric test in a large data is unwieldy
+- To a certain degree, the parametric test is robust to a non-normal
+  distribution
+- Outliers and skewness make it hard to estimate the mean difference, even in a
+  large sample size
+
+--
+
+## Hypotheses
+
+.font2[
+- $H_0$: The sampled groups come from the .amber[same] population
+- $H_1$: The sampled groups come from .amber[different] populations
+]
+
+???
+
+Notice the difference in hypotheses declaration between parametric and
+non-parametric tests
+
+---
+
+class: bg-main3
+
+# But, how do we measure population-based .amber[difference]?
+
+--
+
+.font2[.amber[Hint:] We use the central tendency]
+
+--
+
+.font2[However, we cannot rely on the mean]
+
+--
+
+.font2[So, we use the .amber[median] instead]
+
+--
+
+## .amber[Hypotheses]
+
+.font2[
+- $H_0:\ M_1 = M_2$
+- $H_1:\ M_1 \neq M_2$
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Non-parametric test
+- .amber[One-sample test]
+- Two-sample test
+- Paired test
+]]
+
+
+---
+
+class: bg-main3
+
+# One-sample test
+
+.font2[
+- One-sample sign test
+- One-sample Wilcoxon signed rank test
+]
+
+???
+
+- Similar to the parametric test, we have one group of observation
+- We would like to know whether our group deviates from the hypothesized median
+- One-sample Wilcoxon is analogous to the one-sample T-Test
+
+---
+
+class: bg-main3
+
+# One-sample sign test
+
+.font2[
+- .amber[Does not] assume normality or symmetric distribution
+- Usable in a skewed data
+- Follow a .amber[binomial] distribution
+]
+
+???
+
+- A special case of the binomial test with p=0.5
+- Why p=0.5?
+- Because the chance of having $M_1 \neq M_0$ is 0.5 since median is the
+  midpoint
+
+---
+
+count: false
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Find the residual between our observation and hypothesized median
+- Omit all 0
+- Disregard the magnitude, take only its .amber[sign]
+- Calculate the frequency of .amber[positive] and .amber[negative] signs
+- Let $B_s$ be the resultant $\to B_s \sim B(n, 0.5)$
+]
+
+???
+
+- Because we only have two outcome of interest
+- Whether the observation be positive or negative sign
+- With all instances being independent, we have a Bernoulli trial
+- Then we model our probability using the Binomial distribution
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+count: false
+
+```{r one.sample.sign1}
+
+# Generate a skewed data using a Chi-squared distribution
+set.seed(1)
+x <- rchisq(10, 4) %T>% print()
+
+```
+
+.font2[
+- Here we have $X \sim \chi^2(4)$
+- Let $H_0$ be $M = 5$
+- And we are interested to conduct a two-tailed test
+]
+
+--
+
+```{r one.sample.sign2}
+
+# Set M and find the residual (difference)
+M <- 5
+diff <- {x - M}
+
+# Make a data frame
+tbl <- data.frame(x=x, abs.diff=abs(diff), sign=sign(diff))
+
+```
+
+---
+
+count: false
+
+.bg-white.content[
+<br>
+
+```{r one.sample.sign3, echo=FALSE}
+
+DT::datatable(tbl)
+
+```
+
+<br>
+]
+
+---
+
+count: false
+
+```{r one.sample.sign4}
+
+# Perform a binomial test
+res <- lapply(c(-1, 1), function(sign) {
+	binom.test(sum(tbl$sign==sign), nrow(tbl), 0.5) %>%
+		broom::tidy()
+})
+
+# Two-tailed test on sign=-1
+knitr::kable(res[[1]]) %>% kable_minimal()
+
+# Two-tailed test on sign=1
+knitr::kable(res[[2]]) %>% kable_minimal()
+
+```
+
+---
+
+count: false
+layout: false
+class: bg-main3
+
+# Caveats
+
+.font2[
+- Only see the difference
+- Neglecting the magnitude
+- What if our data has a severe skewness?
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# One-sample Wilcoxon signed rank test
+
+.font2[
+- Does not assume normality
+- But still assumes a .amber[symmetric] distribution
+- What distribution has a symmetric shape but not normal?
+]
+
+???
+
+- Hint: uniform distribution
+- Other examples: Cauchy distribution, generalized normal distribution, etc.
+- This test is not good for a skewed data
+
+---
+
+count: false
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Similar to performing a sign test
+- However, we assign ranks based on computed difference
+- Statistics is the resultants of signed rank
+- Take the .amber[minimum value] between both statistics
+]
+
+???
+
+- Also referred as a sum rank signed test
+
+---
+
+layout: true
+count: false
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r one.sample.sign1}
+```
+
+.font2[
+- Assigning rank will preserve the magnitude
+- Let $H_0: M = 5$
+]
+
+```{r one.sample.wilcox1}
+# Add columns to data frame
+tbl$ranked <- rank(tbl$abs.diff)
+
+```
+
+???
+
+- We will re-use the same data
+- We keep the hypotheses to replicate our previous analysis
+
+
+---
+
+count: false
+
+.bg-white.content[
+<br>
+
+```{r one.sample.wilcox2, echo=FALSE}
+DT::datatable(tbl)
+```
+
+<br>
+]
+
+---
+
+count: false
+
+```{r one.sample.wilcox3}
+
+# Calculate the statistics
+W <- tapply(tbl$rank, tbl$sign, sum) %>% min() %T>% print()
+
+# Find the p-value for a two-tailed test
+psignrank(W, nrow(tbl)) * 2
+
+# Built-in test
+wilcox.test(x, data=tbl, mu=5)
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Non-parametric test
+- One-sample test
+- .amber[Two-sample test]
+- Paired test
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Two-sample test
+
+.font2[
+- Mann-Whitney U test
+- Do not assume normality
+- Can handle skewed data
+- I.I.D
+]
+
+???
+
+- Also referred as a unpaired two-sample Wilcoxon test
+- Does not imply mean difference
+- Applicable to a small dataset
+
+---
+
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Pooled all the data elements from both groups
+- Sort from the smallest to largest value
+- Assign a rank to each value
+- Compare both groups
+]
+
+???
+
+- This is the concept of *sum of ranks*
+- Less statistical power compared to parametric tests
+- Still assumes IID
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r two.sample.wilcox1}
+
+# We will use x as the first group
+x
+
+# Assign x+4 as the second group, make a data frame
+tbl <- data.frame(
+	obs=c(x, x+4), 
+	group=rep(c("1", "2"), each=length(x)) %>% factor()
+) %T>% str()
+
+```
+
+---
+
+count: false
+
+```{r two.sample.wilcox2}
+
+# Goodness of fit test to determine the distribution
+tapply(tbl$obs, tbl$group, ks.test, pnorm) %>% lapply(broom::tidy) %>%
+	lapply(data.frame) %>% {do.call(rbind, .)} %>% kable() %>% kable_minimal()
+
+```
+
+--
+
+.amber.font2[A random quiz has appeared!]
+
+--
+
+.font2[Why do we use Kolmogorov-Smirnov test instead of a normality test?]
+
+???
+
+Is there another option?
+
+---
+
+count: false
+
+```{r plt.tbl, echo=FALSE}
+
+ggplot(tbl, aes(x=obs, y=..density.., color=group, fill=group)) +
+	geom_density(alpha=0.6) + theme_minimal() +
+	geom_vline(xintercept=tapply(tbl$obs, tbl$group, median), linetype=2, color=c("red", "cyan")) +
+	annotate("text", label=c("M 1", "M 2"), x=tapply(tbl$obs, tbl$group, median) + 0.1, y=0.1, hjust="left")
+
+```
+
+---
+
+count: false
+
+```{r two.sample.wilcox3}
+wilcox.test(obs ~ group, data=tbl, conf.int=TRUE)
+rstatix::wilcox_effsize(obs ~ group, data=tbl)
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Non-parametric test
+- One-sample test
+- Two-sample test
+- .amber[Paired test]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Paired test
+
+.font2[
+- Both groups are not independent
+- Paired Wilcoxon test
+- Does not assume normality
+- Does not imply mean difference
+]
+
+???
+
+- Symmetric data is a plus though
+- Does not imply mean difference
+- Applicable to a small dataset
+
+---
+
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Akin to one-sample Wilcoxon test
+- Measure the difference between paired data point
+- Remove zero (if any) then recompute the $n$
+- Assign rank to the absolute difference
+- Calculate statistics based on rank and sign
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r paired.wilcox1}
+# We will use the ChickWeight dataset
+str(ChickWeight)
+```
+
+---
+
+count: false
+
+```{r paired.wilcox2}
+# Assess normality
+tapply(ChickWeight$weight, ChickWeight$Time, shapiro.test) %>% lapply(broom::tidy) %>%
+	lapply(data.frame) %>% {do.call(rbind, .)} %>% kable() %>% kable_minimal()
+```
+
+---
+
+count: false
+
+```{r paired.wilcox3}
+# Subset the dataset to exclude normally distributed data
+tbl <- subset(ChickWeight, subset={ChickWeight$Time %in% c(0, 2)})
+
+# Make Time as a factor
+tbl$Time %<>% factor(levels=c(0, 2))
+```
+
+---
+
+count: false
+
+```{r paired.wilcox4}
+# Perform a paired Wilcoxon test
+wilcox.test(weight ~ Time, data=tbl, paired=TRUE, conf.int=TRUE)
+rstatix::wilcox_effsize(weight ~ Time, data=tbl, paired=TRUE)
+```
+
+---
+
+count: false
+
+```{r paired.wilcox6, echo=FALSE}
+
+ggplot(tbl, aes(x=Time, y=weight)) + geom_violin(alpha=0) + theme_minimal()
+
+```
+
+---
+
+layout: false
+count: false
+class: bg-main1 middle hide-slide-number font5 center
+
+.amber[Query?]

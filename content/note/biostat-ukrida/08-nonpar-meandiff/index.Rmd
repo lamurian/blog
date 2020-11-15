@@ -1,0 +1,67 @@
+---
+author: lam
+title: "Parametric: Mean in Multiple Groups"
+weight: 7
+description: >
+
+  A parametric test requires us to assume or hypothesize parameters in a
+  population. Often, a small sampel size or a highly-skewed distribution does not
+  resemble a normal distribution. In such a case, it becomes impertinent to
+  assume normality in our data. Even though parametric tests are quite robust
+  against non-normal data to a certain degree, it still requires a large number
+  of sample. With larger $n$ and homogeneous intergroup variance, the parametric
+  test may have a sufficient power to correctly reject the $H_0$. However, if we
+  cannot satisfy the required assumption, we need to drop our hypothesized claim
+  of population parameters. In other words, we are employing a non-parametric
+  test to measure observed differences.
+
+summary: >
+
+  A parametric test requires us to assume or hypothesize parameters in a
+  population. Often, a small sampel size or a highly-skewed distribution does not
+  resemble a normal distribution. In such a case, it becomes impertinent to
+  assume normality in our data. Even though parametric tests are quite robust
+  against non-normal data to a certain degree, it still requires a large number
+  of sample. With larger $n$ and homogeneous intergroup variance, the parametric
+  test may have a sufficient power to correctly reject the $H_0$. However, if we
+  cannot satisfy the required assumption, we need to drop our hypothesized claim
+  of population parameters. In other words, we are employing a non-parametric
+  test to measure observed differences.
+
+date: 2020-11-15
+categories: ["statistics", "ukrida"]
+tags: ["R", "hypothesis"]
+slug: 08-nonpar-meandiff
+csl: ../harvard.csl
+bibliography: ../ref.bib
+draft: false
+---
+
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/08-nonpar-meandiff/slide)
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+A parametric test requires us to assume or hypothesize parameters in a
+population. Often, a small sampel size or a highly-skewed distribution does not
+resemble a normal distribution. In such a case, it becomes impertinent to
+assume normality in our data. Even though parametric tests are quite robust
+against non-normal data to a certain degree, it still requires a large number
+of sample. With larger $n$ and homogeneous intergroup variance, the parametric
+test may have a sufficient power to correctly reject the $H_0$. However, if we
+cannot satisfy the required assumption, we need to drop our hypothesized claim
+of population parameters. In other words, we are employing a non-parametric
+test to measure observed differences.
+
+# Non-Parametric Test
+
+Given a small sample size, it is difficult for us to ascertain normality. As we
+have previously discussed, a large sample size merits a high statistical power.
+Conversely, when we have a low sample size, it is just natural to expect a
+lower statistical power.
