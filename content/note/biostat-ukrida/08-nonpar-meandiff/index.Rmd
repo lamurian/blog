@@ -1,7 +1,7 @@
 ---
 author: lam
-title: "Parametric: Mean in Multiple Groups"
-weight: 7
+title: "Non-parametric: Differences in Two Groups"
+weight: 8
 description: >
 
   A parametric test requires us to assume or hypothesize parameters in a
@@ -64,4 +64,294 @@ test to measure observed differences.
 Given a small sample size, it is difficult for us to ascertain normality. As we
 have previously discussed, a large sample size merits a high statistical power.
 Conversely, when we have a low sample size, it is just natural to expect a
-lower statistical power.
+lower statistical power. Asides from normality assumption, parametric tests are
+also sensitive to a severe skewness, because the average value will not
+represent the central tendency. Non-parametric test neither assume normality
+nor symmetricity, thus providing a legible approach for data unsuitable for
+parametric tests. However, having a more lenient assumption means to neglect
+some information in the data, resulting in a lower statistical power compared to
+the parametric test given its assumptions fulfilled. Following figures
+represent how the $\mu$ not describing the central tendency in a skewed data
+(bottom).
+
+```{r plt.data, echo=FALSE}
+
+x <- seq(-3, 3, 0.05)
+y <- dnorm(x, 0, 1)
+tbl <- data.frame(x=x, y=y)
+ggplot(tbl, aes(x=x, y=y)) + theme_minimal() + geom_line() +
+	geom_vline(xintercept=mean(x), linetype=2) +
+	annotate("text", label=c("mu", "M"), x=mean(x)+0.1, y=c(0.3, 0.28), hjust="left", parse=TRUE) +
+	labs(title="Standardized normal distribution", y="Probability", x="Observed event")
+
+```
+
+```{r plt.data.skew, echo=FALSE}
+
+set.seed(1)
+x <- rchisq(300, 5)
+tbl <- data.frame(x=x)
+ggplot(tbl, aes(x=x, y=..density..)) + theme_minimal() +
+	geom_density() +
+	geom_vline(xintercept=c(mean(x), median(x)), linetype=2) +
+	annotate("text", label=c("mu", "M"), x=c(mean(x), median(x))+0.1, y=(0.1), hjust="left", parse=TRUE) +
+	labs(title="Skewed data", y="Probability", x="Observed event")
+
+```
+
+As a summary, we should consider using a non-parametric test in the case of
+having a small sample size. If our data is not asymptotically normal, then
+employing a non-parametric test might be a more appropriate step. The presence
+of extreme outliers or severe skewness may impair the parametric test, so using
+a non-parametric test is desirable. In conducting a non-parametric test, we
+hypothesize on the difference in our observation compared to its reference. To
+describe the difference, we shall use its median value $M$, therefore:
+
+- $H_0:\ M_1 = M_2$
+- $H_1:\ M_1 \neq M_2$
+
+# One-Sample Test
+
+Similar to the parametric test, in one-sample test we only have one group of
+observation. We would like to know whether our group deviates from the
+hypothesized median. We may employ two type of test, i.e. a one-sample sign
+test and one-sample Wilcoxon signed rank test. Only the one-sample Wilcoxon
+test is analogous to the one-sample T-Test
+
+## One-Sample Sign Test
+
+A one-sample sign test does not assume normality nor symmetric distribution. It
+is useful in a skewed data, where the statistics follow a binomial
+distribution. In fact, it is an extension to the binomial test, which we have
+discussed in the [previous lecture](https://lamurian.rbind.io/note/biostat-ukrida/05-independence/).
+In this test, we know that our statistics $B_s \sim B(n, p)$ with $0=0.5$. We
+set the probability $p=0.5$ because the random chance of having $M_1 \neq M_0$
+is 0.5, as the median is the midpoint.
+
+To calculate one-sample sign test, we need to:
+
+- Find the residual between our observation and hypothesized median
+- Omit all 0
+- Disregard the magnitude, take only its sign
+- Calculate the frequency of positive and negative signs
+- Let $B_s$ be the resultant $\to B_s \sim B(n, 0.5)$
+
+Essentially, we only have two outcome of interest, i.e. having a positive or
+negative sign. Assuming I.I.D in each of our observation, we have a Bernoulli
+trial with $p=0.5$, such that we can model our probability as a Binomial
+distribution.
+
+### Example, please?
+
+```{r one.sample.sign1}
+
+# Generate a skewed data using a Chi-squared distribution
+set.seed(1)
+x <- rchisq(10, 4) %T>% print()
+
+```
+
+In this example, we have $X \sim \chi^2(4)$, presenting as a skewed data.
+Should we let $H_0$ be $M=5$ and we are interested to conduct a two-tailed
+test, we can proceed using a one-sample sign test.
+
+```{r one.sample.sign2}
+
+# Set M and find the residual (difference)
+M <- 5
+diff <- {x - M}
+
+# Make a data frame
+tbl <- data.frame(x=x, abs.diff=abs(diff), sign=sign(diff))
+
+```
+
+```{r one.sample.sign3, echo=FALSE}
+
+knitr::kable(tbl)
+
+```
+
+```{r one.sample.sign4}
+
+# Perform a binomial test
+res <- lapply(c(-1, 1), function(sign) {
+	binom.test(sum(tbl$sign==sign), nrow(tbl), 0.5) %>%
+		broom::tidy()
+})
+
+# Two-tailed test on sign=-1
+knitr::kable(res[[1]])
+
+# Two-tailed test on sign=1
+knitr::kable(res[[2]])
+
+```
+
+As we have demonstrated, a non-parametric test is straightforward and simple.
+Statistics obtained from a one-sample sign test only taking into account the
+difference and neglecting the magnitude. This test is suitable to avoid
+incorrectly rejecting the $H_0$ due to biased calculation in the presence of
+severe skewness.
+
+## One-Sample Wilcoxon Signed Rank Test
+
+Similar to the one-sample sign test, one-sample Wilcoxon test also does not
+assume normality. Contrarily, it assumes a symmetric distribution because
+one-sample Wilcoxon test is not suitable for a severely-skewed data. We may
+start to wonder, what distribution has a symmetric shape but not normal? Well,
+that is a fair question, because so far we rarely discuss about non-normally
+distributed symmetric data. Though, we have briefly mentioned one of them in
+the second lecture, the uniform distribution. Of course, there are more
+examples such as Cauchy distribution, a generalized normal distribution (which
+is not normal!), and so on. We will not dig too much into this topic, but
+please be aware that we may have a symmetric but non-normally distributed data.
+
+One-sample Wilcoxon test has a similar procedure to one-sample sign test.
+However, we assign ranks based on computed differences. The statistics is the
+resultants of signed rank, where we only consider the minimum value between
+both the sum of positive and negative ranks. Thus, we sometimes refer
+one-sample Wilcoxon as a sum rank signed test.
+
+### Example, please?
+
+To keep a consistent remark, we shall re-use the previous data. Please be
+advised, we need to ascertain symmetricity before proceeding with a one-sample
+Wilcoxon test. To do so, we may refer to a skewness measure of our data. When
+we have a negative value, it means our data is left skewed, *vice versa*.
+Acquiring the skewness, we may use the range of $[-1, 1]$ to decide that our
+data does not present with a severe skewness impairing its symmetricity.
+
+```{r one.sample.sign1}
+```
+
+```{r one.sample.wilcox1}
+# Add columns to data frame
+tbl$ranked <- rank(tbl$abs.diff)
+
+```
+
+```{r one.sample.wilcox2, echo=FALSE}
+knitr::kable(tbl)
+```
+
+```{r one.sample.wilcox3}
+
+# Calculate the statistics
+W <- tapply(tbl$ranked, tbl$sign, sum) %>% min() %T>% print()
+
+# Find the p-value for a two-tailed test
+psignrank(W, nrow(tbl)) * 2
+
+# Built-in test
+wilcox.test(x, data=tbl, mu=5)
+```
+
+# Two-Sample Test
+
+Mann-Whitney U test is an unpaired two-sample Wilcoxon test. As in other
+non-parametric tests, it does not assume normality, although it requires the
+data be I.I.D. Mann-Whitney U test can also handle skewed data with a small
+sample size. The concept in Mann-Whitney U test is the sum of ranks, where we
+pooled all the data elements from both groups. Then we sorted pooled values,
+starting from the smallest to largest. Similar to one-sample Wilcoxon test, we
+have to assign a rank to each value in order to compare both groups.
+
+## Example, please?
+
+```{r two.sample.wilcox1}
+
+# We will use x as the first group
+x
+
+# Assign x+4 as the second group, make a data frame
+tbl <- data.frame(
+	obs=c(x, x+4), 
+	group=rep(c("1", "2"), each=length(x)) %>% factor()
+) %T>% str()
+
+```
+
+```{r two.sample.wilcox2}
+
+# Goodness of fit test to determine the distribution
+tapply(tbl$obs, tbl$group, ks.test, pnorm) %>% lapply(broom::tidy) %>%
+	lapply(data.frame) %>% {do.call(rbind, .)} %>% kable() %>% kable_minimal()
+
+```
+
+```{r plt.tbl, echo=FALSE}
+
+ggplot(tbl, aes(x=obs, y=..density.., color=group, fill=group)) +
+	geom_density(alpha=0.6) + theme_minimal() +
+	geom_vline(xintercept=tapply(tbl$obs, tbl$group, median), linetype=2, color=c("red", "cyan")) +
+	annotate("text", label=c("M 1", "M 2"), x=tapply(tbl$obs, tbl$group, median) + 0.1, y=0.1, hjust="left")
+
+```
+
+As we can see, both data presented with a non-normal distribution. Thus,
+comparing both observations will require a non-parametric test. Here we employ
+Mann-Whitney U test and compute the effect size.
+
+```{r two.sample.wilcox3}
+wilcox.test(obs ~ group, data=tbl, conf.int=TRUE)
+rstatix::wilcox_effsize(obs ~ group, data=tbl)
+```
+
+# Paired Test
+
+In previous tests, we always assume I.I.D. In case of paired data, i.e. when an
+observation influencing another, we need to take into consideration their
+relationship. Unfortunately, Mann-Whitney U could not discern such a relation
+between data point, as it only looks at the difference in rank. In paired
+Wilcoxon test, we do not assume I.I.D., and procedure-wise it is akin to
+one-sample Wilcoxon test. To understand this concept, please kindly recall how
+paired T-Test relates to one-sample T-Test. Although paired Wilcoxon test does
+not assume the shape of our distribution, a symmetric data is still a plus.
+
+To conduct a paired Wilcoxon test, we first measure the difference between
+paired data points by taking their residuals. Similar observations will result
+in 0 residual, which we have to omit out of our observation. We assign rank to
+the absolute value of computed residual then calculate the statistics as we
+previously demonstrated in the one-sample Wilcoxon test.
+
+## Example, please?
+
+In the previous lecture about ANOVA, we are using `ChickWeight` dataset. We
+happened to observe a non-normally distributed data for two group of times.
+Here, we will further examine both groups to understand the difference.
+
+```{r paired.wilcox1}
+# We will use the ChickWeight dataset
+str(ChickWeight)
+```
+
+```{r paired.wilcox2}
+# Assess normality
+tapply(ChickWeight$weight, ChickWeight$Time, shapiro.test) %>% lapply(broom::tidy) %>%
+	lapply(data.frame) %>% {do.call(rbind, .)} %>% knitr::kable()
+```
+
+After assessing normality, we see that both $T=0$ and $T=2$ not to follow a
+normal distribution.
+
+```{r paired.wilcox3}
+# Subset the dataset to exclude normally distributed data
+tbl <- subset(ChickWeight, subset={ChickWeight$Time %in% c(0, 2)})
+
+# Make Time as a factor
+tbl$Time %<>% factor(levels=c(0, 2))
+```
+
+Since we are interested to observe differences in non-normal distribution, here
+we subset the data to only include observation in group $T_0$ and $T_2$. Then
+we turn our variables into a factor, where we set $T_0$ as our group of
+reference.
+
+```{r paired.wilcox4}
+# Perform a paired Wilcoxon test
+wilcox.test(weight ~ Time, data=tbl, paired=TRUE, conf.int=TRUE)
+rstatix::wilcox_effsize(weight ~ Time, data=tbl, paired=TRUE)
+```
+
+Lastly, we can perform a paired Wilcoxon test and its associated effect size.
