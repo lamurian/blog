@@ -1,0 +1,643 @@
+---
+title: "Correlation of Numeric Variables"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightLines: true
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "kableExtra", "ggplot2")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F, error=F,
+	fig.width=10, fig.height=6, out.width="90%", dev="png", dpi=300
+)
+options(digits=2)
+```
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[.amber[Correlation] of Numeric Variables]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- .amber[Covariance]
+- Pearson's $r$
+- Spearman's $\rho$
+- Kendall's $\tau$
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Covariance
+
+---
+
+.font2[
+- Concept recall: variance
+- Describes a trend between two .amber[numeric] variables
+- Does not define the magnitude
+- How does $y$ behave if we know the value of $x$?
+]
+
+---
+
+count: false
+
+.font2[
+$$\sigma_{x, y} = \frac{\displaystyle \sum_{i=1}^n(x_i - \mu_x)(y_i - \mu_y)}{n}$$
+]
+
+???
+
+- Concept recall: Bias and Bessel's correction
+
+--
+
+.font2[
+$$s_{x, y} = \frac{\displaystyle \sum_{i=1}^n(x_i - \color{orange}{\bar{x}}) (y_i - \color{orange}{\bar{y}})}{(\color{orange}{n-1})}$$
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Covariance matrix
+
+.font2[
+- Pairwise relationships between multiple numeric variables
+- Assessing trends at a glimpse
+- A useful descriptive statistics before designing a complex model
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r cov1}
+
+tbl <- subset(iris, select=c(Sepal.Width, Sepal.Length)) %>% str()
+
+```
+
+--
+
+.font2[
+- We will calculate how `Sepal.Width` covary with `Sepal.Length`
+- From here onwards, we will set `x` to represent the width
+- ...and `y` to represent the length
+]
+
+---
+
+count: false
+
+.bg-white[
+<br>
+
+```{r cov2, echo=F}
+
+tbl <- subset(iris, select=c(Sepal.Length, Sepal.Width)) %>%
+	set_names(c("x", "y")) %>%
+	inset("x.resid", value={iris$Sepal.Length - mean(iris$Sepal.Length)}) %>%
+	inset("y.resid", value={iris$Sepal.Width - mean(iris$Sepal.Width)})
+
+tbl %>% DT::datatable()
+
+```
+
+<br>
+]
+
+---
+
+```{r cov3}
+
+covariance <- function(x, y) {
+	n <- length(x) # Length of x must be = length of y
+	{(x - mean(x)) * (y - mean(y))} %>% sum() %>% divide_by(n-1)
+}
+
+```
+
+.font2[
+- This function will help us calculating the covariance
+- Notice how it forms a computational sequence?
+]
+
+--
+
+```{r cov4}
+covariance(tbl$x, tbl$y)
+cov(tbl$x, tbl$y) # Built-in function
+```
+
+---
+
+.font2[How if we calculate covariances of the same variable?]
+
+--
+
+```{r cov5}
+covariance(tbl$x, tbl$x)
+var(tbl$x) # Variance of x
+```
+
+???
+
+- Covariance of one variable is the **variance**
+
+--
+
+.font2[
+$$s_{x, x} = \frac{\displaystyle \sum_{i=1}^n(x_i - \color{orange}{\bar{x}}) (x_i - \color{orange}{\bar{x}})}{(\color{orange}{n-1})}$$
+]
+
+---
+
+```{r cov6}
+tbl <- subset(iris, select=-Species) %T>% str()
+cov(tbl)
+```
+
+???
+
+- This provides a splendid example on covariance matrix
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Covariance
+- .amber[Pearson's] $r$
+- Spearman's $\rho$
+- Kendall's $\tau$
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Pearson's $r$
+
+---
+
+.font2[
+- Moment product correlation
+- Describes the trend
+- Also the .amber[magnitude]
+- Dimension free
+]
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+r &= \frac{\color{orange}{s_{x,y}}}{s_x \cdot s_y} \\
+  &= \displaystyle \sum_{i=1}^n \frac{\color{orange}{(x-\bar{x}) (y-\bar{y})}} {\color{orange}{(n-1)} \cdot s_x \cdot s_y} \\
+  &= \displaystyle \sum_{i=1}^n \frac{\big( \frac{x-\bar{x}}{s_x} \big) \cdot \big( \frac{y-\bar{y}}{s_y} \big)}{n-1}
+\end{align}
+]
+
+???
+
+- Concept recall: Z-score
+
+---
+
+.font2[
+\begin{align}
+r &= \frac{Z_x \cdot Z_y}{n-1} \\
+\nu &= n - 2 \tag{DoF}
+\end{align}
+]
+
+--
+
+.font2[
+- It describes the relationship between .amber[two] numeric variables
+- Both variables needs to follow a normal distribution
+- Recall: $Z \sim N(0, 1)$
+- Since $r \sim Z \to r$ does not care for the unit!
+]
+
+---
+
+.font2[
+$$t = \frac{r}{\sqrt{\frac{1-r^2}{n-2}}}$$
+
+- $t \sim T(\nu)$
+- There exists another method of determining the significance
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Assumptions
+
+.font2[
+- I.I.D
+- Univariate normality
+- .amber[Bivariate] normality
+- Has a linear relationship
+]
+
+???
+
+- Important concept: joint distribution
+- When the data follows a bivariate normal distribution, Pearson's $r$ can
+  completely describe the relationship
+- However, bivariate normality is not a stringent assumption per se
+- Could not address non-linearity
+
+--
+
+## Hypotheses
+
+.font2[
+- $H_0$: Both variables do not have a linear relationship
+- $H_1$: Both variables have a linear relationship
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r pearson1}
+lapply(tbl, shapiro.test) %>% lapply(broom::tidy) %>% lapply(data.frame) %>%
+	{do.call(rbind, .)} %>% kable() %>% kable_minimal()
+```
+
+---
+
+count: false
+
+```{r pearson2, echo=FALSE}
+par(mfrow=c(2, 2))
+tmp <- lapply(tbl, car::qqPlot)
+```
+
+???
+
+- Sepal width follows a normal distribution
+- Sepal length *closely* follow a normal distribution
+- Not many normality violations in sepal length (checked using qqplot)
+- We shall see whether our data follow a bivariate normal distribution
+
+---
+
+count: false
+
+```{r pearson2.mvn}
+subset(tbl, select=c(Sepal.Length, Sepal.Width)) %>%
+	MVN::mvn() # Multivariate normality
+```
+
+???
+
+- Multivariate normality test is a general form of measuring bivariate
+  normality
+- We use Mardia's test for this purpose
+
+---
+
+```{r pearson3}
+cor.test(tbl$Sepal.Length, tbl$Sepal.Width)
+```
+
+--
+
+.font2[
+- $\color{red}{-1} \leq r \leq \color{orange}{1}$
+- .red[Negative] and .orange[positive] trends
+]
+
+---
+
+count: false
+
+```{r pearson4, echo=FALSE}
+ggplot(tbl, aes(x=Sepal.Length, y=Sepal.Width)) + geom_point() +
+	geom_smooth(method="lm") + theme_minimal()
+```
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Covariance
+- Pearson's $r$
+- .amber[Spearman's] $\rho$
+- Kendall's $\tau$
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Spearman's $\rho$
+
+---
+
+.font2[
+- A non-parametric variant of Pearson's $r$
+- Suitable to handle ordinal data
+- In some cases: applicable for non-normally distributed numeric data
+- Not sufficient to correctly handle tied values
+]
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+\rho &= 1 - \frac{6 \sum (R_x - R_y)^2}{n (n^2 - 1)} \\
+\nu  &= n - 2 \tag{DoF}
+\end{align}
+]
+
+--
+
+.font2[
+- $R_{x,y}$ is the rank for $X, Y$
+- Ranking follows an order within one variable, i.e. .amber[not] by pooling the data
+- By assigning rank, we can address non-linearity to a certain degree
+]
+
+???
+
+- As an alternative to this equation, we can use Pearson's $r$
+- But we need to use the rank instead of the actual data element
+
+---
+
+count: false
+
+.font2[
+$$t = \frac{\rho}{\sqrt{\frac{1-\rho^2}{n-2}}}$$
+
+- $t \sim T(\nu)$
+- Handle ties by taking the average value of ranks
+- Tie $\to$ Has little confidence in determining the p-value
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Assumptions
+
+.font2[
+- I.I.D
+- Monotonic trend
+- Has a natural order
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+## .red[Disclaimer!]
+
+.font2[
+- This example is only for an illustrative purpose
+- We will re-use a subset on the `iris` dataset
+]
+
+---
+
+count: false
+
+```{r cov6}
+```
+
+---
+
+count: false
+
+```{r spearman}
+cor.test(tbl$Sepal.Length, tbl$Sepal.Width, method="spearman")
+```
+
+--
+
+.font2[
+- $\color{red}{-1} \leq \rho \leq \color{orange}{1}$
+- .red[Negative] and .orange[positive] trends
+]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Covariance
+- Pearson's $r$
+- Spearman's $\rho$
+- .amber[Kendall's] $\tau$
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Kendall's $\tau$
+
+---
+
+.font2[
+- Non-parametric
+- Methods: $\tau_a, \tau_b, \tau_c$
+- Concordant and discordant pairs
+]
+
+???
+
+- $\tau_a$: Square table
+- $\tau_b$: Square table, handles tie
+- $\tau_c$: Rectangular table, handles tie
+- Most applicable on an ordinal data
+
+---
+
+count: false
+
+.font2[
+- For $i, j \in X, Y: i \neq j,\ \exists\ (x_{i, j}, y_{i, j})$
+- Concordant: $(x_i < x_j \ \texttt{and}\  y_i < y_j) \lor (x_i > x_j \ \texttt{and}\  y_i > y_j)$
+- Discordant: $(x_i < x_j \ \texttt{and}\  y_i \nless y_j) \lor (x_i > x_j \ \texttt{and}\  y_i \ngtr y_j)$
+]
+
+???
+
+- Concordant: pairs with similar symbols
+- Discordant: pairs with dissimilar symbols
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+\tau_a &= \frac{n_c - n_d}{n}\\
+\tau_b &= \frac{n_c - n_d}{\sqrt{(n + X_0) (n + Y_0)}} \\
+\tau_c &= \frac{2(n_c - n_d)}{n^2 \frac{(m-1)}{m}} \\
+n      &= \binom{n}{2}
+\end{align}
+]
+
+???
+
+- Square table: both variables are ordinal with the same scale
+- Rectangular table: both variables have different measurement scales
+- $n_c$: Number of concordant pairs
+- $n_d$: Number of discordant pairs
+- $n$: Total number of possible pairs
+- $m$: $min(r, c): r$ is the row and $c$ is the column
+- $X_0, Y_0$: Ties in either X or Y
+- Most statistical software employs Kendall's $\tau_b$
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r cov6}
+```
+
+---
+
+count: false
+
+```{r kendall}
+cor.test(tbl$Sepal.Length, tbl$Sepal.Width, method="kendall")
+```
+
+--
+
+.font2[
+- $\color{orange}{0} \leq \tau \leq \color{orange}{1}$
+- Interpret the absolute value of $\tau$
+- Base `R` only implements $\tau_a$, other methods exist in a specific packages
+]
+
+---
+
+layout: false
+class: bg-main2
+
+# Recap
+
+.font2[
+- Check normality
+- Check linearity
+- Non-parametric test: determine the presence of tie
+- Perform correlation
+- Create the plot (if necessary)
+]
+
+---
+
+class: bg-main2
+
+# Caveats
+
+.font2[
+- We only discussed .orange[*some*] of the popular correlation test
+- All discussed methods assume .orange[I.I.D]
+- .orange[Paired data] is suitable for .orange[none] of discussed methods
+- .orange[Time series] data requires a different approach
+- Correlation $\color{orange}{\neq}$ Causation
+]
+
+---
+
+class: bg-main2
+
+# Is that all?
+
+???
+
+Short answer: no.
+
+--
+
+.font2[
+- Concordance correlation coefficient
+- Intraclass correlation
+- Partial correlation
+- Zero-order correlation
+- The list goes on...
+]
+
+---
+
+count: false
+class: bg-main1 middle center font5 hide-slide-number
+
+.amber[Query?]
