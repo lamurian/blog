@@ -1,0 +1,757 @@
+---
+title: "Linear Model"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightLines: true
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "kableExtra", "ggplot2", "ggpubr", "ggfortify")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F, error=F,
+	fig.width=10, fig.height=6, out.width="90%", dev="png", dpi=300
+)
+options(digits=2)
+```
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[.amber[Linear] Model]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- .amber[Concept]
+- Comparison with one-way ANOVA
+- Residual analysis
+- Multiple regression
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Concept
+
+.font2[
+\begin{align}
+\hat{y}_i &= \beta_0 + \beta_1 x_i \\
+y_i &= \hat{y} + \epsilon_i
+\end{align}
+]
+
+---
+
+???
+
+- $\hat{y}$: The estimated value of $y$
+- $y$: The actual dependent variables
+- $\beta_0$: The intercept of your model
+- $\beta_1$: The slope of your model (which $x$ depends upon)
+
+---
+
+count: false
+
+.font2[
+- An extension of .amber[correlation] analysis
+- Explains the .amber[linearity] between $x$ and $y$
+- Constructs both .amber[explanatory] and .amber[predictive] models
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r cor1}
+str(iris)
+```
+
+---
+
+count: false
+
+```{r cor2}
+subset(iris, select=-Species) %>% cor()
+```
+
+???
+
+- There be a seemingly good correlation between Sepal Length and Petal Length
+- We will use that as our DV and IV, respectively
+- Let's try to conduct correlation analysis
+
+---
+
+count: false
+
+```{r cor3}
+with(iris, cor.test(Sepal.Length, Petal.Length))
+```
+
+---
+
+count: false
+
+```{r mod1}
+mod1 <- lm(Sepal.Length ~ Petal.Length, data=iris) %T>% {print(summary(.))}
+```
+
+---
+
+count: false
+
+```{r plt.mod1, echo=FALSE}
+ggscatter(iris, x="Petal.Length", y="Sepal.Length", add="reg.line", add.params=list(color="indianred")) +
+	stat_cor(label.x=3, label.y=6.2, hjust="left") +
+	stat_regline_equation(label.x=3, label.y=6, hjust="left") +
+	theme_minimal()
+```
+
+???
+
+- $\beta_0$ is 4.3
+- $\beta_1$ is 0.41
+
+---
+
+layout: false
+class: bg-main3
+
+# What are the $\beta$ ?
+
+.font2[
+- $\beta$ explains which line best fit the data
+- Changes in $x$ is scaled upon $\beta$
+]
+
+???
+
+- $\beta$ defines how $x$ influences the model
+- $\beta$ predicts how the $\hat{y}$ and $y$ comes out
+
+--
+
+# How do we calculate $\beta$ ?
+
+.font2[
+- Ordinary Least Square
+- Maximum Likelihood Estimation
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Aims of calculating $\beta$
+
+.font2[
+- Find the .amber[best line] to fit the data
+- Get a model with the .amber[least bias] $\epsilon$
+- .amber[Generalize] the model to adapt unforeseen data
+- Clue: the best fitted line will pass through the centroid
+]
+
+???
+
+- The centroid is a coordinate of expected values from both $x$ and $y$
+- The expected value is simply the sample mean
+- So the centroid of $C$ is a pair of $(\bar{x}, \bar{y})$
+
+---
+
+layout: true
+class: bg-main3
+
+# Ordinary Least Square
+
+---
+
+.font2[
+\begin{align}
+\epsilon &= \displaystyle \sum_{i=1}^n (y_i - \hat{y}_i)2 \\
+&= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2
+\end{align}
+]
+
+--
+
+.font2[
+- Both $x$ and $y$ are constants relative to the index $i$
+- $\epsilon$ only depends on $\beta_0$ and $\beta_1$
+- We aim to minimize the bias $\epsilon \to$ How?
+]
+
+--
+
+.font2[
+.amber[Hint:] Partial derivatives
+]
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+\epsilon &= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2 \\
+\frac{\partial \epsilon}{\partial \beta_0} &= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) \\
+\frac{\partial \epsilon}{\partial \beta_1} &= \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i))
+\end{align}
+]
+
+???
+
+- Concept recall: derivatives
+- Partial derivatives is similar, with the only difference it follows a partial
+  assignment
+- It regards the other variables as being a constant
+
+---
+
+## Solving $\beta_0$
+
+\begin{align}
+\frac{\partial \epsilon}{\partial \beta_0} = \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) &= 0\\
+-2 \bigg( \displaystyle \sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \sum_{i=1}^n \beta_1 x_i \bigg) &= 0 \\
+\displaystyle \sum_{i=1}^n y_i - n \beta_0 - \sum_{i=1}^n \beta_1 x_i &= 0 \\
+\beta_0 &= \frac{1}{n} \bigg( \displaystyle \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i \bigg) \\
+\beta_0 &= \bar{y} - \beta_1 \bar{x}
+\end{align}
+
+---
+
+## Solving $\beta_1$
+
+\begin{align}
+\frac{\partial \epsilon}{\partial \beta_1} = \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i)) &= 0 \\
+-2 \bigg( \displaystyle \sum_{i=1}^n x_i (y_i - (\bar{y} - \beta_1 \bar{x} + \beta_1 x_i)) \bigg) &= 0\\
+\displaystyle \sum_{i=1}^n x_i (y_i - \bar{y}) - \sum_{i=1}^n \beta_1 x_i (x_i - \bar{x}) &= 0 \\
+\beta_1 \displaystyle \sum_{i=1}^n x_i (x_i - \bar{x}) &= \sum_{i=1}^n x_i (y_i - \bar{y}) \\
+\beta_1 &= \displaystyle \sum_{i=1}^n \frac{x_i(y_i - \bar{y})}{x_i(x_i - \bar{x})} \\
+\beta_1 &= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x})(y_i - \bar{y})}{(x_i - \bar{x})(x_i - \bar{x})} \\
+\end{align}
+
+???
+
+Notice how $\beta_1$ solves into the quotient of covariance and variance?
+
+---
+
+layout: true
+class: bg-main3
+
+# Maximum Likelihood Estimation
+
+---
+
+.font2[
+\begin{align}
+arg.\ max\ L(\Theta | X) &= \displaystyle \prod_{i=1}^n P(x_i | \Theta)
+\end{align}
+]
+
+???
+
+- $\Theta$ is the parameter
+- $L$ is a likelihood function
+- $P$ is the probability function
+- Likelihood function aims to find population parameters given the data
+
+---
+
+count: false
+
+\begin{align}
+L(\Theta | X) &= \displaystyle \prod_{i=1}^n P(x_i | \Theta) \tag{Normal P.D.F}\\
+L(\mu, \sigma | X) &= \displaystyle \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} \cdot e^{- \frac{(x-\mu)^2}{2 \sigma^2}} \\
+L(\mu, \sigma | X) &= \bigg(\frac{1}{\sqrt{2 \pi \sigma^2}}\bigg)^n \displaystyle \prod_{i=1}^n \cdot e^{- \frac{(x-\mu)^2}{2 \sigma^2}} \\
+\ell(\mu, \sigma | X) &= -\frac{n}{2}\ ln(2 \pi \sigma^2) - \displaystyle \sum_{i=1}^n \frac{(x-\mu)^2}{2 \sigma^2} \tag{log-likelihood} \\
+\ell(\beta_0, \beta_1, \sigma | Y) &= -\frac{n}{2}\ ln(2 \pi \sigma^2) - \frac{1}{2 \sigma^2} \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2
+\end{align}
+
+???
+
+- Assuming the data follows the normal distribution
+- $\ell = ln\ L(\Theta | X)$
+
+--
+
+.font2[
+Next, you just need to perform a partial derivative to find the $arg.\ max$
+]
+
+---
+
+count: false
+
+## Sprinkle some calculus magic and... .amber[voila!]
+
+???
+
+- Use partial derivatives as previously explained
+
+--
+
+.font2[
+\begin{align}
+\beta_0 &= \bar{y} - \beta_1 \bar{x} \\
+\beta_1 &= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x}) (y_i - \bar{y})}{(x_i - \bar{x})^2} \\
+\sigma^2 &= \frac{1}{n} \displaystyle \sum_{i=1}^n (y_i - (\beta_0 - \beta_1 x_i))^2
+\end{align}
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# $\beta_0$ and $\beta_1$ solutions
+
+.font2[
+\begin{align}
+\beta_0 &= \bar{y} - \beta_1 \bar{x} \\
+\beta_1 &= \frac{s_{x, y}}{s_{x, x}}
+\end{align}
+]
+
+???
+
+- Any method yields the same results
+- Covariance is also called a sum of product
+- Variance is a sum of square
+
+--
+
+.font2[
+.amber[Concept recall:] Covariance matrix
+]
+
+--
+
+.font2[
+We can also perform OLS and MLE using matrices operations
+]
+
+--
+
+.font2[
+But I'll leave the venture to your own volition ;)
+]
+
+???
+
+- Matrix operations make complicated operations simpler to solve
+- It is essential when we have a multiple regression
+- That is, a regression with multiple IVs
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- .amber[Comparison with one-way ANOVA]
+- Residual analysis
+- Multiple regression
+]]
+
+---
+
+class: bg-main3
+
+# Comparison with one-way ANOVA
+
+.font2[
+- Mathematically, we do not solve categorical variables in statistics
+- We dummy code the categories into numeric values (e.g.: Male=1, Female=2)
+- Hence, we can view mean difference as a linear model!
+- That makes both `lm` and `aov` as an interchangeable construct
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r mod2}
+mod2 <- lm(Sepal.Length ~ Species, data=iris) %T>% {print(summary(.))}
+```
+
+---
+
+count: false
+
+```{r mod3}
+mod3 <- aov(Sepal.Length ~ Species, data=iris) %T>% {print(anova(.))}
+```
+
+---
+
+count: false
+
+.font2[
+- Wait, didn't I mention they should be similar?
+- Why do we observe different result? :(
+]
+
+???
+
+- By default, `lm` uses a t-statistics
+- While `aov` follows a f-statistics
+- If we put `lm` model into `anova`, we will see the same output
+- Meaning that, we need to perform a sum of square test on our `lm` model
+
+---
+
+count: false
+
+```{r mod2.ftest}
+anova(mod2) # Sum of Square test on the `lm` model
+anova(mod2, mod3) # Partial F-Test
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Partial F-Test
+
+.font2[
+- .amber[Sum of square] method is applicable to linear models
+- Using partial F-Test, we can .amber[compare] multiple models at once
+- By doing so, we can compare the $RSS$, as reflected by the $F$ value
+- We can affirm .amber[true differences] by denoting statistical significance
+- We will revisit this concept when discussing .amber[multiple regression] models
+]
+
+---
+
+class: bg-main3
+
+# ANCOVA
+
+.font2[
+- We can control for covariate in ANOVA
+- By doing so, we do not conduct an analysis of .amber[variance]
+- Instead, we will do an analysis of .amber[covariance]
+]
+
+---
+
+class: bg-main3
+
+# Why ANCOVA?
+
+.font2[
+- This way, we have a more flexible model
+- Using ANCOVA, we can do a multivariate analysis
+- MANOVA $\to$ MANCOVA
+- Results in ANCOVA is similar to linear model with categorical variables
+]
+
+???
+
+In multivariate analysis, we have multiple DVs
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- Comparison with one-way ANOVA
+- .amber[Residual analysis]
+- Multiple regression
+]]
+
+---
+
+class: bg-main3
+
+# Residual analysis
+
+.font2[
+- In making a linear model, we have assumptions to fulfill
+- These assumptions revolve in the error term $\epsilon$
+- We also regard $\epsilon$ as a residual (thus the name!)
+]
+
+--
+
+## What do we look for?
+
+.font2[
+- Normality of the residual
+- Homogeneity of residual variances
+]
+
+---
+
+class: bg-main3
+
+# Normality of the residual
+
+.font2[
+- Remember how we use the normal P.D.F during MLE?
+- We assume that the residual of our model as asymptotically normal
+- It means that, our model does not posses a bias in determining the linearity
+- Test to consider: Shapiro-Wilk, Kolmogorov-Smirnov, Anderson-Darling, etc...
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Homogeneity of residual variances
+
+.font2[
+- Our residual $\epsilon$ varies across different $y$
+- The error term $\epsilon$ is a joint distribution
+- We only get one sample of such a distribution for every instance
+- Test to consider: Breusch-Pagan, Harrison-McCabe
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r mod1}
+```
+
+---
+
+count: false
+
+```{r mod1.norm.resid}
+residuals(mod1) %>% shapiro.test()
+```
+
+---
+
+count: false
+
+```{r mod1.hom.var}
+lmtest::bptest(mod1) # Breusch-Pagan test
+lmtest::hmctest(mod1) # Harrison-McCabe test
+```
+
+---
+
+count: false
+
+```{r plt.resid, echo=FALSE}
+autoplot(mod1) + theme_minimal()
+```
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- Comparison with one-way ANOVA
+- Residual analysis
+- .amber[Multiple regression]
+]]
+
+---
+
+class: bg-main3
+
+# Multiple regression
+
+.font2[
+- Analogous to factorial ANOVA
+- Use multiple independent variables
+- Only use one dependent variable
+- Regarded as a multivariable analysis
+]
+
+???
+
+- Multivariable analysis: A model with multiple IVs
+- Multivariate analysis: A model with multiple DVs
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r mod4}
+mod4 <- lm(Sepal.Length ~ ., data=iris)
+broom::tidy(mod4) %>% kable() %>% kable_material_dark()
+```
+
+---
+
+count: false
+
+```{r mod4.compare}
+anova(mod1, mod4)
+```
+
+???
+
+- Partial F-Test to compare multiple models
+- With more IVs, we will have naturally have lower $RSS$
+
+--
+
+.font2[
+- .amber[Be careful] on spurious correlation!
+- Remember how `Sepal.Length` does not have a strong correlation with `Sepal.Width`?
+]
+
+???
+
+- Spurious correlation happens when using many IVs
+- It results in a model with a good correlation
+- Often times, it indicates an overfit
+- The model will not generalize that well!
+
+---
+
+count: false
+
+```{r mod5}
+
+mod.empty <- lm(Sepal.Length ~ 1, data=iris) # Model with no IV, only intercept
+mod5 <- step(mod.empty, formula(mod4), direction="both") # Stepwise regression
+broom::tidy(mod5) %>% kable() %>% kable_material_dark()
+
+```
+
+???
+
+Stepwise regression:
+- Forward
+- Backward
+- Both
+
+Criterion to omit a variable:
+- p-value
+- AIC: Default in `R`
+- BIC
+
+---
+
+count: false
+
+```{r mod5.norm.resid}
+residuals(mod5) %>% shapiro.test()
+```
+
+---
+
+count: false
+
+```{r mod5.hom.var}
+lmtest::bptest(mod5)
+lmtest::hmctest(mod5)
+```
+
+---
+
+count: false
+
+```{r mod5.vif}
+car::vif(mod5) # Variable inflation factor
+```
+
+???
+
+- To determine the presence of multicollinearity
+- We use 5 as a cut-off
+- Sometimes we can be more lenient and using 10 as our cut-off
+- Interpret the GVIF value
+
+---
+
+count: false
+
+```{r plt.mod5.resid, echo=FALSE}
+autoplot(mod5) + theme_minimal()
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Problems with multiple regression
+
+.font2[
+- Spurious correlation
+- Need to carefully interpret significance
+- Stepwise regression is not the state of the art
+- Possible methods to choose: ridge and lasso regression
+- Both are a part of regularized linear regression
+]
+
+???
+
+- The way stepwise regression work is not reliable
+- Determining importance through p-value, AIC, or BIC is not the state of the
+  art
+- Regularized linear regression provides a more reliable model
+
+---
+
+count: false
+class: bg-main1 center middle hide-slide-number font5
+
+.amber[Query?]
