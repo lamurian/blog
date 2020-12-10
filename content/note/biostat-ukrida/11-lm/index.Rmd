@@ -1,0 +1,46 @@
+---
+author: lam
+title: "Linear Model"
+weight: 11
+description: >
+
+  So far, we have solved hypotheses testings for condition where we have numeric
+  values as our dependent variable and categoric data as our independent
+  variables. We have yet to see the solution if we have numeric variables for
+  both of the dependent and independent variables. After learning the descriptive
+  statistics, we understand that we can observe the spread in our data by
+  measuring the variance, i.e. the dispersion of each data element relative to
+  the mean value. Similarly, we can understand the dispersion of two numeric
+  variables by accounting the covariance.
+
+summary: >
+
+  So far, we have solved hypotheses testings for condition where we have numeric
+  values as our dependent variable and categoric data as our independent
+  variables. We have yet to see the solution if we have numeric variables for
+  both of the dependent and independent variables. After learning the descriptive
+  statistics, we understand that we can observe the spread in our data by
+  measuring the variance, i.e. the dispersion of each data element relative to
+  the mean value. Similarly, we can understand the dispersion of two numeric
+  variables by accounting the covariance.
+
+date: 2020-12-07
+categories: ["statistics", "ukrida"]
+tags: ["R", "hypothesis"]
+slug: 10-cor
+csl: ../harvard.csl
+bibliography: ../ref.bib
+draft: false
+---
+
+[Slide](https://lamurian.rbind.io/note/biostat-ukrida/11-lm/slide)
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "kableExtra", "ggplot2", "ggpubr", "ggfortify")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F, error=F,
+	fig.width=10, fig.height=6, out.width="90%", dev="png", dpi=300
+)
+options(digits=2)
+```
+
