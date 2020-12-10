@@ -24,7 +24,7 @@ summary: >
   the mean value. Similarly, we can understand the dispersion of two numeric
   variables by accounting the covariance.
 
-date: 2020-10-03
+date: 2020-12-03
 categories: ["statistics", "ukrida"]
 tags: ["R", "hypothesis"]
 slug: 10-cor
