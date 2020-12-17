@@ -1,0 +1,579 @@
+---
+title: Introduction to Computational Neuroscience
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+count: false
+class: bg-main1 hide-slide-number split-70
+
+.column[.right.vmiddle.content[
+.font3[Introduction to .amber[Computational Neuroscience]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main1 split-30 hide-slide-number
+
+.bg-main4.column[.right.vmiddle.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column[.vmiddle.content[
+- .amber[Preface]
+- Encoding & decoding
+- Information theory
+- Modelling
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Preface
+
+.font2[
+- Definition
+- .amber[Conceptual] framework
+- Levels of .amber[investigations]
+- Defining a .amber[model]
+]
+
+---
+
+class: bg-main3
+
+# Definition
+
+.font2[
+- Theoretical approach
+- Understanding the fundamental principle
+- Unravel functional mechanisms of the brain
+]
+
+???
+
+- Theoretical approach: utilize mathematics, physics, biology, etc. More to
+  discuss in the conceptual framework section
+- Fundamental principles $\to$ more to discuss in levels of investigation
+  - Development
+  - Organization
+  - Information processing
+  - Mental ability
+- Functional mechanism: what the brain does and how does it perform that way?
+
+---
+
+class: bg-main3
+
+# Conceptual framework
+
+<img src="conceptual-fw.png" width="90%">
+
+???
+
+- Describe facts and predictions
+- Numerical and analytical approach to understand the brain
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+.column.bg-main5[.vmiddle.center.content[
+{{content}}
+]]
+
+.column[.vmiddle.content[
+# Levels of investigations
+
+- Molecules
+- Synapses
+- Neurons
+- Networks
+- Maps
+- System
+- CNS
+- Individual
+]]
+
+---
+
+<img src="https://media.istockphoto.com/vectors/serotonin-hormone-of-happiness-monoamine-neurotransmitter-structural-vector-id1001680858?b=1&k=6&m=1001680858&s=612x612&w=0&h=8yK8e0P19lDIxv8B8IZgTfKQnJYEa18yaeWo0l85Rnc%3D" width="90%">
+
+???
+
+Molecular study: genetic information, protein synthesis, molecular affinity
+
+---
+
+count: false
+
+<img src="https://steemitimages.com/DQmQQd3btuC85EzcAEDgL3MLxmdVdhD4Kvh3wuoMgUpcPA1/Frantsuzskie-uchenye-sozdali-iskusstvennye-sinapsy-sposobnye-obuchatsia.jpg" width="90%">
+
+???
+
+Synaptic study: how the synapse activated, what molecules to bind a particular
+receptor, toxins, etc
+
+---
+
+count: false
+
+<img src="https://i.pinimg.com/originals/01/00/11/01001154e87254e78767a5f45864c2ce.jpg" width="90%">
+
+???
+
+Neurons: modelling an individual or a group of neuron
+
+---
+
+count: false
+
+<img src="https://frontiersinblog.files.wordpress.com/2018/03/neuroscience-brain-simulation-algorithm-exascale.jpg?w=940" width="90%">
+
+???
+
+Mention about graph theory
+
+---
+
+count: false
+
+<img src="https://www.frontiersin.org/files/Articles/442587/fnbeh-13-00186-HTML/image_m/fnbeh-13-00186-g004.jpg" width="90%">
+
+???
+
+Looking at the topology of a brain, mention an example of homunculus
+
+---
+
+count: false
+
+<img src="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6051558/bin/cureus-0010-00000002652-i03.jpg" width="90%">
+
+???
+
+Highlight how changes in one region may affect the other
+
+---
+
+count: false
+
+<img src="https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12035-016-0032-y/MediaObjects/12035_2016_32_Fig3_HTML.gif?as=webp" width="90%">
+
+???
+
+Another example of an investigation in system neuroscience
+
+---
+
+layout: false
+class: bg-main3
+
+# Model
+
+.font2[
+- Simplification
+- Generalization
+- Approximation
+]
+
+???
+
+- A model provides required levels of abstraction to understand a complex
+  mechanism
+- Too simple of a model: only get a rough estimation, large standard error
+- Too complex of a model: get a good approximation, expensive computational
+  cost
+- Type of model: toy, phenomenological, complex
+
+--
+
+# What to model
+
+.font2[
+- Parallel processing
+- Adaptive system
+]
+
+--
+
+.right[
+.font2[
+>.amber["All models are .pink[wrong], but some are useful"]
+]
+
+> -- Common aphorism in statistics
+]
+
+---
+
+class: bg-main3
+
+# What to analyze
+
+.font2[
+Revisiting the levels of analysis (Marr & Poggio):
+
+- Computational theory
+- Representation and algorithm
+- Hardware implementation
+]
+
+???
+
+Computational:
+- What is the goal?
+- Why is it suitable?
+- What is the defining logic?
+
+Representation:
+- How to implement the computational theory?
+- What is the representation of input and output?
+- Algorithm taken to define the function?
+
+Implementation:
+- How do we realize the concept physically?
+- Potential bottleneck?
+
+--
+
+<br> <br>
+
+.right.font3.amber[
+> "The brain produces goal-directed behaviour to maximize our probability of
+> .pink[survival]"
+]
+
+???
+
+Fundamental philosophical reasoning on why we need the brain
+
+---
+
+class: bg-main3
+
+# The anticipating brain
+
+.font2[
+- Synaptic process takes about .amber[10 ms] to finish
+- Yet our brain can perform much faster than a computer
+- As a comparison, a computer may process an information in .amber[ns]
+- Why?
+]
+
+???
+
+Proposed answer:
+- Parallel processing $\to$ but most of the process do not use all the
+  potential computational power in our brain
+- Anticipating brain $\to$ we use the *foreknowledge* to anticipate what will
+  happen
+- Do our brains work according to Bayesian principle?
+
+---
+
+class: bg-main3 middle center
+count: false
+
+<img src="http://2.bp.blogspot.com/-hcv1o4Wq5ho/UAFyUwxbM5I/AAAAAAAAM4E/lihQQRsaLVk/s1600/Owl5.jpg" width="80%">
+
+???
+
+- Our visual cortex takes about 150 ms to recognize this image
+- Advanced algorithm within AlexNET (deep learning) takes about 800 ms
+
+---
+
+count: false
+template: overview
+
+.column[.vmiddle.content[
+- Preface
+- .amber[Encoding & decoding]
+- Information theory
+- Modelling
+]]
+
+---
+
+class: bg-main3
+
+# Encoding & decoding
+
+.font2[
+- Necessary step in processing the information
+- The abstract function pinning down a transformation of input $\to$ output
+- Recognizing pattern of stimuli as a neuronal activity
+]
+
+--
+
+# Brain property
+
+.font2[
+- Around -70 mV at rest
+- Undergo roughly a 100 mV fluctuation $\to$ lasts for about 1 ms
+- Refractory period for rougly tens of ms
+- Intersynaptic transmission requires at least 10 ms
+]
+
+---
+
+class: bg-main3
+
+# Neural encoding
+
+.font2[
+- Spike trains and firing rate
+- Tuning curve
+- Spike-count variability
+]
+
+???
+
+- Spike train $\to$ consecutive neuronal activation
+- Firing rate $\to$ rate of producing action potential (recall: Poisson
+  distribution)
+- Both are defined using a Dirac function $\delta$
+- Tuning curve: how does a group of neuron response to a particular stimuli?
+- In tuning curve, different stimuli will have different activation
+- Spike-count variability: pattern of a specific stimuli (imagine a Morse code)
+- Mention about homogeneous and inhomogeneous Poisson process
+
+--
+
+.center[
+<iframe width="400" height="300" src="https://www.youtube.com/embed/y_l4kQ5wjiw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+???
+
+- Hubel & Wiesel experiment on cat's visual cortex (1981)
+
+---
+
+class: bg-main3
+
+# Neural decoding
+
+.font2[
+- How do we understand recorded neuron potentials?
+- Current approach: conditional probability based on Bayes theorem
+]
+
+.center[
+<iframe width="400" height="300" src="https://www.youtube.com/embed/kbX9FLJ6WKw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+count: false
+template: overview
+
+.column[.vmiddle.content[
+- Preface
+- Encoding & decoding
+- .amber[Information theory]
+- Modelling
+]]
+
+---
+
+class: bg-main3
+
+# Information theory
+
+.font2[
+- Quantifying conveyed information
+- Communication channel as a medium
+]
+
+<img src="https://cdn-images-1.medium.com/max/1600/1*KshdzGhK5dI1Su9ewNPjLw.gif" width="90%">
+
+???
+
+Anecdote: komunikata
+
+---
+
+class: bg-main3
+
+# Entropy
+
+.font2[
+- Denote how .amber[surprising] a set of responses is
+- A function of probability $h(P[r])$
+- Low probability $\to$ higher entropy
+- Additive for independent sources
+- Measures .amber[mutual information]
+
+$$H = - \displaystyle \sum_r P[r] log_2(P[r])$$
+]
+
+???
+
+- Mutual information = full response - noise entropy
+- Full response entropy: total entropy from a given sequence of pattern
+- Noise entropy: the average of entropy from a given sequence of pattern
+- Maximize mutual information while minimizing the noise entropy
+
+---
+
+count: false
+template: overview
+
+.column[.vmiddle.content[
+- Preface
+- Encoding & decoding
+- Information theory
+- .amber[Modelling]
+]]
+
+---
+
+class: bg-main3
+
+# Modelling
+
+.font2[
+- Single compartment
+- Integrate and fire
+- Voltage-dependant conductance
+- Hodgkin-Huxley
+]
+
+---
+
+class: bg-main3
+
+# Single compartment
+
+.font2[
+- Imagine neurons as a single-compartment medium
+- $s$: Synaptic conductance
+- $v$: Voltage-dependant conductance
+]
+
+<img src="single-compartment.png" width="90%">
+
+???
+
+- $s$ comes from presynaptic neurons
+- $v$ is the voltage-gated ion channels
+- The activity of $v$ is further captured in Hodgkin-Huxley model
+
+---
+
+class: bg-main3 split-two
+
+.column[.vmiddle.center.content[
+<img src="https://www.researchgate.net/profile/Masoud_Daneshtalab/publication/281887258/figure/fig1/AS:616374745452565@1523966599862/Schematic-diagram-of-the-Leaky-Integrate-and-Fire-model-6Gerstner-W-Kistler-W-M.png" width="90%">
+]]
+
+.column[.vmiddle.font2.content[
+# Integrate and fire
+
+- Integrate $\delta(t - t_j(f))$
+- Generate $\alpha(t - t_j(f))$
+- Reach a threshold
+- The current will follow a function $I(t)$
+]]
+
+---
+
+class: bg-main3
+
+# Voltage-dependant conductance
+
+.font2[
+- Describes the probability of ion channel activities
+- Stochastic model of an individual channel
+- Various channel type $\to$ different probability
+]
+
+<img src="voltage-dependant.png" width="90%">
+
+???
+
+- Activity: open, ion-conducting state
+- Law of large number: the probability of a population is an approximate of a
+  single-channel activity
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+.column[.vmiddle.center.content[
+{{content}}
+]]
+
+.column[.font2.vmiddle.content[
+# Hodgkin-Huxley
+
+- Describes voltage changes overtime
+- Depends on three main channels
+- Presents the leaking channel
+]]
+
+---
+
+<img src="https://www.researchgate.net/profile/Resconi_Germano/publication/336115489/figure/download/fig1/AS:808040492171265@1569663274916/Circuit-Diagram-for-the-Hodgkin-Huxley-Model-of-the-Squid-Giant-Axon-Hodgkin-Huxley.ppm" width="100%">
+
+---
+
+count: false
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Hodgkins_Huxley_Plot.gif" width="100%">
+
+---
+
+count: false
+
+<img src="https://models.cellml.org/w/andre/HH/@@rawfile/930166f28bc386e6ad7611a3a8ee5ffd5a3490df/tutorial/math-overview.png" width="100%">
+
+---
+
+layout: false
+class: bg-main3 middle center	
+
+<iframe width="640" height="480" src="https://www.youtube.com/embed/YWQnzylhgHc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+layout: false
+count: false
+class: bg-main1 font5 hide-slide-number middle center
+
+.amber[Query?]
