@@ -4,30 +4,26 @@ title: "Linear Model"
 weight: 11
 description: >
 
-  So far, we have solved hypotheses testings for condition where we have numeric
-  values as our dependent variable and categoric data as our independent
-  variables. We have yet to see the solution if we have numeric variables for
-  both of the dependent and independent variables. After learning the descriptive
-  statistics, we understand that we can observe the spread in our data by
-  measuring the variance, i.e. the dispersion of each data element relative to
-  the mean value. Similarly, we can understand the dispersion of two numeric
-  variables by accounting the covariance.
+  Upon seeing a linear trend between two variables, we may guess a potential
+  value of interest given a specific data point. When doing so, we are attempting
+  an inference on predicted outcomes based on observed events. Given a linear
+  trend between multiple variables, such an inference is the basic foundation of
+  a linear model, i.e. a mathematical construct in examining the dependent
+  variable using known independent variables.
 
 summary: >
 
-  So far, we have solved hypotheses testings for condition where we have numeric
-  values as our dependent variable and categoric data as our independent
-  variables. We have yet to see the solution if we have numeric variables for
-  both of the dependent and independent variables. After learning the descriptive
-  statistics, we understand that we can observe the spread in our data by
-  measuring the variance, i.e. the dispersion of each data element relative to
-  the mean value. Similarly, we can understand the dispersion of two numeric
-  variables by accounting the covariance.
+  Upon seeing a linear trend between two variables, we may guess a potential
+  value of interest given a specific data point. When doing so, we are attempting
+  an inference on predicted outcomes based on observed events. Given a linear
+  trend between multiple variables, such an inference is the basic foundation of
+  a linear model, i.e. a mathematical construct in examining the dependent
+  variable using known independent variables.
 
 date: 2020-12-07
 categories: ["statistics", "ukrida"]
 tags: ["R", "hypothesis"]
-slug: 10-cor
+slug: 11-lm
 csl: ../harvard.csl
 bibliography: ../ref.bib
 draft: false
@@ -44,3 +40,134 @@ knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F, error=F,
 options(digits=2)
 ```
 
+Upon seeing a linear trend between two variables, we may guess a potential
+value of interest given a specific data point. When doing so, we are attempting
+an inference on predicted outcomes based on observed events. Given a linear
+trend between multiple variables, such an inference is the basic foundation of
+a linear model, i.e. a mathematical construct in examining the dependent
+variable using known independent variables.
+
+# Fundamental Concepts
+
+As its name suggests, a *linear* model utilizes *linear* algebra to make
+prediction on $y$ given the value of $x$. Assuming a linear trend between a
+pair of $(x_i, y_i)$, then we may calculate $y_i$ as a result of an arbitrary
+constant $\beta$ multiplied to $x$. The value of $\beta$ reflects our estimate
+on how $x$ influences $y$, which termed as an estimate or a slope. However,
+sometimes we may observe that $x_i=0$ results in $y_i \neq 0$. To make a better
+estimate, we need to take into account such an occurrence using an intercept
+$\beta_0$. Some limitations in doing an inference, or even designing a model in
+general, we can only take into account the estimated value $E(y_i)$, where our
+prediction $\hat{y}$ poses a randomly-distributed error $\epsilon$. The term
+error does not mean an error in computation, rather, it is the residuals
+between $\hat{y}_i$ and $y$.
+
+\begin{align}
+\hat{y}_i &= \beta_0 + \beta_1 x_i \\
+y_i &= \hat{y} + \epsilon_i
+\end{align}
+
+In short, we may learn that a linear model is an extension to the correlation
+analysis, where it explains the linearity between $x$ and $y$. The important
+bit about statistical model is its capability to act as an explanatory and
+predictive model. An explanatory model aims to explain how independent
+variables influence the dependent variable. In doing so, we need to minimize
+the multicollinearity so that we are confident each of our independent
+variables directly influence the dependent variable without receiving
+influences from other independent variables. On the other hand, a predictive
+model aims to deliver the closest possible prediction of $\hat{y}_i$, i.e.
+minimizing the error $\epsilon$.
+
+## Example, please?
+
+```{r cor1}
+str(iris)
+```
+
+```{r cor2}
+subset(iris, select=-Species) %>% cor()
+```
+
+There is a seemingly good correlation between sepal length and petal width. We
+will use both variables as our dependent and independent variable,
+respectively. We will initially perform a correlation analysis, using the
+`cor.test()` function in `R`.
+
+```{r cor3}
+with(iris, cor.test(Sepal.Length, Petal.Length))
+```
+
+Then we will model the linearity between sepal length and petal length using
+`lm()`.
+
+```{r mod1}
+mod1 <- lm(Sepal.Length ~ Petal.Length, data=iris) %T>% {print(summary(.))}
+```
+
+```{r plt.mod1, echo=FALSE}
+ggscatter(iris, x="Petal.Length", y="Sepal.Length", add="reg.line", add.params=list(color="indianred")) +
+	stat_cor(label.x=3, label.y=6.2, hjust="left") +
+	stat_regline_equation(label.x=3, label.y=6, hjust="left") +
+	theme_minimal()
+```
+
+We have previously discussed that the intercept $\beta_0$ and slope $\beta_i$
+determine how to predict $y$ using $x$. But, how do we calculate each value of
+$\beta$? We can derive $\beta$ from our data using two methods: Ordinary
+Least Square (OLS) and Maximum Likelihood Estimation (MLE). Both techniques are
+solvable using a partial derivative or matrices operation. In this note, we
+will only consider the former to build a firm foundation on how they work.
+
+When calculating the optimal value of $\beta$, we aim to find the best line
+fitting our data. Optimal $\beta$ will result in the least amount of error
+$\epsilon$. It also generalizes the model to adapt to unforeseen data. Since a
+statistical model calculates the expected value of $E(y)$, we can anticipate
+that a model will draw a line passing through the centroid of
+$(\bar{x},\bar{y})$.
+
+## Ordinary Least Square
+
+The Ordinary Least Square (OLS) method looks for the most appropriate model by
+minimizing the error $\epsilon$. A pair of $(x_i, y_i)$ are constants relative
+to the index $i$. In case of a simple linear regression, the error only depends
+on $\beta_{0,1}$. We can use partial derivatives to find the optimal values of
+$\beta$ in minimizing the error $\epsilon$.
+
+\begin{align}
+\epsilon &= \displaystyle \sum_{i=1}^n (y_i - \hat{y}_i)2 \\
+&= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2
+\end{align}
+
+You may recall learning about derivatives in you high school years. The partial
+derivative is similar, the only difference is it allows a partial assignment.
+When partially solving one variable, we regard the other as a constant.
+
+\begin{align}
+\epsilon &= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2 \\
+\frac{\partial \epsilon}{\partial \beta_0} &= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) \\
+\frac{\partial \epsilon}{\partial \beta_1} &= \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i))
+\end{align}
+
+We shall solve the $\beta_0$ as follow:
+
+\begin{align}
+\frac{\partial \epsilon}{\partial \beta_0} = \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) &= 0\\
+-2 \bigg( \displaystyle \sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \sum_{i=1}^n \beta_1 x_i \bigg) &= 0 \\
+\displaystyle \sum_{i=1}^n y_i - n \beta_0 - \sum_{i=1}^n \beta_1 x_i &= 0 \\
+\beta_0 &= \frac{1}{n} \bigg( \displaystyle \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i \bigg) \\
+\beta_0 &= \bar{y} - \beta_1 \bar{x}
+\end{align}
+
+Then we can proceed by solving the $\beta_1$:
+
+\begin{align}
+\frac{\partial \epsilon}{\partial \beta_1} = \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i)) &= 0 \\
+-2 \bigg( \displaystyle \sum_{i=1}^n x_i (y_i - (\bar{y} - \beta_1 \bar{x} + \beta_1 x_i)) \bigg) &= 0\\
+\displaystyle \sum_{i=1}^n x_i (y_i - \bar{y}) - \sum_{i=1}^n \beta_1 x_i (x_i - \bar{x}) &= 0 \\
+\beta_1 \displaystyle \sum_{i=1}^n x_i (x_i - \bar{x}) &= \sum_{i=1}^n x_i (y_i - \bar{y}) \\
+\beta_1 &= \displaystyle \sum_{i=1}^n \frac{x_i(y_i - \bar{y})}{x_i(x_i - \bar{x})} \\
+\beta_1 &= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x})(y_i - \bar{y})}{(x_i - \bar{x})(x_i - \bar{x})} \\
+\end{align}
+
+As you may have noticed, $\beta_1$ solved into the quotient of covariance and
+variance.
