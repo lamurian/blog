@@ -47,8 +47,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - .amber[Basics on regression: LM]
 - Extending linearity: GLM
-- A bit on Factor Analysis
 - Path Analysis
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -66,6 +66,7 @@ class: bg-main3 hide-slide-number
 - Independent variable
 - Dependent variable
 - Variance-covariance matrix
+- Data Generating Process (.amber[DGP])
 ]
 
 .right-logo[]
@@ -357,8 +358,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - Basics on regression: LM
 - .amber[Extending linearity: GLM]
-- A bit on Factor Analysis
 - Path Analysis
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -455,7 +456,7 @@ count: false
 layout: false
 class: bg-main3
 
-.right-logo
+.right-logo[]
 
 # And .amber[many more] to count...
 
@@ -463,10 +464,10 @@ class: bg-main3
 .amber[Use cases:]
 
 - LM `\(\to\)` Linear trend
-- Poisson `\(\to\)` DGP with rate of occurrence
-- Logistic `\(\to\)` DGP under true bernoulli trial (binomial outcome)
-- Probit `\(\to\)` DGP for binomial outcome with underlying Gaussian process
-- Gamma `\(\to\)` DGP in exponential growth / decay events
+- Poisson `\(\to\)` Rate of occurrence
+- Logistic `\(\to\)` True bernoulli trial (binomial outcome)
+- Probit `\(\to\)` Binomial outcome with underlying Gaussian process
+- Gamma `\(\to\)` Exponential growth / decay events
 - Quasi-poisson / binomial `\(\to\)` Poisson / Binomial DGP with overdispersion
 - Polynomial regression `\(\to\)` Non-linear data, unknown DGP
 ]
@@ -488,8 +489,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - Basics on regression: LM
 - Extending linearity: GLM
-- .amber[A bit on Factor Analysis]
-- Path Analysis
+- .amber[Path Analysis]
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -501,7 +502,235 @@ class: bg-main3
 
 .right-logo[]
 
+# Excerpt on (G)LM
+
+.font2[
+## Pros
+
+- In (G)LM we can introduce .amber[multiple IVs] as predictors
+- We can also moderating effect with .amber[interaction terms] between different IVs
+]
+
+???
+
+A model with multiple IVs is termed multivariable model / multiple regression
+
+--
+
+.font2[
+## Cons
+
+- We cannot address .pink[multiple DVs]
+- Although they are manageable with MAN(C)OVA
+- But neither are suitable to model .pink[non-linearity]
+- And none of the above can completely control .pink[mediating] variables
+]
+
+???
+
+A model with multiple DV is termed multivariate model
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Path Analysis
+
+---
+
+.font2[
+- Multiple input (IVs)
+- Multiple output (DVs)
+- Controlling the effect of mediating variables
+]
+
+---
+
+count: false
+
+## Moderating effect
+
+&lt;img src="index_files/figure-html/moderating-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Intermediary variables
+
+&lt;img src="index_files/figure-html/intermediary-1.jpeg" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# A few to consider
+
+.font2[
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- .amber[A bit on Factor Analysis]
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
 # Factor Analysis
+
+---
+
+.font2[
+- Imagine constructing an .amber[assessment form]
+- Such a form does not clearly indicate measurable objectives
+- Instead, it is a .amber[reflective] ideas on such measures
+- In other words, we conduct and .amber[indirect] measurement
+- How do we extend our concept on regression?
+]
+
+--
+
+.font2[.pink[Disclaimer:] This presentation only focuses on .pink[Confirmatory Factor Analysis]]
+
+---
+
+## Manifest to latent variables
+
+&lt;img src="index_files/figure-html/man2lat-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Multiple latent variables
+
+&lt;img src="index_files/figure-html/multi.latent-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Controlling for co-varying manifests
+
+&lt;img src="index_files/figure-html/covary.manifest-1.jpeg" width="90%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- .amber[Structural Equation Model]
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Structural Equation Model
+
+---
+
+.font2[
+- Okay, factor analysis is pretty dope
+- Can we .amber[regress] those latent variables?
+- Or, how if we need to measure how it relates to .amber[other observables]?
+]
+
+--
+
+.font2[There comes .amber[SEM]: A structural equation model]
+
+---
+
+count: false
+
+## Regressing manifest
+
+&lt;img src="index_files/figure-html/sem1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Regressing to other variables
+
+&lt;img src="index_files/figure-html/sem2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## In brief
+
+.font2[
+- SEM combines the concept of CFA and path analysis
+- We can control confounding variables, either presented as a manifest or latent
+- Highly useful in analyzing data with limited scope of observation
+- We can further extract relationship in a multilevel manner
+- Subgroup analysis is also feasible
+]
+
+---
+
+count: false
+
+.right-logo[]
+
+## ...is a powerful method, but
+
+.center[&lt;img src="https://sayingimages.com/wp-content/uploads/with-great-power-comes-meme.jpg" width="60%"&gt;]
+
+???
+
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+
+---
+
+count: false
+layout: false
+class: bg-main1 center middle font5 hide-slide-number
+
+.right-logo[]
+
+.amber[Query?]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

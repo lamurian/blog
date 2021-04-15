@@ -13,7 +13,7 @@ output:
 ---
 
 ```{r init, echo=FALSE}
-pkgs <- c("magrittr", "ggplot2", "kableExtra", "ggfortify")
+pkgs <- c("magrittr", "ggplot2", "kableExtra", "ggfortify", "lavaan", "semPlot")
 pkgs.load <- sapply(pkgs, library, character.only=TRUE)
 knitr::opts_chunk$set(echo=FALSE, eval=TRUE, messages=FALSE, warning=FALSE, error=FALSE,
 	fig.width=10, fig.height=5, out.width="90%", dev="jpeg", dpi=300
@@ -52,8 +52,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - .amber[Basics on regression: LM]
 - Extending linearity: GLM
-- A bit on Factor Analysis
 - Path Analysis
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -71,6 +71,7 @@ class: bg-main3 hide-slide-number
 - Independent variable
 - Dependent variable
 - Variance-covariance matrix
+- Data Generating Process (.amber[DGP])
 ]
 
 .right-logo[]
@@ -378,8 +379,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - Basics on regression: LM
 - .amber[Extending linearity: GLM]
-- A bit on Factor Analysis
 - Path Analysis
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -594,7 +595,7 @@ ggplot(tbl, aes(x, y)) +
 layout: false
 class: bg-main3
 
-.right-logo
+.right-logo[]
 
 # And .amber[many more] to count...
 
@@ -602,10 +603,10 @@ class: bg-main3
 .amber[Use cases:]
 
 - LM $\to$ Linear trend
-- Poisson $\to$ DGP with rate of occurrence
-- Logistic $\to$ DGP under true bernoulli trial (binomial outcome)
-- Probit $\to$ DGP for binomial outcome with underlying Gaussian process
-- Gamma $\to$ DGP in exponential growth / decay events
+- Poisson $\to$ Rate of occurrence
+- Logistic $\to$ True bernoulli trial (binomial outcome)
+- Probit $\to$ Binomial outcome with underlying Gaussian process
+- Gamma $\to$ Exponential growth / decay events
 - Quasi-poisson / binomial $\to$ Poisson / Binomial DGP with overdispersion
 - Polynomial regression $\to$ Non-linear data, unknown DGP
 ]
@@ -627,8 +628,8 @@ count: false
 .bg-main1.column[.vmiddle.content[
 - Basics on regression: LM
 - Extending linearity: GLM
-- .amber[A bit on Factor Analysis]
-- Path Analysis
+- .amber[Path Analysis]
+- A bit on Factor Analysis
 - Structural Equation Model
 ]]
 
@@ -640,4 +641,321 @@ class: bg-main3
 
 .right-logo[]
 
+# Excerpt on (G)LM
+
+.font2[
+## Pros
+
+- In (G)LM we can introduce .amber[multiple IVs] as predictors
+- We can also moderating effect with .amber[interaction terms] between different IVs
+]
+
+???
+
+A model with multiple IVs is termed multivariable model / multiple regression
+
+--
+
+.font2[
+## Cons
+
+- We cannot address .pink[multiple DVs]
+- Although they are manageable with MAN(C)OVA
+- But neither are suitable to model .pink[non-linearity]
+- And none of the above can completely control .pink[mediating] variables
+]
+
+???
+
+A model with multiple DV is termed multivariate model
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Path Analysis
+
+---
+
+.font2[
+- Multiple input (IVs)
+- Multiple output (DVs)
+- Controlling the effect of mediating variables
+]
+
+---
+
+count: false
+
+## Moderating effect
+
+```{r moderating}
+
+set.seed(seed)
+
+model <- "
+x ~ moderator
+y ~ x + moderator
+"
+
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="est", sizeMan=4, residuals=FALSE)
+
+```
+
+---
+
+count: false
+
+## Intermediary variables
+
+```{r intermediary}
+
+set.seed(seed)
+model <- "
+x2 ~ x1 + x3
+x3 ~ x1
+x4 ~ x2 + x3
+y  ~ x1 + x4
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="est", sizeMan=4, layout="tree2", residuals=FALSE)
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# A few to consider
+
+.font2[
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- .amber[A bit on Factor Analysis]
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
 # Factor Analysis
+
+---
+
+.font2[
+- Imagine constructing an .amber[assessment form]
+- Such a form does not clearly indicate measurable objectives
+- Instead, it is a .amber[reflective] ideas on such measures
+- In other words, we conduct and .amber[indirect] measurement
+- How do we extend our concept on regression?
+]
+
+--
+
+.font2[.pink[Disclaimer:] This presentation only focuses on .pink[Confirmatory Factor Analysis]]
+
+---
+
+## Manifest to latent variables
+
+```{r man2lat}
+
+set.seed(seed)
+model <- "
+lat =~ x1 + x2 + x3 + x4 + x5
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+count: false
+
+## Multiple latent variables
+
+```{r multi.latent}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+count: false
+
+## Controlling for co-varying manifests
+
+```{r covary.manifest}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- .amber[Structural Equation Model]
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Structural Equation Model
+
+---
+
+.font2[
+- Okay, factor analysis is pretty dope
+- Can we .amber[regress] those latent variables?
+- Or, how if we need to measure how it relates to .amber[other observables]?
+]
+
+--
+
+.font2[There comes .amber[SEM]: A structural equation model]
+
+---
+
+count: false
+
+## Regressing manifest
+
+```{r sem1}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+lat1 ~ lat2 + lat3
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=2)
+
+```
+
+---
+
+count: false
+
+## Regressing to other variables
+
+```{r sem2}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+lat1 ~  lat2 + lat3 + v1
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=2)
+
+```
+
+---
+
+count: false
+
+## In brief
+
+.font2[
+- SEM combines the concept of CFA and path analysis
+- We can control confounding variables, either presented as a manifest or latent
+- Highly useful in analyzing data with limited scope of observation
+- We can further extract relationship in a multilevel manner
+- Subgroup analysis is also feasible
+]
+
+---
+
+count: false
+
+.right-logo[]
+
+## ...is a powerful method, but
+
+.center[<img src="https://sayingimages.com/wp-content/uploads/with-great-power-comes-meme.jpg" width="60%">]
+
+???
+
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+
+---
+
+count: false
+layout: false
+class: bg-main1 center middle font5 hide-slide-number
+
+.right-logo[]
+
+.amber[Query?]
