@@ -1,0 +1,9 @@
+.right-logo{
+  bottom: "";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 50px;
+  content: url("logo.jpeg");
+  background-image: "logo.jpeg";
+}
