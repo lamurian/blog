@@ -128,8 +128,11 @@ size <- 200
 
 set.seed(seed)
 
-x   <- rnorm(size, 3, 1)
-y   <- abs(x^3) + runif(size, -8, 8)
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
 tbl <- data.frame(list("x"=x, "y"=y))
 
 ggplot(tbl, aes(x, y)) +
@@ -143,7 +146,7 @@ ggplot(tbl, aes(x, y)) +
 
 --
 
-.font2[We will skip this relationship at the moment :)]
+.font2[We will revisit this trend later :)]
 
 ---
 
@@ -153,8 +156,6 @@ class: bg-main3
 # Linearity
 
 ```{r linear}
-
-seed <- 1
 
 set.seed(seed)
 
@@ -261,7 +262,7 @@ class: bg-main3
 
 .font2[
 - Now, we understand what models do
-- We have been able to distinguish linear trend to monotonic relationship
+- We have been able to distinguish linear to monotonic trend
 - We will revisit linearity and fit in a model to our data :)
 ]
 
@@ -279,8 +280,6 @@ count: false
 ## How about fitting our data to a model?
 
 ```{r linear.fit}
-
-seed <- 1
 
 set.seed(seed)
 
@@ -338,11 +337,9 @@ mod %>% lmtest::hmctest()
 
 count: false
 
-## How do we conclude our model?
-
---
-
 .center[
+.font2[How do we conclude our model?]
+
 <img src="https://www.wallpaperup.com/uploads/wallpapers/2014/02/11/252308/c95c61be7a901ea649fa12ec08267ab6.jpg", width="50%">
 
 .amber.font2[Acceptable]
@@ -366,7 +363,7 @@ class: bg-main3
 .font2[
 - .amber[Linear Model] only accepts linear trends
 - It could not correctly model monotonic relationship
-- Let alone .pink[non-linear] relationship :( 
+- Let alone .pink[non-monotonic] relationship :( 
 ]
 
 --
@@ -421,8 +418,6 @@ count: false
 
 ```{r monotonic.fit1}
 
-seed <- 1
-
 set.seed(seed)
 
 x   <- rnorm(size, 3, 1)
@@ -450,5 +445,199 @@ count: false
 
 <img src="https://theawesomedaily.com/wp-content/uploads/2017/07/meme-faces-6-1.jpg" width="40%">
 
-.font2.amber[What can we do?]
+.font2.amber[Okay, what's next?]
 ]
+
+---
+
+## Fit the data into a .amber[polynomial] model
+
+```{r monotonic.fit2}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+mod <- lm(y ~ poly(x, 2), data=tbl)
+
+tbl$predict <- predict(mod)
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	ggpubr::stat_regline_equation(formula=y~poly(x, 2), label.x=1, label.y=50, color="indianred", size=5, hjust=1, geom="label") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Visual evaluation
+
+```{r monotonic.eval}
+autoplot(mod) + theme_minimal()
+```
+
+---
+
+## ...or use GLM: .amber[Poisson] regression
+
+```{r glm.pois}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=poisson)
+
+eq  <- coef(mod) %>% {sprintf("log(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- exp(predict(mod))
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=1, y=50, size=5, hjust=1, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Visual evaluation
+
+```{r glm.pois.eval}
+autoplot(mod) + theme_minimal()
+```
+
+---
+
+## Another cool stuff with GLM: .amber[Logistic] regression
+
+```{r glm.binom1}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- rnorm(size)
+sim <- b0 + b1*x
+p   <- exp(sim) / (1 + exp(sim))
+y   <- rbinom(size, 1, p)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=binomial)
+
+eq  <- coef(mod) %>% {sprintf("logit(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- predict(mod) %>% {exp(.) / (1+exp(.))}
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=0, y=0.5, size=5, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Also with GLM: .amber[Probit] regression
+
+```{r glm.binom2}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- rnorm(size)
+sim <- b0 + b1*x
+p   <- pnorm(sim)
+y   <- rbinom(size, 1, p)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=binomial(link="probit"))
+
+eq  <- coef(mod) %>% {sprintf("probit(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- predict(mod) %>% {exp(.) / (1+exp(.))}
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=0, y=0.5, size=5, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo
+
+# And .amber[many more] to count...
+
+.font2[
+.amber[Use cases:]
+
+- LM $\to$ Linear trend
+- Poisson $\to$ DGP with rate of occurrence
+- Logistic $\to$ DGP under true bernoulli trial (binomial outcome)
+- Probit $\to$ DGP for binomial outcome with underlying Gaussian process
+- Gamma $\to$ DGP in exponential growth / decay events
+- Quasi-poisson / binomial $\to$ Poisson / Binomial DGP with overdispersion
+- Polynomial regression $\to$ Non-linear data, unknown DGP
+]
+
+???
+
+Examples:
+
+- Poisson: Factors influencing weekly defecation rate
+- Logistic: Factors influencing a specific diagnosis (outcome in binomial)
+- Probit: Factors influencing drug response (outcome in binomial)
+- Gamma: Factors influencing required time in cell division
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- .amber[A bit on Factor Analysis]
+- Path Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+.right-logo[]
+
+# Factor Analysis

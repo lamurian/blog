@@ -122,7 +122,7 @@ class: bg-main3
 
 --
 
-.font2[We will skip this relationship at the moment :)]
+.font2[We will revisit this trend later :)]
 
 ---
 
@@ -225,7 +225,7 @@ class: bg-main3
 
 .font2[
 - Now, we understand what models do
-- We have been able to distinguish linear trend to monotonic relationship
+- We have been able to distinguish linear to monotonic trend
 - We will revisit linearity and fit in a model to our data :)
 ]
 
@@ -316,11 +316,9 @@ mod %&gt;% lmtest::hmctest()
 
 count: false
 
-## How do we conclude our model?
-
---
-
 .center[
+.font2[How do we conclude our model?]
+
 &lt;img src="https://www.wallpaperup.com/uploads/wallpapers/2014/02/11/252308/c95c61be7a901ea649fa12ec08267ab6.jpg", width="50%"&gt;
 
 .amber.font2[Acceptable]
@@ -344,7 +342,7 @@ class: bg-main3
 .font2[
 - .amber[Linear Model] only accepts linear trends
 - It could not correctly model monotonic relationship
-- Let alone .pink[non-linear] relationship :( 
+- Let alone .pink[non-monotonic] relationship :( 
 ]
 
 --
@@ -407,8 +405,103 @@ count: false
 
 &lt;img src="https://theawesomedaily.com/wp-content/uploads/2017/07/meme-faces-6-1.jpg" width="40%"&gt;
 
-.font2.amber[What can we do?]
+.font2.amber[Okay, what's next?]
 ]
+
+---
+
+## Fit the data into a .amber[polynomial] model
+
+&lt;img src="index_files/figure-html/monotonic.fit2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Visual evaluation
+
+&lt;img src="index_files/figure-html/monotonic.eval-1.jpeg" width="90%" /&gt;
+
+---
+
+## ...or use GLM: .amber[Poisson] regression
+
+&lt;img src="index_files/figure-html/glm.pois-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Visual evaluation
+
+&lt;img src="index_files/figure-html/glm.pois.eval-1.jpeg" width="90%" /&gt;
+
+---
+
+## Another cool stuff with GLM: .amber[Logistic] regression
+
+&lt;img src="index_files/figure-html/glm.binom1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Also with GLM: .amber[Probit] regression
+
+&lt;img src="index_files/figure-html/glm.binom2-1.jpeg" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo
+
+# And .amber[many more] to count...
+
+.font2[
+.amber[Use cases:]
+
+- LM `\(\to\)` Linear trend
+- Poisson `\(\to\)` DGP with rate of occurrence
+- Logistic `\(\to\)` DGP under true bernoulli trial (binomial outcome)
+- Probit `\(\to\)` DGP for binomial outcome with underlying Gaussian process
+- Gamma `\(\to\)` DGP in exponential growth / decay events
+- Quasi-poisson / binomial `\(\to\)` Poisson / Binomial DGP with overdispersion
+- Polynomial regression `\(\to\)` Non-linear data, unknown DGP
+]
+
+???
+
+Examples:
+
+- Poisson: Factors influencing weekly defecation rate
+- Logistic: Factors influencing a specific diagnosis (outcome in binomial)
+- Probit: Factors influencing drug response (outcome in binomial)
+- Gamma: Factors influencing required time in cell division
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- .amber[A bit on Factor Analysis]
+- Path Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+.right-logo[]
+
+# Factor Analysis
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
