@@ -690,15 +690,15 @@ class: bg-main3
 
 count: false
 
-## Moderating effect
+## Mediating effect
 
-```{r moderating}
+```{r mediating}
 
 set.seed(seed)
 
 model <- "
-x ~ moderator
-y ~ x + moderator
+x ~ mediator
+y ~ x + mediator
 "
 
 tbl <- simulateData(model, sample.nobs=size)
@@ -743,6 +743,13 @@ class: bg-main3
 - Theoretical suitability
 - In case of causality: temporal dependency
 ]
+
+???
+
+- Commonly used estimator: MLE
+- Only applicable to continuous data, and not quite robust
+- Robust MLE $\to$ MLR
+- For discrete data $\to$ Diagonally Weighted Least Square, Robust Weighted Least Square (WLSMV)
 
 ---
 
