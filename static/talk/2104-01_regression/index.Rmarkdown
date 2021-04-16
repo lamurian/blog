@@ -12,10 +12,10 @@ output:
       highlightSlides: false
 ---
 
-```{r init, echo=FALSE}
+```{r init, echo=FALSE, warning=FALSE, message=FALSE}
 pkgs <- c("magrittr", "ggplot2", "kableExtra", "ggfortify", "lavaan", "semPlot")
 pkgs.load <- sapply(pkgs, library, character.only=TRUE)
-knitr::opts_chunk$set(echo=FALSE, eval=TRUE, messages=FALSE, warning=FALSE, error=FALSE,
+knitr::opts_chunk$set(echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
 	fig.width=10, fig.height=5, out.width="90%", dev="jpeg", dpi=300
 )
 ```
@@ -421,8 +421,11 @@ count: false
 
 set.seed(seed)
 
-x   <- rnorm(size, 3, 1)
-y   <- abs(x^3) + runif(size, -8, 8)
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
 tbl <- data.frame(list("x"=x, "y"=y))
 mod <- lm(y ~ x, data=tbl)
 
@@ -432,7 +435,7 @@ ggplot(tbl, aes(x, y)) +
 	theme_minimal() +
 	geom_point(alpha=1) +
 	geom_line(aes(y=predict), color="indianred", size=1.2) +
-	ggpubr::stat_regline_equation(formula=y~x, label.x=3, label.y=45, color="indianred", size=5, hjust=1, geom="label") +
+	ggpubr::stat_regline_equation(formula=y~x, label.x=1, label.y=50, color="indianred", size=5, hjust=1, geom="label") +
 	labs(x="", y="")
 
 ```
@@ -538,7 +541,7 @@ b0  <- 1.5
 b1  <- 2.1
 x   <- rnorm(size)
 sim <- b0 + b1*x
-p   <- exp(sim) / (1 + exp(sim))
+p   <- pnorm(sim)
 y   <- rbinom(size, 1, p)
 tbl <- data.frame(list("x"=x, "y"=y))
 
@@ -647,7 +650,7 @@ class: bg-main3
 ## Pros
 
 - In (G)LM we can introduce .amber[multiple IVs] as predictors
-- We can also moderating effect with .amber[interaction terms] between different IVs
+- We can also add moderating effect using .amber[interaction terms] between different IVs
 ]
 
 ???
