@@ -7,3 +7,11 @@
   content: url("logo.jpeg");
   background-image: "logo.jpeg";
 }
+
+.remark-slide-content:after {
+    content: "Lamuri (2021) - Intuition on Regression";
+    position: absolute;
+    bottom: 0px;
+    left: 20px;
+    height: 40px;
+}

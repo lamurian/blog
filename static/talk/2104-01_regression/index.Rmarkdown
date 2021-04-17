@@ -633,7 +633,7 @@ class: bg-main3
 
 # Poisson regression
 
-<img src="paper-1.png", width="70%">
+<img src="paper-1.png", width="65%">
 
 Rojanaworarit C, Wong JJ. Investigating the Source of a Disease Outbreak Based
 on Risk Estimation: A Simulation Study Comparing Risk Estimates Obtained From
@@ -683,7 +683,7 @@ class: bg-main3
 
 # Gamma regression
 
-<img src="paper-4.png", width="60%">
+<img src="paper-4.png", width="55%">
 
 Mandal S, Arabi Belaghi R, Mahmoudi A, Aminnejad M. Stein‐type shrinkage
 estimators in gamma regression model with application to prostate cancer data.
@@ -1030,8 +1030,8 @@ count: false
 
 count: false
 layout: false
-class: bg-main1 center middle font5 hide-slide-number
+class: bg-main1 center middle hide-slide-number
 
 .right-logo[]
 
-.amber[Query?]
+.font5.amber[Query?]
