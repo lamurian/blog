@@ -29,11 +29,10 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
-<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
-<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
-<link href="/rmarkdown-libs/bsTable/bootstrapTable.min.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/bsTable/bootstrapTable.js"></script>
+<script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
+<link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
+<link href="{{< blogdown/postref >}}index_files/bsTable/bootstrapTable.min.css" rel="stylesheet" />
+<script src="{{< blogdown/postref >}}index_files/bsTable/bootstrapTable.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/01-intro/slide">Slide</a></p>
@@ -222,7 +221,7 @@ behalf. To calculate the mean, we need to use -wait for it- <code>mean</code>.</
 <pre><code>## [1] 161.3</code></pre>
 <p>The problem is, not all data <em>distributed evenly</em>. A quick glance on our
 histogram and density plot, revealed following figure:</p>
-<p><img src="/note/biostat-ukrida/01-intro/index_files/figure-html/viz-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/viz-1.png" width="672" /></p>
 <p>As we observed, some bins in the histogram presented with a higher probability
 density. We can interpret that the data does not follow an even distribution.
 As a solution, we may need to use another measure to infer the general property
@@ -316,13 +315,13 @@ a sorted data, where it will segregate the data based on its order.</p>
 <pre class="r"><code>quantile(X, probs=seq(0, 1, 1/5))</code></pre>
 <pre><code>##   0%  20%  40%  60%  80% 100% 
 ##  152  153  160  164  166  176</code></pre>
-<p><img src="/note/biostat-ukrida/01-intro/index_files/figure-html/hist.quantile1-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/hist.quantile1-1.png" width="672" /></p>
 <p>Quantile can take any value of <span class="math inline">\(q \in \rm I\!R: 0 \leqslant q \leqslant 1\)</span>.
 Quartile is a special case of quantile, where it considers <span class="math inline">\(q = \{0.25, 0.5, 0.75\}\)</span> to group the data.</p>
 <pre class="r"><code>quantile(X, probs=seq(0, 1, 1/4))</code></pre>
 <pre><code>##   0%  25%  50%  75% 100% 
 ##  152  155  163  166  176</code></pre>
-<p><img src="/note/biostat-ukrida/01-intro/index_files/figure-html/hist.quantile2-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/hist.quantile2-1.png" width="672" /></p>
 <p>Quartile is an important measure in descriptive statistics. In reporting the
 mean, we usually state <span class="math inline">\(\bar{x} \pm s\)</span>. Meanwhile, we may report a median alongside
 its interquartile range as <span class="math inline">\(m\ (IQ1 - IQ3)\)</span>. <span class="math inline">\(IQ1\)</span> stands for the interquartile 1

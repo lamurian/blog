@@ -37,9 +37,8 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
-<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
-<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+<script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
+<link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/08-nonpar-meandiff/slide">Slide</a></p>
@@ -67,8 +66,8 @@ some information in the data, resulting in a lower statistical power compared to
 the parametric test given its assumptions fulfilled. Following figures
 represent how the <span class="math inline">\(\mu\)</span> not describing the central tendency in a skewed data
 (bottom).</p>
-<p><img src="/note/biostat-ukrida/08-nonpar-meandiff/index_files/figure-html/plt.data-1.png" width="100%" /></p>
-<p><img src="/note/biostat-ukrida/08-nonpar-meandiff/index_files/figure-html/plt.data.skew-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.data-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.data.skew-1.png" width="100%" /></p>
 <p>As a summary, we should consider using a non-parametric test in the case of
 having a small sample size. If our data is not asymptotically normal, then
 employing a non-parametric test might be a more appropriate step. The presence
@@ -665,7 +664,7 @@ two-sided
 </tr>
 </tbody>
 </table>
-<p><img src="/note/biostat-ukrida/08-nonpar-meandiff/index_files/figure-html/plt.tbl-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.tbl-1.png" width="100%" /></p>
 <p>As we can see, both data presented with a non-normal distribution. Thus,
 comparing both observations will require a non-parametric test. Here we employ
 Mann-Whitney U test and compute the effect size.</p>
@@ -682,7 +681,7 @@ Mann-Whitney U test and compute the effect size.</p>
 ## difference in location 
 ##                     -4</code></pre>
 <pre class="r"><code>rstatix::wilcox_effsize(obs ~ group, data=tbl)</code></pre>
-<pre><code>## # A tibble: 1 x 7
+<pre><code>## # A tibble: 1 × 7
 ##   .y.   group1 group2 effsize    n1    n2 magnitude
 ## * &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;ord&gt;    
 ## 1 obs   1      2        0.642    10    10 large</code></pre>
@@ -940,7 +939,7 @@ wilcox.test(weight ~ Time, data=tbl, paired=TRUE, conf.int=TRUE)</code></pre>
 ## (pseudo)median 
 ##           -8.5</code></pre>
 <pre class="r"><code>rstatix::wilcox_effsize(weight ~ Time, data=tbl, paired=TRUE)</code></pre>
-<pre><code>## # A tibble: 1 x 7
+<pre><code>## # A tibble: 1 × 7
 ##   .y.    group1 group2 effsize    n1    n2 magnitude
 ## * &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;ord&gt;    
 ## 1 weight 0      2        0.862    50    50 large</code></pre>

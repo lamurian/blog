@@ -29,7 +29,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/04-power/slide">Slide</a></p>
@@ -77,7 +76,7 @@ rather, why does the <em>p-value &gt; 0.05</em>? The question we wish to answer 
 <p>What is the probability of having 6 <code>H</code> out of 10 Bernoulli trials? Is it &lt;
 5%?</p>
 </blockquote>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/plt.binom10-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.binom10-1.png" width="90%" /></p>
 <p>To answer our question, we may use Binomial probability function to find our
 probability. To find a <span class="math inline">\(P(X=6): X \sim B(10, 0.5)\)</span>, <code>R</code> uses following command:</p>
 <pre class="r"><code>dbinom(6, 10, 0.5)</code></pre>
@@ -88,7 +87,7 @@ probability. To find a <span class="math inline">\(P(X=6): X \sim B(10, 0.5)\)</
 <p>So we could not distinguish a relative probability of 0.6 and 0.5
 from a ten consecutive coin tosses. Interesting. How if we preserve the ratio
 of event (3:5) using more trials?</p>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/plt.binom100-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.binom100-1.png" width="90%" /></p>
 <p>As previously done, we can find the probability <span class="math inline">\(P(X=60): X \sim B(100, 0.5)\)</span>
 using the Binomial probability function:</p>
 <pre class="r"><code>dbinom(60, 100, 0.5)</code></pre>
@@ -144,12 +143,12 @@ using the Binomial test:</p>
 ##                    0.7</code></pre>
 <p>With a nice visualization, we can see where our hypothesis located relative to
 the midpoint (hint: the blue dot).</p>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/stat.err.eg2-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/stat.err.eg2-1.png" width="90%" /></p>
 <p>We are assuming <span class="math inline">\(H_a &gt; H_0\)</span>, how do we picture <span class="math inline">\(\alpha\)</span> in our figure? Since
 <span class="math inline">\(\alpha\)</span> is the significance level of 0.05, we need to find a point of
 <span class="math inline">\(x : P(X=0.05 | 50, 0.5)\)</span>. After doing so, we can find our <em>significance value</em>
 in the x-axis (the red dashed line).</p>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/stat.err.eg3-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/stat.err.eg3-1.png" width="90%" /></p>
 <p>Area to the right of our significance value determines the probability of
 getting a type I error <span class="math inline">\(\alpha\)</span>. If we were to make a second distribution
 reflecting our <span class="math inline">\(H_a\)</span>, we may observe intersected area reflecting our
@@ -159,7 +158,7 @@ However, the value of <span class="math inline">\(\beta\)</span> depends on the 
 stated <span class="math inline">\(H_a &gt; H_0\)</span>. It means, the parameter in <span class="math inline">\(H_a\)</span> can be any value higher
 than 0.5, either be 0.6, 0.7, 0.8, and so on. For our convenience, we will
 assign 0.7 as our <span class="math inline">\(H_a\)</span> so we can construct the second binomial distribution.</p>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/stat.err.eg4-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/stat.err.eg4-1.png" width="90%" /></p>
 <p>The area to the left of our significance value in the <em>second</em> <span class="math inline">\(H_a\)</span>
 distribution is the probability of getting a type II error <span class="math inline">\(\beta\)</span>. We can
 summarize the characteristic of type I and type II statistical error using
@@ -250,7 +249,7 @@ size.</p>
 <p>All words and no number would not help us much to understand the context, so we
 shall dig into an example! We will use our previous case of a novel cancer
 drug trial. Can we recall this figure?</p>
-<p><img src="/note/biostat-ukrida/04-power/index_files/figure-html/stat.err.eg4-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/stat.err.eg4-1.png" width="90%" /></p>
 <p>We can calculate power when we know the probability function <em>and</em> its
 parameters, as such:</p>
 <p><span class="math display">\[Let\ X \sim B(n, p)\]</span></p>
@@ -333,7 +332,7 @@ ES &amp;= \frac{\mu_d}{\sigma_d}
 \end{align}\]</span></p>
 <p>Different study designs may require different solution, where different field
 of science contributed to countless preferences in performing statistics. What
-do we do as biomedical scientist? <span class="citation">(Charan and Biswas, 2013)</span></p>
+do we do as biomedical scientist? <span class="citation">(<a href="#ref-Charan2013" role="doc-biblioref">Charan and Biswas, 2013</a>)</span></p>
 </div>
 </div>
 <div id="cross-sectional" class="section level2">
@@ -435,9 +434,9 @@ on each of available methods.</p>
 <li>Do random sampling from each group</li>
 <li>Stratified <span class="math inline">\(\to\)</span> preserves ordinality, i.e. the order is important</li>
 </ul>
-<div id="refs" class="references hanging-indent">
-<div id="ref-Charan2013">
-<p>Charan, J. and Biswas, T. (2013) How to calculate sample size for different study designs in medical research? <em>Indian Journal of Psychological Medicine</em> [online]. 35 (2), pp. 121. Available from: <a href="https://doi.org/10.4103/0253-7176.116232">https://doi.org/10.4103/0253-7176.116232</a>doi:<a href="https://doi.org/10.4103/0253-7176.116232">10.4103/0253-7176.116232</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Charan2013" class="csl-entry">
+Charan, J. and Biswas, T. (2013) How to calculate sample size for different study designs in medical research? <em>Indian Journal of Psychological Medicine</em> [online]. 35 (2), pp. 121. Available from: <a href="https://doi.org/10.4103/0253-7176.116232">https://doi.org/10.4103/0253-7176.116232</a>doi:<a href="https://doi.org/10.4103/0253-7176.116232">10.4103/0253-7176.116232</a>.
 </div>
 </div>
 </div>

@@ -32,7 +32,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/02-data/slide">Slide</a></p>
@@ -232,10 +231,10 @@ the number of trial, where we can compute as:</p>
     epsilon(p.hat, n)
 }, p.hat=df$prob, n=df$roll) %T&gt;% print()</code></pre>
 <pre><code>## [1] 0.0948683 0.0433013 0.0126491 0.0037773 0.0011769 0.0003724 0.0001178</code></pre>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.trial-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.trial-1.png" width="100%" /></p>
 <p>With more trials, we get closer to the expected probability in a fair dice,
 which is 1/6, or equivalently 0.1667.</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.error-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.error-1.png" width="100%" /></p>
 <p>Following previous theory, the error is decreasing proportionally to the number
 of sample.</p>
 </div>
@@ -293,8 +292,8 @@ Central Limit Theorem (CLT).</p>
 \end{align}\]</span></p>
 <p>By changing the parameters, we can see the behaviour of binomial distribution
 as depicted by following figures:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.binom.n-1.png" width="100%" /></p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.binom.p-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.binom.n-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.binom.p-1.png" width="100%" /></p>
 </div>
 <div id="geometric-distribution" class="section level2">
 <h2>Geometric Distribution</h2>
@@ -314,7 +313,7 @@ Or simply denoted as <span class="math inline">\(X \sim G(p)\)</span></p>
 \end{align}\]</span></p>
 <p>Using different value of <span class="math inline">\(p\)</span> as its parameter, we can obtain following
 probability distribution:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.geom-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.geom-1.png" width="100%" /></p>
 </div>
 <div id="poisson-distribution" class="section level2">
 <h2>Poisson Distribution</h2>
@@ -334,7 +333,7 @@ PMF:</p>
 \end{align}\]</span></p>
 <p>Altering the <span class="math inline">\(\lambda\)</span> in its parameter, we can see how Poisson distribution
 behave:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.pois-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.pois-1.png" width="100%" /></p>
 </div>
 </div>
 <div id="continuous-distribution" class="section level1">
@@ -360,7 +359,7 @@ randomly assign patient groups in a clinical trials.</p>
 \mu &amp;= \frac{b+a}{2} \\
 \sigma &amp;= \frac{(b-a)^2}{12}
 \end{align}\]</span></p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.unif-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.unif-1.png" width="100%" /></p>
 </div>
 <div id="exponential-distribution" class="section level2">
 <h2>Exponential Distribution</h2>
@@ -378,7 +377,7 @@ as mileage, weight, volume, etc.</p>
 <p>Or simply denoted as <span class="math inline">\(X \sim Exponential(\lambda)\)</span></p>
 <p><span class="math display">\[\mu = \sigma = \frac{1}{\lambda}\]</span></p>
 <p>Changing the <span class="math inline">\(\lambda\)</span> parameters may result in following figure:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.exp-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.exp-1.png" width="100%" /></p>
 </div>
 <div id="gamma-distribution" class="section level2">
 <h2>Gamma Distribution</h2>
@@ -405,7 +404,7 @@ f(x) &amp;= \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-x \beta} \\
 different <span class="math inline">\(\lambda\)</span> values. Since the effect of rate <span class="math inline">\(\beta\)</span> parameter is
 somewhat similar in Gamma PDF, we will see how the distribution looks over
 different values of shape <span class="math inline">\(\alpha\)</span> parameter.</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.gamma-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.gamma-1.png" width="100%" /></p>
 </div>
 <div id="chi2-distributions" class="section level2">
 <h2><span class="math inline">\(\chi^2\)</span> Distributions</h2>
@@ -421,7 +420,7 @@ The rest are Gamma PDF derivations</p>
 \mu &amp;= k \\
 \sigma &amp;= \sqrt{2k}
 \end{align}\]</span></p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.chisq-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.chisq-1.png" width="100%" /></p>
 </div>
 <div id="normal-distribution" class="section level2">
 <h2>Normal Distribution</h2>
@@ -434,9 +433,9 @@ describe the probability.</p>
 <span class="math inline">\(\sigma \in \mathbb{R}: 0 &lt; \sigma &lt; \infty\)</span></p>
 <p>Or simply denoted as <span class="math inline">\(X \sim N(\mu, \sigma)\)</span></p>
 <p>By alternating the parameter <span class="math inline">\(\mu\)</span>, we may observe following instances:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.norm.mu-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.norm.mu-1.png" width="100%" /></p>
 <p>While changing the parameter <span class="math inline">\(\sigma\)</span> will result as follow:</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.norm.sigma-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.norm.sigma-1.png" width="100%" /></p>
 </div>
 </div>
 <div id="goodness-of-fit-test" class="section level1">
@@ -511,10 +510,10 @@ results. However, in a large sample, even a small deviation will result in
 <span class="math inline">\(H_0\)</span> rejection. Which mean, previously mentioned tests are of no use! Still,
 we can rely on some visual cues to determine the distribution. For this
 demonstration we will again use the previous object of <span class="math inline">\(X\)</span>.</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.gof.hist-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.gof.hist-1.png" width="100%" /></p>
 <p>That is a good start! Sadly, this does not give a clear indication on which
 distribution it follows.</p>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.gof.qq-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.gof.qq-1.png" width="100%" /></p>
 <p>Quantile-Quantile Plot (QQ Plot) can give a better visual cue :)</p>
 </div>
 </div>
@@ -561,7 +560,7 @@ package <code>nortest</code>, and it needs at minimum a sample size <span class=
 </div>
 <div id="visual-examination-1" class="section level2">
 <h2>Visual Examination</h2>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/nortest.demo4-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/nortest.demo4-1.png" width="100%" /></p>
 </div>
 <div id="chi2-and-normal-distribution" class="section level2">
 <h2><span class="math inline">\(\chi^2\)</span> and Normal Distribution</h2>
@@ -580,7 +579,7 @@ X &lt;- rnorm(n=100, mean=0, sd=1)</code></pre>
 ## 
 ## data:  X2
 ## W = 0.7, p-value = 5e-13</code></pre>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.chisq.demo1-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.chisq.demo1-1.png" width="100%" /></p>
 <p>Shapiro-Wilk and visual examination suggested <span class="math inline">\(X^2\)</span> does not follow a normal
 distribution. But, does it follow a <span class="math inline">\(\chi^2\)</span> distribution?</p>
 <pre class="r"><code>ks.test(X2, pchisq, df=1)</code></pre>
@@ -590,7 +589,7 @@ distribution. But, does it follow a <span class="math inline">\(\chi^2\)</span> 
 ## data:  X2
 ## D = 0.1, p-value = 0.2
 ## alternative hypothesis: two-sided</code></pre>
-<p><img src="/note/biostat-ukrida/02-data/index_files/figure-html/plt.chisq.demo2-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.chisq.demo2-1.png" width="100%" /></p>
 <p>So we can safely conclude that raising a normal distribution to the power of
 two resulted in a <span class="math inline">\(\chi^2\)</span> distribution with a parameter of <span class="math inline">\(k=1\)</span>.</p>
 </div>

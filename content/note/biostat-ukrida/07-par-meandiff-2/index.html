@@ -31,7 +31,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/07-par-meandiff-2/slide">Slide</a></p>
@@ -142,14 +141,14 @@ anova(aov.res1)</code></pre>
 <p>We obtain a significant result, brilliant! But we still need to further analyze
 its residual by plotting them against the fitted value:</p>
 <pre class="r"><code>par(mfrow=c(2, 2)); plot(aov.res1)</code></pre>
-<p><img src="/note/biostat-ukrida/07-par-meandiff-2/index_files/figure-html/one.way4-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/one.way4-1.png" width="100%" /></p>
 <p>The residual of our model roughly follows a normal distribution, despite the
 presence of outliers in data index number 4, 15 and 17 (see in figure entitled
 normal Q-Q). On the left side of our figure, we can observe a homogeneous
 residual variances, indicated by the absence of megaphone nor fan effect, i.e.
 the residual distributed evenly for all measured groups. Of course we need to
 present our data visually as to make it easier for our reader to understand:</p>
-<p><img src="/note/biostat-ukrida/07-par-meandiff-2/index_files/figure-html/plt.one.way-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.one.way-1.png" width="100%" /></p>
 <p>So far, we can conclude that conducting ANOVA requires the following steps to
 take:</p>
 <ol style="list-style-type: decimal">
@@ -229,7 +228,7 @@ that our data will not follow a normal distribution. In such a case, it is
 always good to perform a visual examination to determine whether our data
 contains outliers. In case of extreme outliers, we may opt to remove such an
 entry so that we can safely conduct an ANOVA.</p>
-<p><img src="/note/biostat-ukrida/07-par-meandiff-2/index_files/figure-html/two.way4-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/two.way4-1.png" width="100%" /></p>
 <p>We have outliers in data index 7 and 8, but it is still within a safe boundary
 of normal distribution theoretical quantiles. So it is alright to continue our
 inference and fulfilling the homogeneity of variance assumption.</p>
@@ -260,9 +259,9 @@ anova(aov.res2)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Next, we will do a goodness of fit evaluation by analyzing the residual.</p>
 <pre class="r"><code>par(mfrow=c(2,2)); plot(aov.res2)</code></pre>
-<p><img src="/note/biostat-ukrida/07-par-meandiff-2/index_files/figure-html/two.way7-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/two.way7-1.png" width="100%" /></p>
 <p>Then we can plot our statistically-proven mean difference using a nice figure.</p>
-<p><img src="/note/biostat-ukrida/07-par-meandiff-2/index_files/figure-html/plt.two.way-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.two.way-1.png" width="100%" /></p>
 </div>
 </div>
 <div id="repeated-measure-anova" class="section level1">
@@ -433,13 +432,13 @@ keep this post brief, we will stick with Tukey’s HSD and Tukey-Kramer.</p>
 <p>We will have the previous result of one-way ANOVA as our example. By imputing
 the model into <code>TukeyHSD</code> function in <code>R</code>, we will have the following output.</p>
 <pre class="r"><code>aov.res1 %&gt;% anova() %&gt;% broom::tidy()</code></pre>
-<pre><code>## # A tibble: 2 x 6
+<pre><code>## # A tibble: 2 × 6
 ##   term         df sumsq meansq statistic p.value
 ##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
 ## 1 group         2  3.77  1.88       4.85  0.0159
 ## 2 Residuals    27 10.5   0.389     NA    NA</code></pre>
 <pre class="r"><code>TukeyHSD(aov.res1) %&gt;% broom::tidy()</code></pre>
-<pre><code>## # A tibble: 3 x 7
+<pre><code>## # A tibble: 3 × 7
 ##   term  contrast  null.value estimate conf.low conf.high adj.p.value
 ##   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
 ## 1 group trt1-ctrl          0   -0.371   -1.06      0.320      0.391 
@@ -448,17 +447,17 @@ the model into <code>TukeyHSD</code> function in <code>R</code>, we will have th
 <p>As another demonstration, we can also use the our second model using factorial
 ANOVA.</p>
 <pre class="r"><code>aov.res2 %&gt;% anova() %&gt;% broom::tidy()</code></pre>
-<pre><code>## # A tibble: 3 x 6
+<pre><code>## # A tibble: 3 × 6
 ##   term         df sumsq meansq statistic   p.value
 ##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 supp          1  205.  205.       14.0  4.29e- 4
 ## 2 dose          2 2426. 1213.       82.8  1.87e-17
 ## 3 Residuals    56  820.   14.7      NA   NA</code></pre>
 <pre class="r"><code>TukeyHSD(aov.res2) %&gt;% broom::tidy()</code></pre>
-<pre><code>## # A tibble: 4 x 7
+<pre><code>## # A tibble: 4 × 7
 ##   term  contrast null.value estimate conf.low conf.high adj.p.value
 ##   &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
-## 1 supp  VC-OJ             0    -3.7     -5.68     -1.72    4.29e- 4
+## 1 supp  VC-OJ             0    -3.70    -5.68     -1.72    4.29e- 4
 ## 2 dose  1-0.5             0     9.13     6.22     12.0     1.32e- 9
 ## 3 dose  2-0.5             0    15.5     12.6      18.4     7.31e-12
 ## 4 dose  2-1               0     6.37     3.45      9.28    6.98e- 6</code></pre>

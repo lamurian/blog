@@ -29,7 +29,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/11-lm/slide">Slide</a></p>
@@ -119,7 +118,7 @@ respectively. We will initially perform a correlation analysis, using the
 ## Residual standard error: 0.41 on 148 degrees of freedom
 ## Multiple R-squared:  0.76,   Adjusted R-squared:  0.758 
 ## F-statistic:  469 on 1 and 148 DF,  p-value: &lt;2e-16</code></pre>
-<p><img src="/note/biostat-ukrida/11-lm/index_files/figure-html/plt.mod1-1.png" width="90%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.mod1-1.png" width="90%" /></p>
 <p>We have previously discussed that the intercept <span class="math inline">\(\beta_0\)</span> and slope <span class="math inline">\(\beta_i\)</span>
 determine how to predict <span class="math inline">\(y\)</span> using <span class="math inline">\(x\)</span>. But, how do we calculate each value of
 <span class="math inline">\(\beta\)</span>? We can derive <span class="math inline">\(\beta\)</span> from our data using two methods: Ordinary
@@ -148,14 +147,28 @@ on <span class="math inline">\(\beta_{0,1}\)</span>. We can use partial derivati
 derivative is similar, the only difference is it allows a partial assignment.
 When partially solving one variable, we regard the other as a constant.</p>
 <p><span class="math display">\[\begin{align}
-\epsilon &amp;= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2 &amp;\ \\
-\frac{\partial \epsilon}{\partial \beta_0} &amp;= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) &amp;\ \\
-\frac{\partial \epsilon}{\partial \beta_1} &amp;= \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i)) &amp;\ \\
-\frac{\partial \epsilon}{\partial \beta_0} &amp;= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) = 0 &amp;\ \\
-&amp; -2 \bigg( \displaystyle \sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \sum_{i=1}^n \beta_1 x_i \bigg) &amp;= 0 \\
-&amp; \displaystyle \sum_{i=1}^n y_i - n \beta_0 - \sum_{i=1}^n \beta_1 x_i &amp;= 0 \\
-&amp; \beta_0 &amp;= \frac{1}{n} \bigg( \displaystyle \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i \bigg) \\
-&amp; \beta_0 &amp;= \bar{y} - \beta_1 \bar{x}
+\epsilon &amp;= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2 \\
+\frac{\partial \epsilon}{\partial \beta_0} &amp;= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) \\
+\frac{\partial \epsilon}{\partial \beta_1} &amp;= \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i))
 \end{align}\]</span></p>
+<p>We shall solve the <span class="math inline">\(\beta_0\)</span> as follow:</p>
+<p><span class="math display">\[\begin{align}
+\frac{\partial \epsilon}{\partial \beta_0} = \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) &amp;= 0\\
+-2 \bigg( \displaystyle \sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \sum_{i=1}^n \beta_1 x_i \bigg) &amp;= 0 \\
+\displaystyle \sum_{i=1}^n y_i - n \beta_0 - \sum_{i=1}^n \beta_1 x_i &amp;= 0 \\
+\beta_0 &amp;= \frac{1}{n} \bigg( \displaystyle \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i \bigg) \\
+\beta_0 &amp;= \bar{y} - \beta_1 \bar{x}
+\end{align}\]</span></p>
+<p>Then we can proceed by solving the <span class="math inline">\(\beta_1\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+\frac{\partial \epsilon}{\partial \beta_1} = \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i)) &amp;= 0 \\
+-2 \bigg( \displaystyle \sum_{i=1}^n x_i (y_i - (\bar{y} - \beta_1 \bar{x} + \beta_1 x_i)) \bigg) &amp;= 0\\
+\displaystyle \sum_{i=1}^n x_i (y_i - \bar{y}) - \sum_{i=1}^n \beta_1 x_i (x_i - \bar{x}) &amp;= 0 \\
+\beta_1 \displaystyle \sum_{i=1}^n x_i (x_i - \bar{x}) &amp;= \sum_{i=1}^n x_i (y_i - \bar{y}) \\
+\beta_1 &amp;= \displaystyle \sum_{i=1}^n \frac{x_i(y_i - \bar{y})}{x_i(x_i - \bar{x})} \\
+\beta_1 &amp;= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x})(y_i - \bar{y})}{(x_i - \bar{x})(x_i - \bar{x})} \\
+\end{align}\]</span></p>
+<p>As you may have noticed, <span class="math inline">\(\beta_1\)</span> solved into the quotient of covariance and
+variance.</p>
 </div>
 </div>
