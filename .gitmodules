@@ -4,3 +4,42 @@
 [submodule "themes/touchy-hugo"]
 	path = themes/touchy-hugo
 	url = https://github.com/gethugothemes/touchy-hugo/
+[submodule "themes/paper"]
+	path = themes/paper
+	url = https://github.com/nanxiaobei/hugo-paper
+[submodule "themes/blonde"]
+	path = themes/blonde
+	url = https://github.com/opera7133/Blonde
+[submodule "themes/hello-friend-ng"]
+	path = themes/hello-friend-ng
+	url = https://github.com/rhazdon/hugo-theme-hello-friend-ng.git
+[submodule "themes/color-your-world"]
+	path = themes/color-your-world
+	url = https://gitlab.com/rmaguiar/hugo-theme-color-your-world.git
+[submodule "themes/fluency"]
+	path = themes/fluency
+	url = https://github.com/wayjam/hugo-theme-fluency.git
+[submodule "themes/eureka"]
+	path = themes/eureka
+	url = https://github.com/wangchucheng/hugo-eureka/
+[submodule "themes/next"]
+	path = themes/next
+	url = https://github.com/elkan1788/hugo-theme-next
+[submodule "themes/whisper"]
+	path = themes/whisper
+	url = https://github.com/zerostaticthemes/hugo-whisper-theme.git
+[submodule "themes/strange-case"]
+	path = themes/strange-case
+	url = https://github.com/ExchangeRate-API/strange-case.git
+[submodule "themes/academic"]
+	path = themes/academic
+	url = https://github.com/wowchemy/starter-hugo-academic
+[submodule "themes/terminal"]
+	path = themes/terminal
+	url = https://github.com/panr/hugo-theme-terminal.git
+[submodule "themes/gruvbox"]
+	path = themes/gruvbox
+	url = https://github.com/schnerring/hugo-theme-gruvbox
+[submodule "themes/xmin"]
+	path = themes/xmin
+	url = https://github.com/yihui/hugo-xmin
