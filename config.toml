@@ -25,8 +25,8 @@ copyright = "&copy; A. Lamuri {year}"
 ## Advanced options below ##
 ############################
 
-# Name of Academic theme folder in `themes/`.
-theme = "hugo-academic"
+# Name of a theme folder in `themes/`.
+theme = "touchy-hugo"
 
 # Get last modified date for content from Git?
 enableGitInfo = false

@@ -12,6 +12,12 @@
     {{ end }}
 
     {{ if (.Params.publication_types) and (ne (index .Params.publication_types 0) "0") }}
+    {{ $path := "" }}
+    {{ with .File }}
+      {{ $path = .Path }}
+    {{ else }}
+      {{ $path = .Path }}
+    {{ end }}
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
