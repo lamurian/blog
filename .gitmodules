@@ -43,3 +43,6 @@
 [submodule "themes/xmin"]
 	path = themes/xmin
 	url = https://github.com/yihui/hugo-xmin
+[submodule "content"]
+	path = content
+	url = git@github.com:lamurian/blog-content.git
