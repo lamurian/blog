@@ -29,9 +29,8 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
-<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
-<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+<script src="{{< blogdown/postref >}}index_files/kePrint/kePrint.js"></script>
+<link href="{{< blogdown/postref >}}index_files/lightable/lightable.css" rel="stylesheet" />
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/09-nonpar-meandiff-2/slide">Slide</a></p>
@@ -296,7 +295,7 @@ variance.</p>
 ## data:  conc by Run
 ## Kruskal-Wallis chi-squared = 0, df = 10, p-value = 1</code></pre>
 <pre class="r"><code>rstatix::kruskal_effsize(conc ~ Run, data=DNase)</code></pre>
-<pre><code>## # A tibble: 1 x 5
+<pre><code>## # A tibble: 1 × 5
 ##   .y.       n effsize method  magnitude
 ## * &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;ord&gt;    
 ## 1 conc    176 -0.0606 eta2[H] moderate</code></pre>
@@ -412,7 +411,7 @@ Judging from its structure, the variable <code>breaks</code> is numeric, while <
 ## data:  x and w and t
 ## Friedman chi-squared = 0.3, df = 1, p-value = 0.6</code></pre>
 <pre class="r"><code>rstatix::friedman_effsize(x ~ w | t, data=wp)</code></pre>
-<pre><code>## # A tibble: 1 x 5
+<pre><code>## # A tibble: 1 × 5
 ##   .y.       n effsize method    magnitude
 ## * &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;ord&gt;    
 ## 1 x         3   0.111 Kendall W small</code></pre>

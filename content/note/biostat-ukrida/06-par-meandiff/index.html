@@ -31,7 +31,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/06-par-meandiff/slide">Slide</a></p>
@@ -93,9 +92,9 @@ SE &amp;= \frac{10}{\sqrt{18}} &amp;= 2.36 \\
 z  &amp;= \frac{75 - 70}{2.36} &amp;= 2.12
 \end{align}\]</span></p>
 <p>Where does <span class="math inline">\(z\)</span> located in Z-distribution?</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/z.dist1-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/z.dist1-1.png" width="100%" /></p>
 <p>Assigning our significance value on both tails results in:</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/z.dist2-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/z.dist2-1.png" width="100%" /></p>
 <p>Since our <span class="math inline">\(H_a\)</span> assumes non-equality, we can compute the p-value according to
 two-tailed test procedures. First we need to find the cumulative probability of
 <span class="math inline">\(z\)</span> which satisfies:</p>
@@ -131,7 +130,7 @@ T &amp;= Z \sqrt{\frac{\nu}{V}} \tag{Relationship}
 <p>Aside from its relationship with Z-distribution, T-distribution also
 independently relates to the <span class="math inline">\(chi^2\)</span> distribution, where they share the same
 <span class="math inline">\(\nu\)</span> degree of freedom.</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/t.dist-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/t.dist-1.png" width="100%" /></p>
 </div>
 <div id="one-sample-t-test" class="section level1">
 <h1>One Sample T-Test</h1>
@@ -161,13 +160,13 @@ H_a &amp;: \bar{x} \neq 120
 <pre class="r"><code>t &lt;- {{mean(x) - 120} / {sd(x) / sqrt(20)}} %T&gt;% print()</code></pre>
 <pre><code>## [1] 0.933</code></pre>
 <p>Then we shall locate <span class="math inline">\(t\)</span> statistics into its distribution of <span class="math inline">\(t_{19}\)</span>:</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/plt.one.sample1-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.one.sample1-1.png" width="100%" /></p>
 <p>Then we can compute the p-value for a one-tailed test:</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/plt.one.sample2-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.one.sample2-1.png" width="100%" /></p>
 <pre class="r"><code>1 - pt(t, df=19)</code></pre>
 <pre><code>## [1] 0.181</code></pre>
 <p>Also the p-value for a two-tailed test:</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/plt.one.sample3-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/plt.one.sample3-1.png" width="100%" /></p>
 <pre class="r"><code>2 * {1 - pt(t, df=19)}</code></pre>
 <pre><code>## [1] 0.363</code></pre>
 <p>How does our calculation compare to the built-in function in <code>R</code>?</p>
@@ -274,7 +273,7 @@ tapply(tbl$height, tbl$sex, summary)</code></pre>
 <pre class="r"><code>tapply(tbl$height, tbl$sex, sd)</code></pre>
 <pre><code>## female   male 
 ##  17.98   7.93</code></pre>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/two.sample.t2-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/two.sample.t2-1.png" width="100%" /></p>
 <p>Do both groups in our sample follow a normal distribution?</p>
 <pre class="r"><code>tapply(tbl$height, tbl$sex, shapiro.test)</code></pre>
 <pre><code>## $female
@@ -309,7 +308,7 @@ equal to one another. In this case, we will follow Welch’s method.</p>
 ## 
 ## data:  height by sex
 ## t = -3, df = 32, p-value = 0.004
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group female and group male is not equal to 0
 ## 95 percent confidence interval:
 ##  -19.87  -4.07
 ## sample estimates:
@@ -323,7 +322,7 @@ how it is different from Welch’s:</p>
 ## 
 ## data:  height by sex
 ## t = -3, df = 53, p-value = 0.002
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group female and group male is not equal to 0
 ## 95 percent confidence interval:
 ##  -19.27  -4.67
 ## sample estimates:
@@ -334,7 +333,7 @@ when we have unequal variance. A low p-value is not a bad sign per se, but we
 need to be wary when we violated required assumptions. A low p-value may
 indicate an inflation in statistical error. After conducting our test, we can
 summarize our findings by visualizing them.</p>
-<p><img src="/note/biostat-ukrida/06-par-meandiff/index_files/figure-html/two.sample.t7-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/two.sample.t7-1.png" width="100%" /></p>
 <p>Visualizing our results is important when conducting a statistical inference,
 since it gives the reader a clearer representation on what we observed in our
 data. Both figures give similar information, yet conveyed in different
@@ -493,7 +492,7 @@ d &lt;- psych::cohen.d(tbl ~ time) %T&gt;% print()</code></pre>
 <pre><code>## Call: psych::cohen.d(x = tbl ~ time)
 ## Cohen d statistic of difference between two means
 ##    lower effect upper
-## bp -0.99  -0.47  0.05
+## bp -0.98  -0.47  0.04
 ## 
 ## Multivariate (Mahalanobis) distance between groups
 ## [1] 0.47

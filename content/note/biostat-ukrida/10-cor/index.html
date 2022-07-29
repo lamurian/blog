@@ -33,7 +33,6 @@ bibliography: ../ref.bib
 draft: false
 ---
 
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><a href="https://lamurian.rbind.io/note/biostat-ukrida/10-cor/slide">Slide</a></p>
@@ -359,7 +358,7 @@ Shapiro-Wilk normality test
 </tr>
 </tbody>
 </table>
-<p><img src="/note/biostat-ukrida/10-cor/index_files/figure-html/pearson2-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/pearson2-1.png" width="100%" /></p>
 <p>From both Shapiro-Wilk test and a visual examination, we may conclude that the
 <code>Sepal.Width</code> follows a normal distribution and <code>Sepal.Length</code> is seemingly
 close to the normal distribution. Using a QQ-plot, we do not observe many
@@ -368,15 +367,13 @@ with the bivariate normality assumption.</p>
 <pre class="r"><code>subset(tbl, select=c(Sepal.Length, Sepal.Width)) %&gt;%
     MVN::mvn() # Multivariate normality</code></pre>
 <pre><code>## $multivariateNormality
-##              Test          Statistic            p value Result
-## 1 Mardia Skewness   9.46144098216623 0.0505456076692465    YES
-## 2 Mardia Kurtosis -0.853178029438543  0.393560585232763    YES
-## 3             MVN               &lt;NA&gt;               &lt;NA&gt;    YES
+##            Test  HZ p value MVN
+## 1 Henze-Zirkler 2.9   8e-07  NO
 ## 
 ## $univariateNormality
-##           Test     Variable Statistic   p value Normality
-## 1 Shapiro-Wilk Sepal.Length      0.98      0.01    NO    
-## 2 Shapiro-Wilk Sepal.Width       0.98      0.10    YES   
+##               Test     Variable Statistic   p value Normality
+## 1 Anderson-Darling Sepal.Length      0.89     0.022    NO    
+## 2 Anderson-Darling Sepal.Width       0.91     0.020    NO    
 ## 
 ## $Descriptives
 ##                n Mean Std.Dev Median Min Max 25th 75th Skew Kurtosis
@@ -402,7 +399,7 @@ arguments of sample variables.</p>
 <p>The correlation coefficient <span class="math inline">\(r\)</span> will have a range of value <span class="math inline">\([-1, 1]\)</span>, where it
 reflects the trend and magnitude of a relationship between two numeric
 variables.</p>
-<p><img src="/note/biostat-ukrida/10-cor/index_files/figure-html/pearson4-1.png" width="100%" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/pearson4-1.png" width="100%" /></p>
 <p>This plot visualizes the linearity and the extent of correlation between
 <code>Sepal.Length</code> and <code>Sepal.Width</code>.</p>
 </div>
