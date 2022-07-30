@@ -13,9 +13,11 @@
 !resources/**
 !static/**
 !themes/**
+!layouts/**
 
 # File to publish on github
-!config.toml
+!*.toml
+!.Rprofile
 !index.Rmd
 !README.md
 !.DS_Store
