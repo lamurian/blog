@@ -34,7 +34,7 @@ disable404     = false
 disableHugoGeneratorInject = false
 
 [permalinks]
-  posts = "/posts/:year/:month/:title/"
+  posts = "/posts/:year/:month/:slug/"
 
 [author]
   name = "Aly Lamuri"
@@ -68,7 +68,7 @@ disableHugoGeneratorInject = false
 
   # Prefix of link to the git commit detail page. GitInfo must be enabled.
   #
-  # gitUrl = ""
+  gitUrl = "https://github.com/lamurian/blog/commit/"
 
   # Set disableReadOtherPosts to true in order to hide the links to other posts.
   #
@@ -117,8 +117,8 @@ disableHugoGeneratorInject = false
 
     topText = []
     bottomText = [
-      "Powered by <a href=\"http://gohugo.io\">Hugo</a>",
-      "Made with &#10084; by <a href=\"https://github.com/rhazdon\">Djordje Atlialp</a>"
+    #  "Powered by <a href=\"http://gohugo.io\">Hugo</a>",
+    #  "Made with &#10084; by <a href=\"https://github.com/rhazdon\">Djordje Atlialp</a>"
     ]
 
   # Colors for favicons
