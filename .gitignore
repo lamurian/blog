@@ -1,9 +1,6 @@
 # Blacklist everything
 *
 
-# Whitelist folder contents
-!*/
-
 # Folder to publish on github
 !assets/**
 !config/**
