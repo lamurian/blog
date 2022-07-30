@@ -1,4 +1,4 @@
-baseURL = "https://example.com"
+baseURL = "https://lamurian.rbind.io/"
 title   = "Lamurian"
 languageCode = "en-us"
 theme = "hello-friend-ng"
@@ -25,10 +25,10 @@ buildExpired = false
 canonifyURLs = true
 
 enableRobotsTXT = true
-enableGitInfo   = false
+enableGitInfo   = true
 enableEmoji     = true
 enableMissingTranslationPlaceholders = false
-disableRSS     = false
+disableRSS     = true
 disableSitemap = false
 disable404     = false
 disableHugoGeneratorInject = false
