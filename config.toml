@@ -111,9 +111,9 @@ disableHugoGeneratorInject = false
   #
   [params.footer]
     trademark = true
+    author = true
     rss = false
     copyright = false
-    author = true
 
     topText = []
     bottomText = [
