@@ -100,7 +100,10 @@ disableHugoGeneratorInject = false
   # linking local files with their path relative to the static folder, e.g. "css/styles.css"
   #
   customCSS = []
-  customJS  = []
+  customJS  = [
+    "//yihui.org/js/math-code.js", # MathJax support for Rmd and md
+    "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
+  ]
 
   # Toggle this option need to rebuild SCSS, requires extended version of Hugo
   #
