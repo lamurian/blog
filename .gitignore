@@ -1,16 +1,12 @@
 # Blacklist everything
 *
 
-# Folder to publish on github
-!assets/**
-!config/**
-!content/**
-!data/**
-!R/**
-!resources/**
-!static/**
-!themes/**
-!layouts/**
+# Whitelist subdirectory
+!*/
+
+# Specifically ignoring these dirs
+.alt
+public
 
 # File to publish on github
 !*.toml
@@ -20,3 +16,4 @@
 !.DS_Store
 !Thumbs.db
 !.hugo_build.lock
+!*md
