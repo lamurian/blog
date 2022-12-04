@@ -20,4 +20,7 @@ options(
 )
 
 # fix Hugo version
-options(blogdown.hugo.version = "0.101.0")
+options(blogdown.hugo.version = "0.105.0")
+
+# Set knitr options
+knitr::opts_chunk$set(comments = "|")
