@@ -23,4 +23,4 @@ options(
 options(blogdown.hugo.version = "0.105.0")
 
 # Set knitr options
-knitr::opts_chunk$set(comments = "|")
+knitr::opts_chunk$set(comment = "|")
