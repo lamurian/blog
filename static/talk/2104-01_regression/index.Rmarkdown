@@ -1,0 +1,1037 @@
+---
+title: Intuition on Regression
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["logo.css", "shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightSlides: false
+---
+
+```{r init, echo=FALSE, warning=FALSE, message=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra", "ggfortify", "lavaan", "semPlot")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	fig.width=10, fig.height=5, out.width="90%", dev="jpeg", dpi=300
+)
+```
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[Intuition on .amber[Regression]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+.right-logo[]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Basics on regression: LM]
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: false
+count: false
+class: bg-main3 hide-slide-number
+
+# Prior concepts to understand
+
+.font2[
+- Independent variable
+- Dependent variable
+- Variance-covariance matrix
+- Data Generating Process (.amber[DGP])
+]
+
+.right-logo[]
+
+???
+
+- IV = feature in ML
+- DV = target / label in ML
+- Variance-covariance matrix is a square matrix
+- The diagonal of var-covar matrix is the Variance
+- While the upper and lower triangles are the covariances
+
+---
+
+layout: false
+class: bg-main3
+
+# Basic on regression: .amber[LM]
+
+.font2[
+- LM stands for Linear Model
+- Relies on variance-covariance matrix
+- It extends .amber[correlation]
+- Describing linearity between IVs and DV
+]
+
+.right-logo[]
+
+---
+
+count: false
+class: bg-main3
+
+# What is .amber[linearity] anyway?
+
+.font2[
+- Relationship between two variables
+- A specific form of .amber[monotonic] relationships
+- Variables could be observable or inferrable (more on this on later sections)
+- .amber[Hint:] upwards and downwards .amber[slope]
+]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+# Monotonic relationship
+
+```{r monotonic}
+
+seed <- 1
+size <- 200
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	labs(x="", y="")
+
+```
+
+.right-logo[]
+
+--
+
+.font2[We will revisit this trend later :)]
+
+---
+
+count: false
+class: bg-main3
+
+# Linearity
+
+```{r linear}
+
+set.seed(seed)
+
+x   <- rnorm(size, 3, 1)
+y   <- x + runif(size, -1, 1)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	labs(x="", y="")
+
+```
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+# What does a model do?
+
+.right-logo[]
+
+---
+
+.center.font2[
+It transforms this...
+
+\begin{bmatrix}
+\sigma_{1, 1} & \cdots & \sigma_{1, n} \\
+\vdots	      & \ddots & \vdots       \\
+\sigma_{n, 1} & \cdots & \sigma_{n ,n}
+\end{bmatrix}
+
+]
+
+.center.font2[.amber[Hint:] This is a variance-covariance matrix]
+
+???
+
+- An input matrix of independent variables
+- This data contains $n$ variables from $m$ subjects
+- Each row maps to dependent variable $y_i$
+
+---
+
+count: false
+class: bg-main3
+
+.center.font2[
+...into this...
+
+$$\displaystyle \beta_0 + \sum_{i=1}^n \beta_i X_i$$
+]
+
+--
+
+.center.font2[
+...so that we can find $\color{orange}{\hat{y}}$
+]
+
+--
+
+.center.font2[Hold on, hold on...]
+
+---
+
+count: false
+
+.center[
+<br> <br>
+
+![](https://thinkingmeme.com/wp-content/uploads/2018/02/memesfaces9.jpg)
+
+.font2[
+Why $\color{orange}{\hat{y}}$ and not $\color{orange}{y}$ though?
+]
+]
+
+---
+
+count: false
+
+.font2[
+- A model provides a prediction
+- Thus the notation: $\color{orange}{\hat{y}}$
+- It explains the variability in .amber[DV] using variance-covariance matrix of
+  .amber[IVs]
+- Perfect linearity $\to$ The trend of IV completely defines DV
+]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Linear Model
+
+---
+
+.font2[
+- Now, we understand what models do
+- We have been able to distinguish linear to monotonic trend
+- We will revisit linearity and fit in a model to our data :)
+]
+
+---
+
+## What we previously had
+
+```{r linear}
+```
+
+---
+
+count: false
+
+## How about fitting our data to a model?
+
+```{r linear.fit}
+
+set.seed(seed)
+
+x   <- rnorm(size, 3, 1)
+y   <- x + runif(size, -1, 1)
+tbl <- data.frame(list("x"=x, "y"=y))
+mod <- lm(y ~ x, data=tbl)
+
+tbl$predict <- predict(mod)
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	ggpubr::stat_regline_equation(formula=y~x, label.x=5.3, label.y=4.1, color="indianred", size=5, hjust=1, geom="label") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Summarizing the model
+
+```{r linear.summary}
+summary(mod)
+```
+
+---
+
+count: false
+
+## Visual evaluation on the model
+
+```{r linear.eval1}
+autoplot(mod) + theme_minimal()
+```
+
+---
+
+count: false
+
+## Statistical evaluation on the model
+
+```{r linear.eval2, echo=TRUE}
+# Residual normality
+mod %>% residuals() %>% nortest::ad.test()
+
+# Homogeneity of residual variance
+mod %>% lmtest::hmctest()
+```
+
+---
+
+count: false
+
+.center[
+.font2[How do we conclude our model?]
+
+<img src="https://www.wallpaperup.com/uploads/wallpapers/2014/02/11/252308/c95c61be7a901ea649fa12ec08267ab6.jpg", width="50%">
+
+.amber.font2[Acceptable]
+]
+
+???
+
+- For most values, our model fit perfectly
+- For extreme values, the residual is seemingly not normally distributed
+- We need to take into account potential outliers
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# However...
+
+.font2[
+- .amber[Linear Model] only accepts linear trends
+- It could not correctly model monotonic relationship
+- Let alone .pink[non-monotonic] relationship :( 
+]
+
+--
+
+# What can we do?
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- .amber[Extending linearity: GLM]
+- Path Analysis
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Generalized Linear Model
+
+---
+
+.font2[
+- Introducing link function to the model
+- Link function will change the way our model predict the outcome
+- Link function .amber[*does not*] transform the data
+- It just defines how the model behave!
+]
+
+---
+
+## What we previously had
+
+```{r monotonic}
+```
+
+---
+
+count: false
+
+## How about fitting our data to a .amber[linear] model?
+
+```{r monotonic.fit1}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+mod <- lm(y ~ x, data=tbl)
+
+tbl$predict <- predict(mod)
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	ggpubr::stat_regline_equation(formula=y~x, label.x=1, label.y=50, color="indianred", size=5, hjust=1, geom="label") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+.center[
+.font2[Our model does not provide a proper fit!]
+
+<img src="https://theawesomedaily.com/wp-content/uploads/2017/07/meme-faces-6-1.jpg" width="40%">
+
+.font2.amber[Okay, what's next?]
+]
+
+---
+
+## Fit the data into a .amber[polynomial] model
+
+```{r monotonic.fit2}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+mod <- lm(y ~ poly(x, 2), data=tbl)
+
+tbl$predict <- predict(mod)
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	ggpubr::stat_regline_equation(formula=y~poly(x, 2), label.x=1, label.y=50, color="indianred", size=5, hjust=1, geom="label") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Visual evaluation
+
+```{r monotonic.eval}
+autoplot(mod) + theme_minimal()
+```
+
+---
+
+## ...or use GLM: .amber[Poisson] regression
+
+```{r glm.pois}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- runif(size, 0, 1.5)
+mu  <- exp(b0 + b1*x)
+y   <- rpois(n=size, lambda=mu)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=poisson)
+
+eq  <- coef(mod) %>% {sprintf("log(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- exp(predict(mod))
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=1, y=50, size=5, hjust=1, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Visual evaluation
+
+```{r glm.pois.eval}
+autoplot(mod) + theme_minimal()
+```
+
+---
+
+## Another cool stuff with GLM: .amber[Logistic] regression
+
+```{r glm.binom1}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- rnorm(size)
+sim <- b0 + b1*x
+p   <- pnorm(sim)
+y   <- rbinom(size, 1, p)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=binomial)
+
+eq  <- coef(mod) %>% {sprintf("logit(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- predict(mod) %>% {exp(.) / (1+exp(.))}
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=0, y=0.5, size=5, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+count: false
+
+## Also with GLM: .amber[Probit] regression
+
+```{r glm.binom2}
+
+set.seed(seed)
+
+b0  <- 1.5
+b1  <- 2.1
+x   <- rnorm(size)
+sim <- b0 + b1*x
+p   <- pnorm(sim)
+y   <- rbinom(size, 1, p)
+tbl <- data.frame(list("x"=x, "y"=y))
+
+mod <- glm(y ~ x, data=tbl, family=binomial(link="probit"))
+
+eq  <- coef(mod) %>% {sprintf("probit(y) = %.2f + %.2fx", .[[1]], .[[2]])}
+
+tbl$predict <- predict(mod) %>% {exp(.) / (1+exp(.))}
+
+ggplot(tbl, aes(x, y)) +
+	theme_minimal() +
+	geom_point(alpha=1) +
+	geom_line(aes(y=predict), color="indianred", size=1.2) +
+	annotate("label", label=eq, x=0, y=0.5, size=5, color="indianred") +
+	labs(x="", y="")
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# And .amber[many more] to count...
+
+.font2[
+.amber[Use cases:]
+
+- LM $\to$ Linear trend
+- Poisson $\to$ Rate of occurrence
+- Logistic $\to$ True bernoulli trial (binomial outcome)
+- Probit $\to$ Binomial outcome with underlying Gaussian process
+- Gamma $\to$ Exponential growth / decay events
+- Quasi-poisson / binomial $\to$ Poisson / Binomial DGP with overdispersion
+- Polynomial regression $\to$ Non-linear data, unknown DGP
+]
+
+???
+
+Examples:
+
+- Poisson: Factors influencing weekly defecation rate
+- Logistic: Factors influencing a specific diagnosis (outcome in binomial)
+- Probit: Factors influencing drug response (outcome in binomial)
+- Gamma: Factors influencing required time in cell division
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Poisson regression
+
+<img src="paper-1.png", width="65%">
+
+Rojanaworarit C, Wong JJ. Investigating the Source of a Disease Outbreak Based
+on Risk Estimation: A Simulation Study Comparing Risk Estimates Obtained From
+Logistic and Poisson Regression Applied to a Dichotomous Outcome. Ochsner
+Journal. 2019 Sep 21;19(3):220-6.
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Probit regression
+
+<img src="paper-2.png", width="60%">
+
+Lei C, Sun X. Comparing lethal dose ratios using probit regression with
+arbitrary slopes. BMC Pharmacology and Toxicology. 2018 Dec;19(1):1-0.
+
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Quasi-poisson and negative binomial regression
+
+<img src="paper-3.png", width="60%">
+
+Seyoum A, Zewotir T. Quasi-Poisson versus negative binomial regression models
+in identifying factors affecting initial CD4 cell count change due to
+antiretroviral therapy administered to HIV-positive adults in North–West
+Ethiopia (Amhara region). AIDS research and therapy. 2016 Dec;13(1):1-0.
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Gamma regression
+
+<img src="paper-4.png", width="55%">
+
+Mandal S, Arabi Belaghi R, Mahmoudi A, Aminnejad M. Stein‐type shrinkage
+estimators in gamma regression model with application to prostate cancer data.
+Statistics in medicine. 2019 Sep 30;38(22):4310-22.
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- .amber[Path Analysis]
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+.right-logo[]
+
+# Excerpt on (Generalized) Linear Model
+
+.font2[
+## Pros
+
+- In (G)LM we can introduce .amber[multiple IVs] as predictors
+- We can also add moderating effect using .amber[interaction terms] between different IVs
+]
+
+???
+
+A model with multiple IVs is termed multivariable model / multiple regression
+
+--
+
+.font2[
+## Cons
+
+- We cannot address .pink[multiple DVs]
+- Although they are manageable with MAN(C)OVA
+- But neither are suitable to model .pink[non-linearity]
+- And none of the above can completely control .pink[mediating] variables
+]
+
+???
+
+A model with multiple DV is termed multivariate model
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Path Analysis
+
+---
+
+.font2[
+- Multiple input (IVs)
+- Multiple output (DVs)
+- Controlling the effect of mediating variables
+]
+
+---
+
+count: false
+
+## Mediating effect
+
+```{r mediating}
+
+set.seed(seed)
+
+model <- "
+x ~ mediator
+y ~ x + mediator
+"
+
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="est", sizeMan=4, residuals=FALSE)
+
+```
+
+---
+
+count: false
+
+## Intermediary variables
+
+```{r intermediary}
+
+set.seed(seed)
+model <- "
+x2 ~ x1 + x3
+x3 ~ x1
+x4 ~ x2 + x3
+y  ~ x1 + x4
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="est", sizeMan=4, layout="tree2", residuals=FALSE)
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# A few to consider
+
+.font2[
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+]
+
+???
+
+- Commonly used estimator: MLE
+- Only applicable to continuous data, and not quite robust
+- Robust MLE $\to$ MLR
+- For discrete data $\to$ Diagonally Weighted Least Square, Robust Weighted Least Square (WLSMV)
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- .amber[A bit on Factor Analysis]
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Factor Analysis
+
+---
+
+.font2[
+- Imagine constructing an .amber[assessment form]
+- Such a form does not clearly indicate measurable objectives
+- Instead, it is a .amber[reflective] ideas on such measures
+- In other words, we conduct and .amber[indirect] measurement
+- How do we extend our concept on regression?
+]
+
+--
+
+.font2[.pink[Disclaimer:] This presentation only focuses on .pink[Confirmatory Factor Analysis]]
+
+---
+
+## Manifest to latent variables
+
+```{r man2lat}
+
+set.seed(seed)
+model <- "
+lat =~ x1 + x2 + x3 + x4 + x5
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+count: false
+
+## Multiple latent variables
+
+```{r multi.latent}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+count: false
+
+## Controlling for co-varying manifests
+
+```{r covary.manifest}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=3)
+
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- .amber[Structural Equation Model]
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Structural Equation Model
+
+---
+
+.font2[
+- Okay, factor analysis is pretty dope
+- Can we .amber[regress] those latent variables?
+- Or, how if we need to measure how it relates to .amber[other observables]?
+]
+
+--
+
+.font2[There comes .amber[SEM]: A structural equation model]
+
+---
+
+count: false
+
+## Regressing manifest
+
+```{r sem1}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+lat1 ~ lat2 + lat3
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=2)
+
+```
+
+---
+
+count: false
+
+## Regressing to other variables
+
+```{r sem2}
+
+set.seed(seed)
+model <- "
+lat1 =~ x1 + x2 + x3 + x4 + x5
+lat2 =~ x6 + x7 + x8 + x9
+lat3 =~ x10 + x11 + x12 + x13
+x10  ~~ x8
+lat1 ~  lat2 + lat3 + v1
+"
+tbl <- simulateData(model, sample.nobs=size)
+mod <- sem(model, data=tbl, estimator="MLR")
+semPaths(mod, style="lisrel", whatLabels="std", sizeMan=4, layout="tree2", residuals=FALSE, rotation=2)
+
+```
+
+---
+
+count: false
+
+## In brief
+
+.font2[
+- Combines path and confirmatory factor analysis
+- We can control confounding variables, either presented as a manifest or latent
+- Highly useful in analyzing data with limited scope of observation
+- We can further extract relationship in a multilevel manner
+- Subgroup analysis is also feasible
+]
+
+---
+
+count: false
+
+.right-logo[]
+
+## ...is a powerful method, but
+
+.center[<img src="https://sayingimages.com/wp-content/uploads/with-great-power-comes-meme.jpg" width="60%">]
+
+???
+
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+
+---
+
+count: false
+layout: false
+class: bg-main1 center middle hide-slide-number
+
+.right-logo[]
+
+.font5.amber[Query?]

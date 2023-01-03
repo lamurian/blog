@@ -1,0 +1,173 @@
+---
+title: Introduction to Cognitive Neuroscience
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+count: false
+class: bg-main1 hide-slide-number split-70
+
+.column[.right.vmiddle.content[
+.font3[Introduction to .amber[Cognitive Neuroscience]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+class: bg-main3
+
+# History
+
+.font2[
+- Emerges in early 90s
+- An exciting branch of science combining psychology, biology and sociology
+- Neuroscience as its main "umbrella"
+]
+
+???
+
+Main concern:
+- Psychology:
+  - Cognitive science
+  - Neuropsychology
+- Neuroscience:
+  - Behavioural neuroscience
+  - Functional neuroscience
+  - System neuroscience
+
+Current development: Investigation on neuroeconomy
+
+---
+
+class: bg-main3 split-two
+
+.column[.vmiddle.center.content[
+<img src="http://thedementiaqueen.com/wp-content/uploads/2013/05/3187646_fnsyn-03-00004-g004.png" width="100%">
+]]
+
+.column[.vmiddle.content[
+# Core concept
+
+.font2[What .amber[fire] together, .amber[wire] together]
+]]
+
+---
+
+class: bg-main3
+
+# Modelling in neuroscience
+
+.font2[
+- Toy model: Mathematical model to simplify neuronal behaviour
+- Brain model: Depicting a complex interaction in the brain
+- Systemic neuroscience?
+]
+
+---
+
+class: bg-main3
+
+# Top-down .amber[vs.] Bottom-up?
+
+--
+
+<img src="https://www.frontiersin.org/files/Articles/47493/fnhum-07-00102-r2/image_m/fnhum-07-00102-g001.jpg" width="100%">
+
+---
+
+class: bg-main3
+
+# Blue Brain Project
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/q2LVaPhM0ec" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: bg-main3
+
+# Cognition
+
+.font2[
+- Higher function resulting from neocortex
+- Manifests in many forms
+- Is it specific to human?
+]
+
+???
+
+- Attention
+- Memory and learning
+- Visuospatial
+- Executive (motoric)
+- Language
+
+---
+
+class: bg-main3
+
+# What does cognitive neuroscience try to solve?
+
+.font2[
+- An enigmatic facade of human cognition
+- Why do we differ from other species?
+- How do we best deliver our knowledge?
+- Learning, behaviour, personality, etc...
+]
+
+???
+
+- Arie W. Kruglanski: radicalization and deradicalization
+- Political neuroscience
+
+---
+
+class: bg-main3
+
+# Some of the recent discoveries
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZQTqvv6HHHY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: bg-main3
+
+# London cab driver
+
+.font2[
+- A study on visuospatial function
+- Cab drivers in London needs to pass a certain exams
+- They have to memorize intricate maps
+- Higher activity among active drivers
+- Lower activity among retired drivers
+]
+
+---
+
+count: false
+class: bg-main1 hide-slide-number middle font5 center
+
+.amber[Query?]

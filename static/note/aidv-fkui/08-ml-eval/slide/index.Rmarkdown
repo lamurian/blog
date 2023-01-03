@@ -1,0 +1,256 @@
+---
+title: "Machine Learning Evaluation"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightLines: true
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dpi=300, dev="png", fig.width=10, fig.height=5, output.widht="100%"
+)
+```
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.right.vmiddle.content[
+.font3[Machine Learning .amber[Evaluation]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Department of Medical Physics
+]]
+
+---
+
+name: overview
+layout: true
+count: false
+class: bg-main4 split-30 hide-slide-number middle
+
+.column[.right.vmiddle.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Regression]
+- Classification
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Mean Absolute Error
+
+.font2[
+$$MAE = \frac{1}{n} \displaystyle \sum_{i=1}^n |y_i - \hat{y}|$$
+
+Represents the .amber[absolute] error between original and predicted values 
+]
+
+---
+
+class: bg-main3
+
+# Mean Squared Error
+
+.font2[
+$$MSE = \frac{1}{n} \displaystyle \sum_{i=1}^n (y_i - \bar{y})^2$$
+
+- Also called a mean squared deviation
+- Apply extra weight on larger error
+]
+
+---
+
+class: bg-main3
+
+# Root Mean Squared Error
+
+.font2[
+$$RMSE = \sqrt{MSE} = \sqrt{\frac{1}{n} \displaystyle \sum_{i=1}^n (y_i-\bar{y})^2}$$
+
+- Has the same purpose as $MSE$
+- If $RMSE = MAE$, all errors are of the same magnitude
+- If $RMSE > MAE$, greater variance in individual error
+]
+
+???
+
+- $RMSE$ is always larger or equal to the $MAE$
+
+---
+
+class: bg-main3
+
+# R-Squared
+
+.font2[
+$$R^2 = 1 - \frac{\sum (y_i - \hat{y})^2}{\sum (y_i - \bar{y})^2}$$
+
+- A coefficient of determination
+- Represents how good predicted values align with actual values
+]
+
+---
+
+class: bg-main3
+
+# Other metrics
+
+.font2[
+- AIC
+- Corrected AIC
+- BIC
+- Mallows Cp
+]
+
+???
+
+- Akaike Information Criteria: penalize the inclusion of predictor (add
+  penalty when adding more predictors)
+- Corrected AIC: for small sample size
+- Bayesian Information Criteria: variant of AIC with a stronger penalty
+- Mallows Cp: another variant of AIC
+- Lower score = better
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Regression
+- .amber[Classification]
+]]
+
+---
+
+class: bg-main3
+
+# Jaccard index
+
+.font2[
+$$j(y, \bar{y}) = \frac{|y \cap \hat{y}|}{|y \cup \hat{y}|}$$
+
+- Measures similarity between actual and predicted class
+- Higher index is better
+]
+
+---
+
+class: bg-main3 middle center
+
+.center.contet[<img src="https://glassboxmedicine.files.wordpress.com/2019/02/confusion-matrix.png?w=1200" width="100%">]
+
+???
+
+- False positive: type-I error
+- False negative: type-II error
+- Confusion matrix is important to measure other metrics
+
+---
+
+class: bg-main3
+
+# Accuracy
+
+.font2[
+$$Accuracy=\frac{TP + TN}{Total}$$
+
+- Another formulation of a Jacard index
+]
+
+---
+
+class: bg-main3
+
+# Recall
+
+.font2[
+$$Recall = \frac{TP}{TP + FN}$$
+
+- Sensitivity
+- True positive rate
+- Measured on the actual positive column
+]
+
+---
+
+class: bg-main3
+
+# Precision
+
+.font2[
+$$Precision = \frac{TP}{TP + FP}$$
+
+- A fraction of correct identification
+- Measured on the predicted positive row
+]
+
+???
+
+- Precision and recall trade-off
+- Higher precision $\to$ lower recall
+- Use a certain threshold to determine cases
+- Higher threshold $\to$ higher precision $\to$ lower recall
+
+---
+
+class: bg-main3
+
+# F1 score
+
+.font2[
+$$F1 = 2 \times \frac{Precision \cdot Recall}{Precision + Recall}$$
+
+- Harmonic mean of precision and recall
+- Not sensitive to extremely large value
+- Determine the balance between precision and recall
+]
+
+???
+
+- Imagine you have a model with precision=1 and recall=0
+- The mean would be 0.5
+- But the harmonic mean is 0
+- We want a model with more or less similar precision and recall
+
+---
+
+class: bg-main3
+
+# Receiver Operator Curve
+
+.center.content[<img src="https://cdn.analyticsvidhya.com/wp-content/uploads/2020/10/image3-9.png" width="100%">]
+
+---
+
+class: bg-main3
+
+# What have we learnt?
+
+.font2[
+- Regression and classification have similar procedure
+- But both requires different metrics
+- Not a single metric can rule them all
+- Use a combination of them
+]

@@ -1,0 +1,972 @@
+---
+title: Sample Size and Statistical Power
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, messages=FALSE, warning=FALSE,
+	error=FALSE, fig.width=10, fig.height=5, out.width="90%", dev="png", dpi=300
+)
+options(digits=4)
+```
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.vmiddle.right.content[
+.font3[Sample Size and Statistical .amber[Power]]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Recap: Hypothesis and significance
+
+.font2[
+- Null and alternative hypothesis
+- Rejecting the null
+- Should we accept the alternative?
+]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+count: false
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main2[.vmiddle.content[
+- .amber[More on p-value]
+- Type of statistical error
+- Power analysis as a measure of $\alpha$ and $\beta$
+- Equation in calculating sample size
+- Random sampling
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# .amber[P-value:] core concepts
+
+- .font2[We can reject the null when we get a p-value < 0.05. ]
+
+--
+.font2[But why?]
+
+--
+- .font2[.amber[0.05] simply reflects a .amber[5%] chance]
+
+--
+- .font2[...of having a correct null hypothesis]
+
+--
+- .font2[Or the way I like to say it: ]
+
+--
+.amber.font2[probability value]
+
+--
+- .font2[When the probability is .small enough, we reject the null]
+
+--
+- .font2[Well, that's not too hard! :)]
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+# .amber[P-value:] a visual example
+
+---
+
+count: true
+
+.font2[Let's revisit our last example of a coin toss]
+
+```{r coin, echo=TRUE}
+set.seed(1)
+coin <- sample(c("H", "T"), 10, replace=TRUE, prob=rep(1/2, 2)) %T>% print()
+```
+
+--
+
+- We can formulate our hypothesis as:
+  - $H_0: P(X=x) = 0.5$
+  - $H_a: P(X=x) \neq 0.5$
+--
+
+- As always, we set `H` as our outcome of interest
+- Since it is a Bernoulli trial, we assumes it conforms the binomial distribution
+
+--
+
+.font2[...but, does it?]
+
+---
+
+count: false
+
+```{r binom.test}
+binom.test(x=sum(coin == "H"), n=length(coin), p=0.5)
+```
+
+--
+
+- We have seen this numerous times now
+
+--
+- But we have yet to unravel the secret behind this magic!
+
+--
+- Why did we .pink[fail to reject] the null hypothesis?
+
+--
+- Or rather, why does the .amber[p-value > 0.05?]
+
+--
+
+.amber[Question:] What's the probability of having 6 `H` out of 10 Bernoulli
+trials? .pink[Is it < 5%?]
+
+---
+
+count: false
+
+.column[.vmiddle.center.content[
+
+```{r plt.binom10, echo=FALSE, fig.width=8}
+
+df <- data.frame(x=c(1:10), y=dbinom(1:10, 10, 0.5))
+color <- c(rep(NA, 4), "Hypothesis", "Event", rep(NA, 4))
+ggplot(df, aes(x=x, y=y, color=color)) +
+	geom_point(size=3) + geom_segment(aes(y=0, xend=x, yend=y), size=1.5) + theme_minimal() +
+	scale_x_continuous(breaks=c(1:10)) +
+	labs(x="Number of heads", y="Probability", title="Ten coin tosses") +
+	theme(legend.title=element_blank())
+
+```
+
+]]
+
+.column[.vmiddle.content[
+$P(X=6): X \sim B(10, 0.5)$
+```{r dbinom10}
+dbinom(6, 10, 0.5)
+```
+
+We can manually calculate the p-value as the .amber[sum] of $P(X \geqslant 6)$
+
+```{r pval.binom10}
+2 * (dbinom(6:10, 10, 0.5) %>% sum())
+```
+
+.amber[Question:] How if we preserve the ratio of event (3:5) using more trials?
+]]
+
+---
+
+count: false
+
+.column[.vmiddle.center.content[
+
+```{r plt.binom100, echo=FALSE, fig.width=8}
+
+df <- data.frame(x=c(1:100), y=dbinom(1:100, 100, 0.5))
+color <- c(rep(NA, 49), "Hypothesis", rep(NA, 9), "Event", rep(NA, 40))
+size <- c(rep(1, 49), 3, rep(1, 9), 3, rep(1, 40))
+ggplot(df, aes(x=x, y=y, color=color)) +
+	geom_point(size=size) + geom_segment(aes(y=0, xend=x, yend=y), size=size) + theme_minimal() +
+	scale_x_continuous(breaks=seq(10, 100, 10)) +
+	labs(x="Number of heads", y="Probability", title="Ten coin tosses") +
+	theme(legend.title=element_blank())
+
+```
+
+]]
+
+.column[.vmiddle.content[
+$P(X=60): X \sim B(100, 0.5)$
+```{r dbinom100}
+dbinom(60, 100, 0.5)
+```
+
+And we the p-value would be:
+
+```{r pval.binom100}
+2 * (dbinom(60:100, 100, 0.5) %>% sum())
+```
+
+.amber[Question:] We preserved the ratio, why has the probability changed?
+]]
+
+---
+
+layout: false
+class: bg-main3
+count: true
+
+# .amber[P-value:] take home notes
+
+.font2[
+- Theoretically, p-value is *difficult* to understand
+- But in practice, it tells you the .amber[probability] of having a *correct* $H_0$
+- Low p-value $\to$ reject $H_0$
+]
+
+---
+
+layout: false
+class: bg-main3 middle center
+count: false
+
+<iframe width="90%" height="90%" src="https://www.youtube.com/embed/9jW9G8MO4PQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+template: overview
+count: false
+
+.column.bg-main2[.vmiddle.content[
+- More on p-value
+- .amber[Type of statistical error]
+- Power analysis as a measure of $\alpha$ and $\beta$
+- Equation in calculating sample size
+- Random sampling
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Significance level
+
+- 0.05 is our significance level $\alpha$
+- .amber[Higher] $\alpha \to$ more chance to reject the $H_0 \to$ .pink[incorrect rejection?]
+- .amber[More] sample $\to$ more chance to reject the $H_0 \to$ .pink[incorrect rejection?]
+
+---
+
+???
+
+- When p-value < 0.05, we reject the $H_0$
+- And 0.05 is a number we agreed upon
+- We know *why* we choose the number, but *what* is 0.05?
+
+---
+
+count: false
+
+# Example, please?
+
+Suppose we are conducting a study on .amber[a potential cancer therapy]. We
+knew giving the patient a placebo may affect .amber[their recovery] rate by
+.pink[50%]. We are certain giving the new **treatment will increase the
+.amber[probability]**. Tested on .pink[50] patients, .pink[35] showed signs of
+better quality of life.
+
+--
+
+# Concept check
+
+- Considering I.I.D, does it follow a Bernoulli trial?
+- If so, how do we model its distribution?
+- What are the parameters for our distribution?
+- What formal test can we use to determine significance?
+
+---
+
+count: false
+
+## Modelling the distribution
+
+.font2[
+$$Cured \sim B(50, 0.5)$$
+]
+
+--
+
+##  Stating the hypothesis
+
+\begin{align}
+H_0 &: P(X=35) = 0.5 \\
+H_a &: P(X=35) > 0.5
+\end{align}
+
+---
+
+count: false
+
+## Statistical test
+
+```{r stat.err.eg1}
+binom.test(35, 50, 0.5, alternative="greater")
+```
+
+---
+
+count: false
+
+```{r stat.err.eg2, echo=FALSE}
+
+df1 <- data.frame(x=c(1:50), y=dbinom(1:50, 50, 0.5), h="h0")
+color <- c(rep("grey50", 34), "Blue", rep("grey50", 15))
+size <- c(rep(1, 34), 3, rep(1, 15))
+plt <- ggplot(df1, aes(x=x, y=y)) + geom_point(color=color, size=size) +
+	geom_segment(aes(y=0, xend=x, yend=y)) + theme_minimal() +
+	labs(x="Number of patients reporting higher QoL", y="Probability")
+plt
+
+```
+
+---
+
+count: false
+
+.font2[
+- We are assuming the $H_a > H_0$
+- How do we picture $\alpha$ in our figure?
+]
+
+---
+
+count: false
+
+```{r stat.err.eg3, echo=FALSE}
+
+alpha.value <- qbinom(0.95, 50, 0.5)
+plt + geom_vline(xintercept=alpha.value, size=1.5, linetype=3, color="red") +
+	annotate("text", label="alpha=0.05", x=alpha.value+3, y=0.06)
+
+```
+
+---
+
+count: false
+
+.font2[
+- Shaded region of $\alpha$ determine the probability of getting a type I error
+- On the other hand, $\beta$ reflects the type II error
+- However, the value of $\beta$ depends on $H_a$ distribution
+]
+
+???
+
+- Assuming $H_a$ coming from similar distribution as $H_0$, we just need to determine its parameter
+- $P$ as the parameter could be anything as long as $P > 0.5$
+- For our convenience, we shall have $P = 0.7$ to construct the second distribution
+
+---
+
+count: false
+
+```{r stat.err.eg4, echo=FALSE}
+
+h1 <- data.frame(x=1:50, y=dbinom(1:50, 50, 0.7), h="h1")
+df2 <- rbind(df1, h1)
+colors <- c(rep("grey50", 34), "blue", rep("grey50", 65))
+sizes <- c(rep(1, 34), 3, rep(1, 65))
+alpha.value <- qbinom(0.95, 50, 0.5)
+ggplot(df2, aes(x=x, y=y, color=h)) + geom_point(color=colors, size=sizes) + geom_line() +
+	geom_segment(aes(y=0, xend=x, yend=y)) + theme_minimal() +
+	labs(x="Number of patients reporting higher QoL", y="Probability") +
+	geom_vline(xintercept=alpha.value, size=1.5, linetype=3, color="red") +
+	annotate("text", label="alpha=0.05", x=alpha.value+3, y=0.06) +
+	theme(legend.title=element_blank())
+
+```
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+.column[.content.vmiddle.center[
+<img src="https://mk0codingwithmaxskac.kinstacdn.com/wp-content/uploads/2019/12/type-1-error-type-2-statistical-power-comic.png" width="100%">
+]]
+
+.column[.vmiddle.content[
+# Statistical error
+
+{{content}}
+]]
+
+---
+
+## Type I
+
+- Incorrectly rejecting the $H_0$
+- Reflected as $\alpha \to$ shaded area to the right of $H_0$ distribution
+- A false positive
+
+## Type II
+
+- Incorrectly accepting the $H_0$
+- Reflected as $\beta \to$ shaded area to the left of $H_a$ distribution
+- A false negative
+
+---
+
+template: overview
+count: false
+
+.column.bg-main2[.vmiddle.content[
+- More on p-value
+- Type of statistical error
+- .amber[Power analysis]
+- Equation in calculating sample size
+- Random sampling
+]]
+
+
+---
+
+layout: false
+class: bg-main3
+
+# $Power = 1 - \beta$
+
+.font2[
+- Correctly reject the $H_0$ when it is actualy false
+- Prospective vs. retrospective?
+- Help you determine the minimum required sample
+]
+
+???
+
+- Retrospective: to see whether or not we have conducted a correct procedure to reject the $H_0$
+- Prospective: to calculate a sufficient minimal sample size needed
+
+--
+
+# Caveats
+
+.font2[
+- Depends on formal methods to use
+- Does not generalize well
+- Give a best case scenario estimate
+]
+
+???
+
+- There are other method to calculate the sample size
+- We don't have to solely rely on power analysis
+
+---
+
+class: bg-main3 split-two
+count: false
+
+# Things to consider...
+
+.font2.column.center.split-two[
+  .row[.vmiddle.content[
+Power
+  ]]
+
+  .row[.vmiddle.content[
+Sample size
+  ]]
+]
+
+.font2.column.center.split-two[
+  .row[.vmiddle.content[
+Effect size
+  ]]
+
+  .row[.vmiddle.content[
+Alpha
+  ]]
+]
+---
+
+class: bg-main3 split-two
+count: false
+
+.font2.column.center.split-two[
+  .row[.vmiddle.content[
+Power
+  ]]
+
+  .row[.vmiddle.content[
+Sample size
+  ]]
+]
+
+.font2.column.center.split-two[
+  .row.bg-main5[.amber.vmiddle.content[
+Effect size
+  ]]
+
+  .row[.vmiddle.content[
+Alpha
+  ]]
+]
+
+???
+
+- These four are inter-related
+- Adjustment on one governs the others
+- Each one is a function of another
+
+---
+
+class: bg-main3
+
+# Effect size
+
+.font2[
+- .amber[Disclaimer:] this is just an overview, *not* an in-detailed explanation
+- Effect size measures a true difference between two hypotheses
+- Numerous conventions exists
+- Higher effect size $\to$ higher power 
+- One of the most difficult to obtain!
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Obtaining an effect size
+
+---
+
+.font2[
+- .amber[Literature review]
+- Pilot study
+- Cohen's recommendation
+]
+
+???
+
+Literature review:
+
+- Published articles may have done similar investigation on different population
+- Use their data to estimate the desired effect size
+- Meta-analysis technique is sometimes applicable to make a better estimate
+
+---
+
+count: false
+
+.font2[
+- Literature review
+- .amber[Pilot study]
+- Cohen's recommendation
+]
+
+???
+
+Pilot study:
+
+- By conducting a pilot study, we can get data reflecting our future study
+- Time consuming, but giving a closer estimate
+- A good chance to resolve any unanticipated issue
+
+---
+
+count: false
+
+.font2[
+- Literature review
+- Pilot study
+- .amber[Cohen's recommendation]
+]
+
+???
+
+Cohen's recommendation:
+
+- Depends on what formal test to use
+- Separated into small, medium and large effect size
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r stat.err.eg4, echo=FALSE}
+```
+???
+
+We will re-examine our last example on a novel cancer drug
+
+---
+
+count: false
+
+.font2[
+$$Let\ X \sim B(n, p)$$
+]
+
+--
+
+.font2[
+\begin{align}
+sig &= x:P(X=1-\alpha\ |\ n, H_0) \\
+\beta &= P(X \leqslant sig\ |\ n, H_1) \\
+Power &= 1 - \beta
+\end{align}
+]
+
+???
+
+We can calculate power when we know the probability function *and* its parameters
+
+---
+
+count: false
+
+```{r power.binom}
+# Set H0, sample size, significance level (alpha)
+h0 <- 0.5; size <- 50; alpha.rate <- 0.05
+
+# Find significance value
+alpha.value <- qbinom(1 - alpha.rate, size, prob=h0) %T>% print()
+
+# Determine H1
+h1 <- 0.7
+
+# Calculate beta
+beta.value <- dbinom(0:alpha.value, size, prob=h1) %>% sum() %T>% print()
+
+# Calculate power
+1 - beta.value
+
+```
+
+---
+
+count: false
+
+```{r stat.err.eg4, echo=FALSE}
+```
+
+???
+
+- Of course we can "reverse engineer" the calculation to obtain required sample size using known power
+- But the math can be quite... challenging :)
+- Thankfully, we have some ready-to-use packages to do the computation for us (yay to them!)
+
+---
+
+template: overview
+count: false
+
+.column.bg-main2[.vmiddle.content[
+- More on p-value
+- Type of statistical error
+- Power analysis as a measure of $\alpha$ and $\beta$
+- .amber[Equation in calculating sample size]
+- Random sampling
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Equation in calculating sample size
+
+.font2[
+- As in calculating effect sizes, we have numerous equations to apply
+- None fits all size, depends on our research context
+- We will see popular ones used in general and biomedical science
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# General equation
+
+.font2[
+$$n = \bigg( \frac{Z_{1 - \frac{\alpha}{2}} + Z_{1-\beta}}{ES} \bigg)^2$$
+]
+
+---
+
+.font2[
+$n$: Number of minimal sample size  
+$Z_{1 - \frac{\alpha}{2}}$: Significance value in a standardized normal distribution  
+$Z_{1-\beta}$: Power value in a standardized normal distribution  
+$ES$: Effect size
+]
+
+???
+
+For different purposes, we need different effect size estimation
+
+---
+
+count: false
+
+## Dichotomous outcome, one sample
+
+.font2[
+\begin{align}
+H_0 &: p = p_0 \\
+ES &= \frac{p_1 - p_0}{\sqrt{p(1-p)}}
+\end{align}
+]
+
+---
+
+count: false
+
+## Dichotomous outcome, two independent samples
+
+.font2[
+\begin{align}
+H_0 &: p_1 = p_2 \\
+ES &= \frac{|p_1 = p_2|}{\sqrt{p(1-p)}}
+\end{align}
+]
+
+---
+
+count: false
+
+## Continuous outcome, one sample
+
+.font2[
+\begin{align}
+H_0 &: \mu = \mu_0 \\
+ES &= \frac{|\mu_1 = \mu_0|}{\sigma}
+\end{align}
+]
+
+---
+
+count: false
+
+## Continuous outcome, two independent samples
+
+.font2[
+\begin{align}
+H_0 &: \mu_1 = \mu_2 \\
+ES &= \frac{|\mu_1 = \mu_2|}{\sigma}
+\end{align}
+]
+
+---
+
+count: false
+
+## Continuous outcome, two matched samples
+
+.font2[
+\begin{align}
+H_0 &: \mu_d = 0 \\
+ES &= \frac{\mu_d}{\sigma_d}
+\end{align}
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Problems
+
+.font2[
+- Different study design may require different solution
+- Different field of knowledge has its own preferences
+- What do we do as biomedical scientists?
+]
+
+<br> <br> <br> <br>
+<br> <br> <br> <br>
+<br> <br> <br> <br>
+
+J. Charan and T. Biswas. .amber[“How to calculate sample size for different study designs in medical research?”] In: _Indian Journal of Psychological Medicine_ 35.2 (2013), p. 121. DOI: 10.4103/0253-7176.116232.
+
+---
+
+class: bg-main3
+
+# Cross-sectional
+
+## Qualitative variable
+
+$$n = \frac{Z_{1-\frac{\alpha}{2}}^2 \cdot p (1-p)}{d^2}$$
+
+## Quantitative variable
+
+$$n = \frac{Z_{1-\frac{\alpha}{2}}^2 \cdot \sigma^2}{d^2}$$
+
+$Z_{1 - \frac{\alpha}{2}}$: Significance value in a standardized normal distribution  
+$d$: Absolute error as determined by the researcher  
+$p$: Estimated proportion  
+$\sigma$: Standard deviation
+
+???
+
+Statistics obtained from literature review or a pilot study
+
+---
+
+class: bg-main3
+
+# Case-control
+
+## Qualitative variable
+
+$$n = \frac{r+1}{r} \frac{(p^*)(1-p^*)(Z_{\beta} + Z_{\frac{\alpha}{2}})^2}{(p_1 - p_2)^2}$$
+
+## Quantitative variable
+
+$$n = \frac{r+1}{r} \frac{\sigma^2(Z_{\beta} + Z_{\frac{\alpha}{2}})^2}{(p_1 - p_2)^2}$$
+
+$r$: Ratio of control to case  
+$p^*$: Average of exposed samples proportion  
+$\sigma$: Standard deviation from previous publication  
+$p_1 - p_2$: Difference in proportion as previously reported  
+$Z_{\beta}$: $\beta$ value in a standardized normal distribution  
+
+???
+
+$\beta$ value depends on power, i.e. 0.84 for 80% of power and 1.28 for 90%
+
+---
+
+class: bg-main3
+
+# Clinical trial / experimental
+
+## Qualitative variable
+
+$$n = \frac{2 P(1-P) \cdot (Z_{\frac{\alpha}{2}} + Z_{\beta})^2}{(p_1-p_2)^2}$$
+
+## Quantitative variable
+
+$$n = \frac{2\sigma^2 \cdot (Z_{\frac{\alpha}{2}} + Z_{\beta})^2}{d^2}$$
+
+$\sigma$: Standard deviation from previous publication  
+$P$: Pooled prevalence from both groups  
+$p_1 - p_2$: Difference in proportion as previously reported  
+
+---
+
+template: overview
+count: false
+
+.column.bg-main2[.vmiddle.content[
+- More on p-value
+- Type of statistical error
+- Power analysis as a measure of $\alpha$ and $\beta$
+- Equation in calculating sample size
+- .amber[Random sampling]
+]]
+
+---
+
+class: bg-main3
+
+# Random sampling
+
+## Non-Probability
+
+.font2[
+- Convenience
+- Quota
+]
+
+--
+
+## Probability
+
+.font2[
+- Simple
+- Systematic
+- Stratified
+]
+
+---
+
+class: bg-main3
+
+# Non-Probability random sampling
+
+## Convenience
+
+- Based on availability
+- Representativeness is unknown
+- Useful in preliminary study
+
+--
+
+## Quota
+
+- As in convenient sampling
+- We set the desired proportion of our sample
+- Proportion based on specific criteria, e.g. age, sex, etc.
+
+---
+
+class: bg-main3
+
+# Probability random sampling
+
+## Simple
+
+- Random sample from a list of all subjects in a population
+- Each subject has an equal chance to participate
+- Useful in a small population
+
+--
+
+## Systematic
+
+- Subject selection not entirely random
+- As in random sampling, requires an enumeration of all subjects
+- Systematically select the subject based on a certain criteria, e.g. every $n_{th}$ subject
+
+--
+
+## Stratified / cluster
+
+- Split subjects into stratified / clustered groups
+- Do random sampling from each group
+- Stratified $\to$ preserves ordinality, i.e. the order is important
+
+---
+
+class: bg-main2 middle center
+
+.amber.font5[Query?]

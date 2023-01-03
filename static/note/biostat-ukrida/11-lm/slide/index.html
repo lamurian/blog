@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Linear Model</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[.amber[Linear] Model]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- .amber[Concept]
+- Comparison with one-way ANOVA
+- Residual analysis
+- Multiple regression
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Concept
+
+.font2[
+`\begin{align}
+\hat{y}_i &amp;= \beta_0 + \beta_1 x_i \\
+y_i &amp;= \hat{y} + \epsilon_i
+\end{align}`
+]
+
+---
+
+???
+
+- `\(\hat{y}\)`: The estimated value of `\(y\)`
+- `\(y\)`: The actual dependent variables
+- `\(\beta_0\)`: The intercept of your model
+- `\(\beta_1\)`: The slope of your model (which `\(x\)` depends upon)
+
+---
+
+count: false
+
+.font2[
+- An extension of .amber[correlation] analysis
+- Explains the .amber[linearity] between `\(x\)` and `\(y\)`
+- Constructs both .amber[explanatory] and .amber[predictive] models
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+str(iris)
+```
+
+```
+## 'data.frame':	150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+---
+
+count: false
+
+
+```r
+subset(iris, select=-Species) %&gt;% cor()
+```
+
+```
+##              Sepal.Length Sepal.Width Petal.Length Petal.Width
+## Sepal.Length         1.00       -0.12         0.87        0.82
+## Sepal.Width         -0.12        1.00        -0.43       -0.37
+## Petal.Length         0.87       -0.43         1.00        0.96
+## Petal.Width          0.82       -0.37         0.96        1.00
+```
+
+???
+
+- There be a seemingly good correlation between Sepal Length and Petal Length
+- We will use that as our DV and IV, respectively
+- Let's try to conduct correlation analysis
+
+---
+
+count: false
+
+
+```r
+with(iris, cor.test(Sepal.Length, Petal.Length))
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  Sepal.Length and Petal.Length
+## t = 22, df = 148, p-value &lt;2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.83 0.91
+## sample estimates:
+##  cor 
+## 0.87
+```
+
+---
+
+count: false
+
+
+```r
+mod1 &lt;- lm(Sepal.Length ~ Petal.Length, data=iris) %T&gt;% {print(summary(.))}
+```
+
+```
+## 
+## Call:
+## lm(formula = Sepal.Length ~ Petal.Length, data = iris)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.2468 -0.2966 -0.0152  0.2768  1.0027 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    4.3066     0.0784    54.9   &lt;2e-16 ***
+## Petal.Length   0.4089     0.0189    21.6   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.41 on 148 degrees of freedom
+## Multiple R-squared:  0.76,	Adjusted R-squared:  0.758 
+## F-statistic:  469 on 1 and 148 DF,  p-value: &lt;2e-16
+```
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.mod1-1.png" width="90%" /&gt;
+
+???
+
+- `\(\beta_0\)` is 4.3
+- `\(\beta_1\)` is 0.41
+
+---
+
+layout: false
+class: bg-main3
+
+# What are the `\(\beta\)` ?
+
+.font2[
+- `\(\beta\)` explains which line best fit the data
+- Changes in `\(x\)` is scaled upon `\(\beta\)`
+]
+
+???
+
+- `\(\beta\)` defines how `\(x\)` influences the model
+- `\(\beta\)` predicts how the `\(\hat{y}\)` and `\(y\)` comes out
+
+--
+
+# How do we calculate `\(\beta\)` ?
+
+.font2[
+- Ordinary Least Square
+- Maximum Likelihood Estimation
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Aims of calculating `\(\beta\)`
+
+.font2[
+- Find the .amber[best line] to fit the data
+- Get a model with the .amber[least bias] `\(\epsilon\)`
+- .amber[Generalize] the model to adapt unforeseen data
+- Clue: the best fitted line will pass through the centroid
+]
+
+???
+
+- The centroid is a coordinate of expected values from both `\(x\)` and `\(y\)`
+- The expected value is simply the sample mean
+- So the centroid of `\(C\)` is a pair of `\((\bar{x}, \bar{y})\)`
+
+---
+
+layout: true
+class: bg-main3
+
+# Ordinary Least Square
+
+---
+
+.font2[
+`\begin{align}
+\epsilon &amp;= \displaystyle \sum_{i=1}^n (y_i - \hat{y}_i)2 \\
+&amp;= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2
+\end{align}`
+]
+
+--
+
+.font2[
+- Both `\(x\)` and `\(y\)` are constants relative to the index `\(i\)`
+- `\(\epsilon\)` only depends on `\(\beta_0\)` and `\(\beta_1\)`
+- We aim to minimize the bias `\(\epsilon \to\)` How?
+]
+
+--
+
+.font2[
+.amber[Hint:] Partial derivatives
+]
+
+---
+
+count: false
+
+.font2[
+`\begin{align}
+\epsilon &amp;= \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2 \\
+\frac{\partial \epsilon}{\partial \beta_0} &amp;= \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) \\
+\frac{\partial \epsilon}{\partial \beta_1} &amp;= \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i))
+\end{align}`
+]
+
+???
+
+- Concept recall: derivatives
+- Partial derivatives is similar, with the only difference it follows a partial
+  assignment
+- It regards the other variables as being a constant
+
+---
+
+## Solving `\(\beta_0\)`
+
+`\begin{align}
+\frac{\partial \epsilon}{\partial \beta_0} = \displaystyle \sum_{i=1}^n -2 (y_i - (\beta_0 + \beta_1 x_i)) &amp;= 0\\
+-2 \bigg( \displaystyle \sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \sum_{i=1}^n \beta_1 x_i \bigg) &amp;= 0 \\
+\displaystyle \sum_{i=1}^n y_i - n \beta_0 - \sum_{i=1}^n \beta_1 x_i &amp;= 0 \\
+\beta_0 &amp;= \frac{1}{n} \bigg( \displaystyle \sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i \bigg) \\
+\beta_0 &amp;= \bar{y} - \beta_1 \bar{x}
+\end{align}`
+
+---
+
+## Solving `\(\beta_1\)`
+
+`\begin{align}
+\frac{\partial \epsilon}{\partial \beta_1} = \displaystyle \sum_{i=1}^n -2 x_i (y_i - (\beta_0 + \beta_1 x_i)) &amp;= 0 \\
+-2 \bigg( \displaystyle \sum_{i=1}^n x_i (y_i - (\bar{y} - \beta_1 \bar{x} + \beta_1 x_i)) \bigg) &amp;= 0\\
+\displaystyle \sum_{i=1}^n x_i (y_i - \bar{y}) - \sum_{i=1}^n \beta_1 x_i (x_i - \bar{x}) &amp;= 0 \\
+\beta_1 \displaystyle \sum_{i=1}^n x_i (x_i - \bar{x}) &amp;= \sum_{i=1}^n x_i (y_i - \bar{y}) \\
+\beta_1 &amp;= \displaystyle \sum_{i=1}^n \frac{x_i(y_i - \bar{y})}{x_i(x_i - \bar{x})} \\
+\beta_1 &amp;= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x})(y_i - \bar{y})}{(x_i - \bar{x})(x_i - \bar{x})} \\
+\end{align}`
+
+???
+
+Notice how `\(\beta_1\)` solves into the quotient of covariance and variance?
+
+---
+
+layout: true
+class: bg-main3
+
+# Maximum Likelihood Estimation
+
+---
+
+.font2[
+`\begin{align}
+arg.\ max\ L(\Theta | X) &amp;= \displaystyle \prod_{i=1}^n P(x_i | \Theta)
+\end{align}`
+]
+
+???
+
+- `\(\Theta\)` is the parameter
+- `\(L\)` is a likelihood function
+- `\(P\)` is the probability function
+- Likelihood function aims to find population parameters given the data
+
+---
+
+count: false
+
+`\begin{align}
+L(\Theta | X) &amp;= \displaystyle \prod_{i=1}^n P(x_i | \Theta) \tag{Normal P.D.F}\\
+L(\mu, \sigma | X) &amp;= \displaystyle \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} \cdot e^{- \frac{(x-\mu)^2}{2 \sigma^2}} \\
+L(\mu, \sigma | X) &amp;= \bigg(\frac{1}{\sqrt{2 \pi \sigma^2}}\bigg)^n \displaystyle \prod_{i=1}^n \cdot e^{- \frac{(x-\mu)^2}{2 \sigma^2}} \\
+\ell(\mu, \sigma | X) &amp;= -\frac{n}{2}\ ln(2 \pi \sigma^2) - \displaystyle \sum_{i=1}^n \frac{(x-\mu)^2}{2 \sigma^2} \tag{log-likelihood} \\
+\ell(\beta_0, \beta_1, \sigma | Y) &amp;= -\frac{n}{2}\ ln(2 \pi \sigma^2) - \frac{1}{2 \sigma^2} \displaystyle \sum_{i=1}^n (y_i - (\beta_0 + \beta_1 x_i))^2
+\end{align}`
+
+???
+
+- Assuming the data follows the normal distribution
+- `\(\ell = ln\ L(\Theta | X)\)`
+
+--
+
+.font2[
+Next, you just need to perform a partial derivative to find the `\(arg.\ max\)`
+]
+
+---
+
+count: false
+
+## Sprinkle some calculus magic and... .amber[voila!]
+
+???
+
+- Use partial derivatives as previously explained
+
+--
+
+.font2[
+`\begin{align}
+\beta_0 &amp;= \bar{y} - \beta_1 \bar{x} \\
+\beta_1 &amp;= \displaystyle \sum_{i=1}^n \frac{(x_i - \bar{x}) (y_i - \bar{y})}{(x_i - \bar{x})^2} \\
+\sigma^2 &amp;= \frac{1}{n} \displaystyle \sum_{i=1}^n (y_i - (\beta_0 - \beta_1 x_i))^2
+\end{align}`
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# `\(\beta_0\)` and `\(\beta_1\)` solutions
+
+.font2[
+`\begin{align}
+\beta_0 &amp;= \bar{y} - \beta_1 \bar{x} \\
+\beta_1 &amp;= \frac{s_{x, y}}{s_{x, x}}
+\end{align}`
+]
+
+???
+
+- Any method yields the same results
+- Covariance is also called a sum of product
+- Variance is a sum of square
+
+--
+
+.font2[
+.amber[Concept recall:] Covariance matrix
+]
+
+--
+
+.font2[
+We can also perform OLS and MLE using matrices operations
+]
+
+--
+
+.font2[
+But I'll leave the venture to your own volition ;)
+]
+
+???
+
+- Matrix operations make complicated operations simpler to solve
+- It is essential when we have a multiple regression
+- That is, a regression with multiple IVs
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- .amber[Comparison with one-way ANOVA]
+- Residual analysis
+- Multiple regression
+]]
+
+---
+
+class: bg-main3
+
+# Comparison with one-way ANOVA
+
+.font2[
+- Mathematically, we do not solve categorical variables in statistics
+- We dummy code the categories into numeric values (e.g.: Male=1, Female=2)
+- Hence, we can view mean difference as a linear model!
+- That makes both `lm` and `aov` as an interchangeable construct
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+mod2 &lt;- lm(Sepal.Length ~ Species, data=iris) %T&gt;% {print(summary(.))}
+```
+
+```
+## 
+## Call:
+## lm(formula = Sepal.Length ~ Species, data = iris)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -1.688 -0.329 -0.006  0.312  1.312 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         5.0060     0.0728   68.76  &lt; 2e-16 ***
+## Speciesversicolor   0.9300     0.1030    9.03  8.8e-16 ***
+## Speciesvirginica    1.5820     0.1030   15.37  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.52 on 147 degrees of freedom
+## Multiple R-squared:  0.619,	Adjusted R-squared:  0.614 
+## F-statistic:  119 on 2 and 147 DF,  p-value: &lt;2e-16
+```
+
+---
+
+count: false
+
+
+```r
+mod3 &lt;- aov(Sepal.Length ~ Species, data=iris) %T&gt;% {print(anova(.))}
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Sepal.Length
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## Species     2   63.2   31.61     119 &lt;2e-16 ***
+## Residuals 147   39.0    0.27                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+count: false
+
+.font2[
+- Wait, didn't I mention they should be similar?
+- Why do we observe different result? :(
+]
+
+???
+
+- By default, `lm` uses a t-statistics
+- While `aov` follows a f-statistics
+- If we put `lm` model into `anova`, we will see the same output
+- Meaning that, we need to perform a sum of square test on our `lm` model
+
+---
+
+count: false
+
+
+```r
+anova(mod2) # Sum of Square test on the `lm` model
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Sepal.Length
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## Species     2   63.2   31.61     119 &lt;2e-16 ***
+## Residuals 147   39.0    0.27                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+```r
+anova(mod2, mod3) # Partial F-Test
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: Sepal.Length ~ Species
+## Model 2: Sepal.Length ~ Species
+##   Res.Df RSS Df Sum of Sq F Pr(&gt;F)
+## 1    147  39                      
+## 2    147  39  0         0
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Partial F-Test
+
+.font2[
+- .amber[Sum of square] method is applicable to linear models
+- Using partial F-Test, we can .amber[compare] multiple models at once
+- By doing so, we can compare the `\(RSS\)`, as reflected by the `\(F\)` value
+- We can affirm .amber[true differences] by denoting statistical significance
+- We will revisit this concept when discussing .amber[multiple regression] models
+]
+
+---
+
+class: bg-main3
+
+# ANCOVA
+
+.font2[
+- We can control for covariate in ANOVA
+- By doing so, we do not conduct an analysis of .amber[variance]
+- Instead, we will do an analysis of .amber[covariance]
+]
+
+---
+
+class: bg-main3
+
+# Why ANCOVA?
+
+.font2[
+- This way, we have a more flexible model
+- Using ANCOVA, we can do a multivariate analysis
+- MANOVA `\(\to\)` MANCOVA
+- Results in ANCOVA is similar to linear model with categorical variables
+]
+
+???
+
+In multivariate analysis, we have multiple DVs
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- Comparison with one-way ANOVA
+- .amber[Residual analysis]
+- Multiple regression
+]]
+
+---
+
+class: bg-main3
+
+# Residual analysis
+
+.font2[
+- In making a linear model, we have assumptions to fulfill
+- These assumptions revolve in the error term `\(\epsilon\)`
+- We also regard `\(\epsilon\)` as a residual (thus the name!)
+]
+
+--
+
+## What do we look for?
+
+.font2[
+- Normality of the residual
+- Homogeneity of residual variances
+]
+
+---
+
+class: bg-main3
+
+# Normality of the residual
+
+.font2[
+- Remember how we use the normal P.D.F during MLE?
+- We assume that the residual of our model as asymptotically normal
+- It means that, our model does not posses a bias in determining the linearity
+- Test to consider: Shapiro-Wilk, Kolmogorov-Smirnov, Anderson-Darling, etc...
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Homogeneity of residual variances
+
+.font2[
+- Our residual `\(\epsilon\)` varies across different `\(y\)`
+- The error term `\(\epsilon\)` is a joint distribution
+- We only get one sample of such a distribution for every instance
+- Test to consider: Breusch-Pagan, Harrison-McCabe
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+mod1 &lt;- lm(Sepal.Length ~ Petal.Length, data=iris) %T&gt;% {print(summary(.))}
+```
+
+```
+## 
+## Call:
+## lm(formula = Sepal.Length ~ Petal.Length, data = iris)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.2468 -0.2966 -0.0152  0.2768  1.0027 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    4.3066     0.0784    54.9   &lt;2e-16 ***
+## Petal.Length   0.4089     0.0189    21.6   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.41 on 148 degrees of freedom
+## Multiple R-squared:  0.76,	Adjusted R-squared:  0.758 
+## F-statistic:  469 on 1 and 148 DF,  p-value: &lt;2e-16
+```
+
+---
+
+count: false
+
+
+```r
+residuals(mod1) %&gt;% shapiro.test()
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  .
+## W = 1, p-value = 0.7
+```
+
+---
+
+count: false
+
+
+```r
+lmtest::bptest(mod1) # Breusch-Pagan test
+```
+
+```
+## 
+## 	studentized Breusch-Pagan test
+## 
+## data:  mod1
+## BP = 3, df = 1, p-value = 0.1
+```
+
+```r
+lmtest::hmctest(mod1) # Harrison-McCabe test
+```
+
+```
+## 
+## 	Harrison-McCabe test
+## 
+## data:  mod1
+## HMC = 0.4, p-value = 0.1
+```
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.resid-1.png" width="90%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.column.bg-main1[.vmiddle.content[
+- Concept
+- Comparison with one-way ANOVA
+- Residual analysis
+- .amber[Multiple regression]
+]]
+
+---
+
+class: bg-main3
+
+# Multiple regression
+
+.font2[
+- Analogous to factorial ANOVA
+- Use multiple independent variables
+- Only use one dependent variable
+- Regarded as a multivariable analysis
+]
+
+???
+
+- Multivariable analysis: A model with multiple IVs
+- Multivariate analysis: A model with multiple DVs
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+mod4 &lt;- lm(Sepal.Length ~ ., data=iris)
+broom::tidy(mod4) %&gt;% kable() %&gt;% kable_material_dark()
+```
+
+&lt;table class=" lightable-material-dark" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.28 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sepal.Width &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Petal.Length &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.83 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Petal.Width &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.32 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.04 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Speciesversicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.72 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Speciesvirginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+count: false
+
+
+```r
+anova(mod1, mod4)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: Sepal.Length ~ Petal.Length
+## Model 2: Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species
+##   Res.Df  RSS Df Sum of Sq    F Pr(&gt;F)    
+## 1    148 24.5                             
+## 2    144 13.6  4        11 29.1 &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+???
+
+- Partial F-Test to compare multiple models
+- With more IVs, we will have naturally have lower `\(RSS\)`
+
+--
+
+.font2[
+- .amber[Be careful] on spurious correlation!
+- Remember how `Sepal.Length` does not have a strong correlation with `Sepal.Width`?
+]
+
+???
+
+- Spurious correlation happens when using many IVs
+- It results in a model with a good correlation
+- Often times, it indicates an overfit
+- The model will not generalize that well!
+
+---
+
+count: false
+
+
+```r
+mod.empty &lt;- lm(Sepal.Length ~ 1, data=iris) # Model with no IV, only intercept
+mod5 &lt;- step(mod.empty, formula(mod4), direction="both") # Stepwise regression
+```
+
+```
+## Start:  AIC=-56
+## Sepal.Length ~ 1
+## 
+##                Df Sum of Sq   RSS    AIC
+## + Petal.Length  1      77.6  24.5 -267.6
+## + Petal.Width   1      68.4  33.8 -219.5
+## + Species       2      63.2  39.0 -196.2
+## + Sepal.Width   1       1.4 100.8  -55.7
+## &lt;none&gt;                      102.2  -55.6
+## 
+## Step:  AIC=-268
+## Sepal.Length ~ Petal.Length
+## 
+##                Df Sum of Sq   RSS  AIC
+## + Sepal.Width   1       8.2  16.3 -327
+## + Species       2       7.8  16.7 -321
+## + Petal.Width   1       0.6  23.9 -270
+## &lt;none&gt;                       24.5 -268
+## - Petal.Length  1      77.6 102.2  -56
+## 
+## Step:  AIC=-327
+## Sepal.Length ~ Petal.Length + Sepal.Width
+## 
+##                Df Sum of Sq   RSS  AIC
+## + Species       2       2.4  14.0 -346
+## + Petal.Width   1       1.9  14.4 -343
+## &lt;none&gt;                       16.3 -327
+## - Sepal.Width   1       8.2  24.5 -268
+## - Petal.Length  1      84.4 100.8  -56
+## 
+## Step:  AIC=-346
+## Sepal.Length ~ Petal.Length + Sepal.Width + Species
+## 
+##                Df Sum of Sq  RSS  AIC
+## + Petal.Width   1      0.41 13.6 -349
+## &lt;none&gt;                      14.0 -346
+## - Species       2      2.36 16.3 -327
+## - Sepal.Width   1      2.72 16.7 -321
+## - Petal.Length  1     14.04 28.0 -244
+## 
+## Step:  AIC=-349
+## Sepal.Length ~ Petal.Length + Sepal.Width + Species + Petal.Width
+## 
+##                Df Sum of Sq  RSS  AIC
+## &lt;none&gt;                      13.6 -349
+## - Petal.Width   1      0.41 14.0 -346
+## - Species       2      0.89 14.4 -343
+## - Sepal.Width   1      3.13 16.7 -319
+## - Petal.Length  1     13.79 27.3 -245
+```
+
+```r
+broom::tidy(mod5) %&gt;% kable() %&gt;% kable_material_dark()
+```
+
+&lt;table class=" lightable-material-dark" style='font-family: "Source Sans Pro", helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.28 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Petal.Length &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.83 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sepal.Width &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.09 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Speciesversicolor &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.72 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Speciesvirginica &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Petal.Width &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.32 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.04 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+???
+
+Stepwise regression:
+- Forward
+- Backward
+- Both
+
+Criterion to omit a variable:
+- p-value
+- AIC: Default in `R`
+- BIC
+
+---
+
+count: false
+
+
+```r
+residuals(mod5) %&gt;% shapiro.test()
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  .
+## W = 1, p-value = 0.9
+```
+
+---
+
+count: false
+
+
+```r
+lmtest::bptest(mod5)
+```
+
+```
+## 
+## 	studentized Breusch-Pagan test
+## 
+## data:  mod5
+## BP = 7, df = 5, p-value = 0.2
+```
+
+```r
+lmtest::hmctest(mod5)
+```
+
+```
+## 
+## 	Harrison-McCabe test
+## 
+## data:  mod5
+## HMC = 0.4, p-value = 0.1
+```
+
+---
+
+count: false
+
+
+```r
+car::vif(mod5) # Variable inflation factor
+```
+
+```
+##              GVIF Df GVIF^(1/(2*Df))
+## Petal.Length 23.2  1             4.8
+## Sepal.Width   2.2  1             1.5
+## Species      40.0  2             2.5
+## Petal.Width  21.0  1             4.6
+```
+
+???
+
+- To determine the presence of multicollinearity
+- We use 5 as a cut-off
+- Sometimes we can be more lenient and using 10 as our cut-off
+- Interpret the GVIF value
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.mod5.resid-1.png" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+# Problems with multiple regression
+
+.font2[
+- Spurious correlation
+- Need to carefully interpret significance
+- Stepwise regression is not the state of the art
+- Possible methods to choose: ridge and lasso regression
+- Both are a part of regularized linear regression
+]
+
+???
+
+- The way stepwise regression work is not reliable
+- Determining importance through p-value, AIC, or BIC is not the state of the
+  art
+- Regularized linear regression provides a more reliable model
+
+---
+
+count: false
+class: bg-main1 center middle hide-slide-number font5
+
+.amber[Query?]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"countIncrementalSlides": false,
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

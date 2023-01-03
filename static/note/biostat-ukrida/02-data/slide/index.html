@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Type and Distribution</title>
+    <meta charset="utf-8" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: split-70 hide-slide-number bg-main1
+count: false
+
+.column[.vmiddle.right.content[
+.font3[.amber[Data:] Type and Distribution]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: split-30 hide-slide-number bg-main2
+count: false
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.column.bg-main4[.vmiddle.content[
+- .amber[Data type]
+- Probability Density Function
+- Goodness of fit test
+- Test of normality
+- Central Limit Theorem
+]]
+
+---
+
+layout: true
+class: bg-main3 split-two
+
+
+.column.font2[.vmiddle.center.content[
+{{content}}
+]]
+
+.column[.vmiddle.content[
+# Data Type
+  .font2[
+- Categorical
+- Numeric
+  ]
+]]
+
+---
+
+???
+- Numerous conventions in describing data
+- Understanding the nature behind categorical and numeric is more important
+- Examples on established convention:
+  - Nominal, ordinal, interval, ratio
+  - Categorical, discrete, continuous
+
+---
+
+count: false
+
+&lt;img src="https://www.incimages.com/uploaded_files/image/970x450/male-female-sign-1940x900_35330.jpg" width="100%"&gt;
+Nominal
+
+???
+Other examples:
+- Types of car
+- Brands
+- Netflix shows
+
+---
+
+count: false
+
+&lt;img src="https://static.vecteezy.com/system/resources/previews/000/680/216/original/spicy-level-of-red-hot-pepper.jpg" width="100%"&gt;
+Ordinal
+
+???
+Other examples:
+- Disease severity
+- Qualitative measure: bad `\(\to\)` good
+
+---
+
+count: false
+
+&lt;img src="https://nypost.com/wp-content/uploads/sites/2/2018/03/180315-water-bottles-feature-image.jpg?quality=90&amp;strip=all&amp;w=1200" width="100%"&gt;
+Discrete (clue: countable)
+
+---
+
+count: false
+
+&lt;img src="https://livelaughloveandlose.files.wordpress.com/2016/05/weighing-scales.jpg" width="90%"&gt;
+Continuous (clue: measurable)
+
+???
+Continuous:
+- Interval
+- Ratio
+
+---
+
+layout: false
+class: bg-main3 split-30
+
+.row.bg-main2[.vmiddle.content[
+# Continuous Data
+]]
+
+.row[.split-two.content[
+  .column[.font2.content[
+## Interval
+
+- Has a fixed distance
+- Arithmetic: addition and subtraction
+- Examples:
+  - Likert scale
+  - Temperature in other scales
+  ]]
+
+  .column[.font2.content[
+## Ratio
+
+- Has an absolute zero
+- Infinitesimal measure
+- All arithmetic rules are applicable
+- Examples:
+  - Temperature in Kelvin
+  - Weight
+  ]]
+
+]]
+
+---
+
+class: bg-main3
+
+# How about Likert-type item?
+
+.font2[
+- Usually uses a distinctive scale out of 4, 5, 7 and 10 units
+- Some regards Likert-type question as discrete counts
+- While for others, a continuous interval
+- Context-dependant
+]
+
+--
+
+&lt;img src="https://greatbrook.com/wp-content/uploads/2019/01/VAS-Ideograph.png" width="90%"&gt;
+
+---
+
+class: bg-main5 hide-slide-number font2
+count: false
+
+# Checkpoint! What type of .amber[data] do we have?
+
+--
+1. We were conducting a survey in .amber[three universities].
+
+--
+1. From each university, we sampled the .amber[first, second, penultimate and final] year students in a four-year programme. 
+
+--
+1. We nicely asked them to indicate their .amber[level of burnout] using a Likert-type self-report inventory.
+
+--
+1. We also kindly measured their .amber[blood cortisol] level.
+
+---
+
+template: overview
+count: false
+
+.column.bg-main4[.vmiddle.content[
+- Data type
+- .amber[Probability Density Function]
+- Goodness of fit test
+- Test of normality
+- Central Limit Theorem
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Probability
+
+- An .amber[event] `\(E\)` occurring within a particular .red[sample space] `\(S\)`
+- .amber[Event]: Expected results
+- .red[Sample space]: All possible outcomes
+- Probability `\(P\)` is a proportion of event divided by its sample space
+- Or mathematically:
+
+`$$P(E=e) = \frac{E}{S}$$`
+
+---
+
+- Suppose we have a fair coin and doing a flip 10 times, where `H` indicates the
+  head and `T` indicates the tail
+
+--
+- Then, our sample space:
+
+
+```r
+set.seed(1)
+*S &lt;- sample(c("H", "T"), 10, replace=TRUE, prob=rep(1/2, 2)) %T&gt;% print()
+```
+
+```
+##  [1] "T" "T" "H" "H" "T" "H" "H" "H" "H" "T"
+```
+
+---
+
+count: false
+- Let the head be our expected outcome
+
+--
+- Then, our event:
+
+
+```r
+*E &lt;- S[which(S == "H")] %T&gt;% print()
+```
+
+```
+## [1] "H" "H" "H" "H" "H" "H"
+```
+
+---
+
+count: false
+
+- Thus, we can regard the probability of having a desired outcome as a
+  .amber[relative frequency] of events in a given sample space
+
+--
+- As such:
+
+
+```r
+length(E) / length(S)
+```
+
+```
+## [1] 0.6
+```
+
+--
+- Ten flips using a fair coin resulted in 60% chance of having heads
+
+
+```
+##  [1] "T" "T" "H" "H" "T" "H" "H" "H" "H" "T"
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Determine the Probability
+
+.font2[
+- Enumeration
+- Tree diagram
+- Resampling
+]
+
+---
+
+???
+
+- So far, we have learnt about enumeration
+- In such a method, we determine a probability as a relative frequency measure
+
+--
+## Caveats in enumeration
+
+- Higher sample space `\(\to\)` harder to solve
+- It is more apparent with sequential problem
+- Sequential problem: when you need to calculate probability from two different instances
+- Example: the probability of having three `4` while rolling a dice three times
+
+--
+
+.font2[.amber[Tree diagram] is available to solve a more complex probability problem]
+
+---
+
+count: false
+
+## Sample case `\(\to\)` .amber[the urn problem]
+
+- We have an urn filled with .cyan[30 blue] and .red[50 red] balls
+- All balls are identical except for color
+- In the urn, all balls have an equal distribution
+- .amber[**Task:**] Take three balls .amber[without] replacement
+- .amber[Question:] How high is the chance of getting three blue balls?
+
+---
+
+count: false
+
+
+```r
+    B (30/80)
+   /
+  /
+80
+  \
+   \          
+    R (50/80)
+```
+
+---
+
+count: false
+
+
+```r
+               B (29/79)
+             /
+    B (30/80)
+   /	     \
+  /            R (50/79)
+80
+  \
+   \          
+    R (50/80)
+```
+
+---
+
+count: false
+
+
+```r
+                        / B (28/78)
+               B (29/79)
+             /          \ R (50/78)
+    B (30/80)
+   /	     \
+  /            R (50/79)
+80
+  \
+   \          
+    R (50/80)
+```
+
+--
+
+The chance for having .cyan[three blue balls] is 0.0494 
+
+---
+
+count: false
+
+
+```r
+                        / B (28/78)
+               B (29/79)
+             /          \ R (50/78)
+    B (30/80)
+   /	     \          / B (?)
+  /            R (50/79)
+80                      \ R (?)
+  \
+   \          
+    R (50/80)
+```
+
+We have learnt how to draw a tree diagram. Now, what should we fill the question mark with?
+
+---
+
+count: false
+
+
+```r
+                        / B (28/78)
+               B (29/79)
+             /          \ R (50/78)
+    B (30/80)
+   /	     \          / B (29/78)
+  /            R (50/79)
+80                      \ R (49/78)
+  \
+   \          
+    R (50/80)
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Let's roll the dice :)
+
+---
+
+.font2[
+- To learn resampling method, we will conduct a short experiment
+- This experiment relies on a simple function
+- Said function will simulate an independent dice-roll
+- The only parameter is `n`, indicating the number of roll 
+]
+
+
+```r
+dice &lt;- function(n) {
+	sample(1:6, n, replace=TRUE, prob=rep(1/6, 6))
+}
+```
+
+--
+.font2[Let's see whether our function work...]
+
+--
+
+```r
+dice(1)
+```
+
+```
+## [1] 3
+```
+
+.font2[It does!]
+
+---
+
+count: false
+
+- So we shall roll the dice 10 times
+- Let .amber[4] be our outcome of interest
+- How high is the probability of having the event within 10 trials?
+
+--
+
+
+```r
+set.seed(1)
+*roll &lt;- dice(10) %T&gt;% print()
+```
+
+```
+##  [1] 3 4 5 1 3 1 1 5 5 2
+```
+
+- How high is the probability of getting 4?
+
+--
+- Turns out, it is .amber[1/10]
+
+--
+- We have a fair dice, why is the probability not .amber[1/6]?
+
+--
+- .lime[**Hint:**] sample and population
+
+--
+- The .amber[more sample] we got, the closer it is to .amber[represent the population]
+
+---
+
+count: false
+
+- What will we get with different number of rolls?
+
+--
+- 100 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(100)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.25
+```
+
+--
+- 1,000 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(1000)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.2
+```
+
+--
+- 10,000 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(10000)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.1724
+```
+
+---
+
+count: false
+
+- 100,000 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(100000)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.1661
+```
+
+--
+- 1,000,000 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(1000000)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.1664
+```
+
+--
+- 10,000,000 rolls:
+
+
+```r
+set.seed(1); roll &lt;- dice(10000000)
+sum(roll==4) / length(roll)
+```
+
+```
+## [1] 0.1666
+```
+
+---
+
+count: false
+
+.font2[
+- With more trials, we get closer to the expected probability in a fair dice
+- Which is .amber[1/6], or equivalently .amber[0.1667]
+- The .red[error] of estimated probability is .red[inversely proportional] to the number of trial
+]
+
+--
+.font2[
+Or mathematically:
+
+`$$\epsilon = \sqrt{\frac{\hat{p} (1-\hat{p})}{N}},\ where:$$`
+
+`\(\epsilon\)`: Error  
+`\(\hat{p}\)`: Estimated probability (current trial)  
+`\(N\)`: Number of resampling
+]
+
+---
+
+count: false
+
+How high is the error in our trials?
+
+--
+
+- First we need to set the function to calculate error
+
+
+```r
+epsilon &lt;- function(p.hat, n) {
+	sqrt({p.hat * (1-p.hat)}/n)
+}
+```
+
+--
+
+- Get the roll and probability
+
+
+```r
+roll &lt;- c(10, 100, 1000, 10000, 100000, 1000000, 10000000)
+prob &lt;- sapply(roll, function(n) {
+	set.seed(1); roll &lt;- dice(n)
+	sum(roll==4) / length(roll)
+})
+```
+
+---
+
+count: false
+
+
+```r
+df &lt;- data.frame(list("roll"=roll, "prob"=prob))
+df %&gt;% knitr::kable() %&gt;% kable_styling()
+```
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; roll &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; prob &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+01 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+04 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1724 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+05 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1661 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+06 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1664 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1e+07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1666 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+
+```r
+df$error &lt;- mapply(function(p.hat, n) {
+	epsilon(p.hat, n)
+}, p.hat=df$prob, n=df$roll) %T&gt;% print()
+```
+
+```
+## [1] 0.0948683 0.0433013 0.0126491 0.0037773 0.0011769 0.0003724 0.0001178
+```
+
+---
+
+count: false
+
+Here is a nice figure to summarize the concept:
+
+&lt;img src="index_files/figure-html/plt.trial-1.png" width="90%" /&gt;
+
+---
+
+count: false
+
+And another figure to see the error:
+
+&lt;img src="index_files/figure-html/plt.error-1.png" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+# Homework
+
+.font2[
+- Previously, we used tree diagram to determine the probability in the urn problem
+- Solve .amber[the urn problem] using resampling method
+- .amber[**Question:**] What is the probability of getting three .red[red balls]?
+]
+
+--
+
+.font2[
+Task description:
+- Do a trial of `\(\{100, 200, 500, 1000, 2000, 5000\}\)`
+- Set `1` as the seed for each resampling
+- Plot the probability and error
+- Briefly explain your results
+- You may use any programming language you are familiar with
+- You just need to present the plot and explanation
+]
+
+---
+
+class: bg-main3
+
+# Random Variables
+
+.font2[
+Independent vs Identical? `\(\to\)` I.I.D
+]
+
+--
+
+- All sampled random variables should be .amber[independent] from one another
+- Each sampling procedure have to be .amber[identical], as to produce similar probability
+
+--
+
+.font2[Considering I.I.D, can we do a better probability estimation?]
+
+--
+
+- If they are I.I.D, we can approximate the probability using:
+  - Probability .amber[Mass] Function (.amber[discrete] variable)
+  - Probability .amber[Density] Function (.amber[continuous] variable)
+
+--
+
+.font2[In math, please?]
+
+`\begin{align}
+P(E=e) &amp;= f(e) &gt; 0: E \in S \tag{1} \\
+\displaystyle \sum_{e \in S} f(e) &amp;= 1 \tag{2} \\
+P(E \in A) &amp;= \displaystyle \sum_{e \in A} f(e) \tag{3}: A \subset S
+\end{align}`
+
+???
+
+- The function is arbitrary, it can take on any form
+- There are myriad distributions
+- We will look at specific examples
+
+---
+
+layout: true
+class: bg-main3
+
+# Binomial Distribution
+
+.font2[
+- Have an identical iteration over `\(n\)` times of trial
+- Each iteration corresponds to a .amber[Bernoulli trial]
+- All instances are independent
+]
+
+---
+
+count: true
+
+--
+
+`\begin{align}
+f(x) &amp;= \binom{n}{x} p^x (1-p)^{n-x} \tag{1} \\
+\binom{n}{x} &amp;= \frac{n!}{x! (n-x)!}
+\end{align}`
+
+Or simply denoted as: `\(X \sim B(n, p)\)`
+
+--
+
+`\begin{align}
+\mu &amp;= n \cdot p \\
+\sigma &amp;= \sqrt{\mu \cdot (1-p)}
+\end{align}`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.binom.n-1.png" width="90%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.binom.p-1.png" width="90%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Geometric Distribution
+
+.font2[
+- Describes .amber[number of failures] before getting an event
+- Follows .amber[Bernoulli trial]
+- A derivation of binomial distribution, with `\(x=1\)`
+]
+
+---
+
+count: true
+
+--
+
+`$$f(n) = P(X=n) = p (1-p)^{n-1}, with:$$`
+
+`\(n\)`: Number of trials to get an event  
+`\(p\)`: The probability of getting an event  
+Or simply denoted as `\(X \sim G(p)\)`
+
+--
+
+`\begin{align}
+\mu &amp;= \frac{1}{p} \\
+\sigma &amp;= \sqrt{\frac{1-p}{p^2}}
+\end{align}`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.geom-1.png" width="90%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Poisson Distribution
+
+.font2[
+- Suppose we know the rate of certain outcomes
+- Poisson distribution defines the probability of an outcome happening `\(x\)` times
+- Limited to a particular time frame (often described as observation period)
+]
+
+---
+
+count: true
+
+--
+
+`$$f(x) = \frac{e^{-\lambda}\lambda^x}{x!},\ with:$$`
+
+`\(x\)`: The number of expected events  
+`\(e\)`: Euler's number  
+`\(\lambda\)`: Average number of events in one time frame
+
+Or simply denoted as `\(X \sim P(\lambda)\)`
+
+`\begin{align}
+\mu &amp;= \lambda \\
+\sigma &amp;= \sqrt{\lambda}
+\end{align}`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.pois-1.png" width="90%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Uniform Distribution
+
+.font2[
+- A continuous function describing .amber[uniform] probabilities
+- Hence the name: uniform distribution
+- Useful in random number generator `\(\to\)` for randomization in clinical trials
+]
+
+???
+
+- We finished the first part of distribution: discrete
+- Now, we shall see continuous distributions and their properties
+
+---
+
+count: true
+
+--
+
+`$$f(x) = \frac{1}{b-a}$$`
+
+Or simply denoted as `\(X \sim U(a,b)\)`
+
+--
+
+`\begin{align}
+\mu &amp;= \frac{b+a}{2} \\
+\sigma &amp;= \frac{(b-a)^2}{12}
+\end{align}`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.unif-1.png" width="90%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Exponential Distribution
+
+.font2[
+- A reparameterization of Poisson distribution
+- We are interested to see how long of a .amber[time frame needed] to observe an event
+]
+
+---
+
+count: true
+
+???
+
+- Time frame is intangible
+- It is not always **time**, it could be other continuous measures
+- Examples: Mileage, weight, volume, etc.
+
+--
+
+`$$f(x) = \lambda e^{-x \lambda}, with:$$`
+
+`\(x\)`: Time needed to observe an event  
+`\(\lambda\)`: The rate for a certain event
+
+Or simply denoted as `\(X \sim Exponential(\lambda)\)`
+
+`$$\mu = \sigma = \frac{1}{\lambda}$$`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.exp-1.png" width="100%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Gamma Distribution
+
+- Exponential distribution is a gamma distribution without a .amber[shape] parameter
+- Essentially, gamma distribution finds its uses in similar cases as exponential distribution
+- Relies on the gamma function `\(\Gamma(\alpha)\)`
+
+---
+
+count: true
+
+--
+
+`\begin{align}
+f(x) &amp;= \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-x \beta} \\
+\Gamma(\alpha) &amp;= \displaystyle \int_0^\infty y^{\alpha -1} e^{-y}\ dy,\ with:
+\end{align}`
+
+`\(\beta\)`: Rate ( `\(\lambda\)` in exponential PDF)  
+`\(\alpha\)`: Shape  
+`\(\Gamma\)`: Gamma function  
+`\(e\)`: Euler number
+
+Or simply denoted as `\(X \sim \Gamma(\alpha, \beta)\)`
+
+--
+
+If we were to assign the shape parameter `\(\alpha=1\)`, we get an exponential PDF.
+
+--
+.amber[Therefore,] `\(Exponential(\lambda) \sim \Gamma(1, \lambda)\)`.
+
+--
+
+`\begin{align}
+\mu &amp;= \frac{\alpha}{\beta} \\
+\sigma &amp;= \frac{\sqrt{\alpha}}{\beta}
+\end{align}`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.gamma-1.png" width="100%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# `\(\chi^2\)` Distribution.amber[s]
+
+.font2[
+- .amber[Special cases] of a Gamma distribution
+- Widely used in statistical .amber[inferences]
+]
+
+---
+
+count: true
+
+--
+
+`$$f(x) = \frac{1}{\Gamma (k/2) 2^{k/2}} x^{k/2 - 1} e^{-x/2},\ with:$$`
+
+`\(k\)`: Degree of freedom  
+The rest are Gamma PDF derivations
+
+Or simply denoted as `\(X \sim \chi^2(k)\)`
+
+`\begin{align}
+\mu &amp;= k \\
+\sigma &amp;= \sqrt{2k}
+\end{align}`
+
+--
+
+.font2[Relation to normal distribution?]
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.chisq-1.png" width="100%" /&gt;
+
+---
+
+layout: true
+class: bg-main3
+
+# Normal Distribution
+
+.font2[
+- Ubiquitous in real-world data
+- Symmetric with `\(\mu\)` and `\(\sigma\)` completely describes the distribution
+]
+
+---
+
+count: true
+
+--
+
+`$$f(x) = \frac{1}{\sigma \sqrt{2\pi}}exp \bigg\{ -\frac12 \bigg( \frac{x-\mu}{\sigma} \bigg)^2 \bigg\},\ with:$$`
+
+`\(x \in \mathbb{R}: -\infty &lt; x &lt; \infty\)`  
+`\(\mu \in \mathbb{R}: -\infty &lt; \mu &lt; \infty\)`  
+`\(\sigma \in \mathbb{R}: 0 &lt; \sigma &lt; \infty\)`  
+
+Or simply denoted as `\(X \sim N(\mu, \sigma)\)`
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.norm.mu-1.png" width="100%" /&gt;
+
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.norm.sigma-1.png" width="100%" /&gt;
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.norm-1.png" width="100%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.column.bg-main4[.vmiddle.content[
+- Data type
+- Probability Density Function
+- .amber[Goodness of fit test]
+- Test of normality
+- Central Limit Theorem
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Goodness of Fit Test
+
+.font2[
+- To determine whether your data follow a certain distribution
+- Numerous methods exist, we will dig into more popular ones
+- Given correct parameters, some methods can fully describe your data
+- `\(H_0\)`: Given data follow a certain distribution
+- `\(H_1\)`: Given data does not follow a certain distribution
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Binomial Test
+
+.font2[
+- An adaptation from binomial PMF
+- To determine whether acquired probability followed .amber[Bernoulli] trial's
+]
+
+---
+
+.font2[
+`$$Pr(X=k) = \binom{n}{k}p^k (1-p)^{n-k}$$`
+]
+
+---
+
+count: false
+
+Remember we previously tossed a coin 10 times?
+
+--
+
+
+```r
+set.seed(1)
+*S &lt;- sample(c("H", "T"), 10, replace=TRUE, prob=rep(1/2, 2)) %T&gt;% print()
+```
+
+```
+##  [1] "T" "T" "H" "H" "T" "H" "H" "H" "H" "T"
+```
+
+
+```r
+length(E) / length(S)
+```
+
+```
+## [1] 0.6
+```
+
+--
+
+If it represents a Bernoulli trial, it should satisfy `\(P(X=6)\)` in such a way
+that we cannot reject the `\(H_0\)` when calculating its probability:
+
+`$$P(X=6) = \binom{10}{6}0.5^6(1-0.5)^4$$`
+
+---
+
+count: false
+
+Luckily, we .amber[do not] need to compute it by hand 
+--
+(yet)
+
+
+```r
+binom.test(x=6, n=10, p=0.5)
+```
+
+```
+## 
+## 	Exact binomial test
+## 
+## data:  6 and 10
+## number of successes = 6, number of trials = 10, p-value = 0.8
+## alternative hypothesis: true probability of success is not equal to 0.5
+## 95 percent confidence interval:
+##  0.2624 0.8784
+## sample estimates:
+## probability of success 
+##                    0.6
+```
+
+--
+
+Interpreting the p-value, we cannot reject the `\(H_0\)`, so our coin toss followed
+the Bernoulli trial after all.
+
+---
+
+layout: true
+class: bg-main3
+
+# Kolmogorov-Smirnov Test
+
+.font2[
+- This test is available to determine various distribution
+- Works as a non-parametric test
+- Pretty much robust, only second to .amber[Anderson-Darling] test on normal distribution
+]
+
+???
+
+Robustness based on yielded power
+
+---
+
+count: true
+
+--
+
+Let `\(X \sim Exponential(2): n = 100\)`
+
+
+```r
+set.seed(1); X &lt;- rexp(n=100, rate=2)
+```
+
+--
+
+By imputing `\(\lambda\)` variable, Kolmogorov-Smirnov can compute its goodness of fit
+
+
+```r
+ks.result &lt;- ks.test(X, pexp, rate=2)
+```
+
+---
+
+count: false
+
+
+```r
+print(ks.result)
+```
+
+```
+## 
+## 	One-sample Kolmogorov-Smirnov test
+## 
+## data:  X
+## D = 0.084, p-value = 0.5
+## alternative hypothesis: two-sided
+```
+
+---
+
+layout: true
+class: bg-main3
+
+# Visual Examination
+
+---
+
+.font2[
+- Okay, doing math is cool and all
+- But in a large sample, even a small deviation will result in `\(H_0\)` rejection
+- Which mean, previously mentioned tests are of no use!
+- We can rely on some visual cues to determine the distribution though
+]
+
+--
+
+.font2[
+For this demonstration, I will again use the previous object `\(X\)`
+]
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.gof.hist-1.png" width="90%" /&gt;
+
+--
+
+Hey, that's a good start! 
+--
+This does not clearly suggest a specific distribution though :(
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/plt.gof.qq-1.png" width="90%" /&gt;
+
+--
+
+Quantile-Quantile Plot (QQ Plot) can give a better visual cue :)
+
+---
+
+template: overview
+count: false
+
+.column.bg-main4[.vmiddle.content[
+- Data type
+- Probability Density Function
+- Goodness of fit test
+- .amber[Test of normality]
+- Central Limit Theorem
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Test of Normality
+
+.font2[
+- Practically a subset of goodness of fit test
+- Some are more appropriate under certain circumstances
+- We shall see through widely used ones
+- `\(H_0\)`: Sample follows the normal distribution
+- `\(H_0\)`: Sample does not follow the normal distribution
+]
+
+---
+
+layout: false
+class: bg-main3
+
+# Shapiro-Wilk Test
+
+.font2[
+- A well-established test to assess normality
+- Can tolerate skewness to a certain degree
+- Implementation in `R`: sample size between 3 and 5000
+]
+
+---
+
+class: bg-main3
+
+# Anderson-Darling Test
+
+.font2[
+- Less well-known compared to Shapiro-Wilk
+- Gives more weight to the tails
+- Implementation in `R`: minimum sample size is 7
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Demonstration
+
+Let `\(X \sim N(0, 1): n=100\)`
+
+
+```r
+set.seed(1)
+X &lt;- rnorm(n=100, mean=0, sd=1)
+```
+
+---
+
+--
+
+## Shapiro-Wilk
+
+
+```r
+shapiro.test(X)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  X
+## W = 1, p-value = 1
+```
+
+---
+
+count: false
+
+## Anderson-Darling
+
+
+```r
+nortest::ad.test(X)
+```
+
+```
+## 
+## 	Anderson-Darling normality test
+## 
+## data:  X
+## A = 0.16, p-value = 0.9
+```
+
+---
+
+layout: false
+class: bg-main3
+count: false
+
+# Visual Examination
+
+&lt;img src="index_files/figure-html/nortest.demo4-1.png" width="100%" /&gt;
+
+---
+
+name: chisq-norm
+layout: true
+class: bg-main3
+
+# `\(\chi^2\)` and Normal Distribution
+
+.font2[
+- Raise a normally distributed data to the power of two
+- It shall follow a `\(\chi^2\)` distribution with 1 degree of freedom
+]
+
+---
+
+--
+
+For demonstration purposes, we will re-use `\(X \sim N(0, 1): n=100\)`
+
+
+```r
+set.seed(1)
+X &lt;- rnorm(n=100, mean=0, sd=1)
+```
+
+We previously tested `\(X\)` against Shapiro-Wilk and Anderson-Darling tests to indicate normality.
+
+--
+
+Now, we will raise it to the power of two
+
+
+```r
+X2 &lt;- X^2
+```
+
+---
+
+count: false
+
+Does it still follow a normal distribution?
+
+
+```r
+shapiro.test(X2)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  X2
+## W = 0.7, p-value = 5e-13
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+# Visual Examination
+
+&lt;img src="index_files/figure-html/plt.chisq.demo1-1.png" width="90%" /&gt;
+
+---
+
+template: chisq-norm
+count: false
+
+It does not follow normal distribution at all. 
+--
+Does it follow the `\(\chi^2\)` distribution though?
+
+--
+
+
+```r
+ks.test(X2, pchisq, df=1)
+```
+
+```
+## 
+## 	One-sample Kolmogorov-Smirnov test
+## 
+## data:  X2
+## D = 0.1, p-value = 0.2
+## alternative hypothesis: two-sided
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+# Visual Examination
+
+&lt;img src="index_files/figure-html/plt.chisq.demo2-1.png" width="90%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.column.bg-main4[.vmiddle.content[
+- Data type
+- Probability Density Function
+- Goodness of fit test
+- Test of normality
+- .amber[Central Limit Theorem]
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Central Limit Theorem
+
+.font2[
+`$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty$$`
+]
+
+---
+
+count: true
+
+???
+
+`\(\xrightarrow{d}\)` is a convergence of random variables
+
+--
+
+.font2[
+- So far, we have learnt sampling distributions
+- We are also able to compute the mean and standard deviation based on their parameters
+- It just happened that the sample mean follow a normal distribution
+- .amber[Central limit theorem] delineates such an occurrence
+- This rule applies to both .amber[discrete] and .amber[continuous] distribution
+]
+
+---
+
+count: false
+
+.font2[
+- It comes with a trade though
+- CLT requires `\(n\)` as a sufficiently large number
+- The number of `\(n\)` depends on data skewness
+- More skewed? More `\(n\)` required.
+]
+
+---
+
+count: false
+
+How do we determine `\(n\)`?
+--
+`\(\to\)` Simulation
+
+--
+1. Choose any distribution
+
+--
+1. Generate `\(n\)` random numbers using specified parameters
+
+--
+1. Compute the mean and variance based on previous parameters `\(\to\)` Use it to generate a normal distribution
+
+--
+1. Reuse the parameters to re-iterate step 2
+
+--
+1. Conduct the simulation for an arbitrary number of times (e.g. for convenience, 1000)
+
+--
+1. Calculate mean from all generated data `\(\to\)` Make a histogram and compare it with step 3
+
+--
+1. Does not fit normal distribution? `\(\to\)` Increase `\(n\)`
+
+---
+
+count: false
+
+## Why should you care?
+
+.font2[
+- In a research settings, you may find differing average values
+- It could happen despite following the exact procedure
+- And it is frustrating!
+- Knowing CLT, you can prove the difference is indeed within expectation
+- Besides, the equation above looks cool ;)
+]
+
+---
+
+count: false
+
+## Final Excerpts:
+
+.font2[
+- CLT describes a tendency of a .amber[mean] `\(\bar{x}\)` to follow normal distribution
+- Requires a sufficient .amber[number of sample] `\(n\)`
+- A .amber[simple simulation] can prove the theorem
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

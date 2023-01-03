@@ -1,0 +1,1232 @@
+---
+title: "Mathematics for Machine Learning"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightLines: true
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dpi=300, dev="png", fig.width=10, fig.height=5, output.widht="100%"
+)
+```
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.vmiddle.right.content[
+.font3[.amber[Mathematics] for Machine Learning]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Department of Medical Physics
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 hide-slide-number split-30
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Linear algebra]
+- Calculus
+- Probability and statistics
+]]
+
+---
+
+layout: true
+class: bg-main3
+
+# Linear algebra
+
+.font2[
+- A set of rules to manipulate mathematical .amber[objects]
+- Operates in a defined .amber[spaces]
+- Defines a relationship between multiple variables
+]
+
+---
+
+???
+
+Object in math depends on which branch it is defined upon, in linear algebra:
+- Scalar
+- Vector
+- Matrix
+- Tensor
+
+Spaces:
+- Vector
+- Metric
+- Normed
+- Inner product
+
+---
+
+count: false
+
+## How does it look like?
+
+.font2[
+$$\alpha x + \beta y = c$$
+]
+
+---
+
+count: false
+
+## Geometry and algebra?
+
+.font2[
+- Euclidean space (flat)
+- Non-euclidean space (added curvature)
+]
+
+???
+
+- We often assume flat euclidean space
+- Violation on any of Euclid's postulate results in non-euclidean space
+- Euclidean approximation does not generalize well to non-euclidean space
+
+---
+
+layout: false
+class: bg-main3 split-two
+
+.bg-white.column[.vmiddle.center.content[
+<img src="http://www.pitt.edu/~jdnorton/teaching/HPS_0410/chapters/non_Euclid_Euclid/Euclid/Billingsley's_Elements_1570.jpg" height="100%">
+]]
+
+.column[.vmiddle.content[
+# Euclid's five postulates
+
+.font2[
+- Joining two points $\to$ straight line
+- Straight lines indefinitely extends as is
+- Rotating a straight line $\to$ a circle
+- All right angles are perpendicular
+]
+]]
+
+???
+
+When rotating a straight line on one endpoint, it will form a circle, where the
+length of such a straight line equates to the radius
+
+Where's the fifth one?
+
+---
+
+class: bg-main3
+
+# The fifth postulate
+
+.font2[
+If .amber[two lines] are drawn which .pink[intersect a third] in such a way that the *sum of
+the inner angles* on one side is less than two right angles, then the two lines
+inevitably must .amber[intersect each other] on that side if extended far enough
+]
+
+--
+
+.font2[Also known as the parallel postulate]
+
+--
+
+<img src="https://i.ytimg.com/vi/0v2FvpTkW7I/maxresdefault.jpg" width="50%">
+
+???
+
+- Sounds reasonable
+- But only on a flat surface
+- What if we embed such a surface into curvatures?
+
+---
+
+class: bg-main3
+
+# What do we use Euclidean space for?
+
+.font2[
+- .amber[Modelling] our real world :)
+- Make an .amber[approximation] we can comprehend
+- Estimate a .amber[distance] between two points
+]
+
+--
+
+# Example in machine learning, please
+
+.font2[
+- Hierarchical clustering
+- Principal component analysis
+- And many more to jump on the bandwagon!
+]
+
+---
+
+count: false
+class: bg-main3 middle center
+
+# Hierarchical clustering
+
+<img src="https://www.researchgate.net/profile/Philipp-Heimberger/publication/333966028/figure/fig2/AS:772872800833538@1561278643292/Result-of-the-hierarchical-clustering.png" width="60%">
+
+???
+
+- In hierarchical clustering, first we determine the distance between two data
+  points to determine their closeness
+- Closer distance = higher similarity
+
+---
+
+count: false
+class: center middle bg-main3
+
+# PCA
+
+<img src="https://cdn-images-1.medium.com/max/1600/1*ZFqnPuxa1PtUece-OHBoTA.png" width="70%">
+
+???
+
+- PCA maximizes the spaces in reduced dimension (e.g. from a two dimension to
+  one, it will calculate reduced dimension which variances is the largest)
+
+---
+
+class: bg-main3 middle center
+
+# A violation of Euclid's postulate?
+
+???
+
+- Let $X$ be a curved surface, embedded by a two-dimensional euclidean space
+- None of the straight line will follow Euclid's postulates
+- Hence: non-euclidean space
+
+--
+
+<img src="https://images.squarespace-cdn.com/content/56ee72d9c2ea51bd675641da/1476242359445-8N16VQ6VAQT38XXNLD8Q/?content-type=image%2Fjpeg" width="100%">
+
+--
+
+## Okay, geometry is cool and all
+
+--
+
+## But, what does it have to do with machine learning?
+
+---
+
+class: bg-main3
+
+# Caveats in (some) machine learning models
+
+.font2[
+- We .amber[assume] our data lives in a .pink[flat] mathematical space
+- High .amber[dimensionality] does not play well with Euclid's postulates
+- Some address this limitation by developing a non-euclidean algorithm
+- This course will mostly consider an Euclidean space
+]
+
+???
+
+- Curse of dimensionality: phenomena occurring only in high-dimensional data
+- More dimension $\to$ requires more data
+
+---
+
+class: bg-main3
+
+# Back to linear algebra
+
+.font2[
+- We have seen how algebra relates with geometry
+- We know some limitations we have when performing algebraic operations
+- Now we can safely proceed to understand the role of algebra in machine learning!
+]
+
+--
+
+# .amber[Quick recall:] spaces in linear algebra
+
+.font2[
+- Vector
+- Metric
+- Normed
+- Inner product
+]
+
+---
+
+class: bg-main3
+
+# Vector space
+
+.font2[
+- Governs multiplication and addition
+- Produce objects of the same classes
+- What are classes?
+- Defining a system of linear equations
+]
+
+???
+
+Classes:
+- Geometric vector: what we have learnt during high school
+- Polynomial
+- Signals
+- Tuple: what we mainly concern ourselves with in machine learning
+
+---
+
+class: bg-main3
+
+# System of linear equation
+
+.font2[
+\begin{align}
+Let\ X &= (\mathbf{x_1}, \mathbf{x_2}, ..., \mathbf{x_n}) \\
+A &= (\alpha_1, \alpha_2, ..., \alpha_m) : \forall A, X \in \mathbb{R},\ then \\
+\exists f(x) &= \displaystyle \sum_1^j \sum_1^i \alpha_{ij} \cdot \mathbf{x}_i = \Pi
+\end{align}
+]
+
+???
+
+- Let there be a sequence of vector **X** and scalar $A$, there exists a
+  function defining the sum of product between **x** and $\alpha$
+
+---
+
+class: bg-main3
+
+# Example, please?
+
+.font2[
+\begin{align}
+4x_1 + 4x_2 &= 5 \\
+2x_1 - 4x_2 &= 1 \tag{+} \\
+\hline
+6x_1 &= 6 \\
+\end{align}
+]
+
+--
+
+.font2[
+\begin{align}
+\therefore x_1 & = 1 \\
+x_2 & = 0.25
+\end{align}
+]
+
+---
+
+class: bg-main3
+
+# What do we learn?
+
+.font2[
+- System of linear algebra is not complicated
+- It is intuitive to solve
+- At a glance, we can see a .amber[pattern] of their solution
+- But a computer does not rely on intuition
+- How do we teach a computer to solve them?
+]
+
+--
+
+## Solution: use .amber[matrices]
+
+---
+
+class: bg-main3
+
+# Re-formulate our solution as a matrix
+
+.font2[
+\begin{align}
+\begin{bmatrix} 4 & 4 \\ 2 & -4 \end{bmatrix}
+\cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+\begin{bmatrix} 5 \\ 1 \end{bmatrix}
+\\
+Let\ A &:= \begin{bmatrix} 4 & 4 \\ 2 & -4 \end{bmatrix}
+\\
+A \cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+\begin{bmatrix} 5 \\ 1 \end{bmatrix}
+\\
+A^{-1} \cdot A \cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+A^{-1} \begin{bmatrix} 5 \\ 1 \end{bmatrix} \\
+\end{align}
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Calculate an inverse matrix $A^{-1}$
+
+---
+
+count: false
+
+.font2.center[
+Recall that $A \cdot A^{-1} = I$
+\begin{align}
+\left[\begin{array}{cc|cc}
+4 & 4 & 1 & 0 \\
+2 & -4 & 0 & 1
+\end{array}\right]
+\end{align}
+Starts by having the original and identity matrix side by side
+]
+
+---
+
+count: false
+
+.font2.center[
+Add the second row into the first
+\begin{align}
+\left[\begin{array}{cc|cc}
+6 & 0 & 1 & 1 \\
+2 & -4 & 0 & 1
+\end{array}\right]
+\end{align}
+]
+
+---
+
+count: false
+
+.font2.center[
+Divide the first row by 6
+\begin{align}
+\left[\begin{array}{cc|cc}
+1 & 0 & \frac{1}{6} & \frac{1}{6} \\
+2 & -4 & 0 & 1
+\end{array}\right]
+\end{align}
+]
+
+---
+
+count: false
+
+.font2.center[
+Divide the second row by 2
+\begin{align}
+\left[\begin{array}{cc|cc}
+1 & 0 & \frac{1}{6} & \frac{1}{6} \\
+1 & -2 & 0 & \frac{1}{2}
+\end{array}\right]
+\end{align}
+]
+
+---
+
+count: false
+
+.font2.center[
+Subtract the first row from the second
+\begin{align}
+\left[\begin{array}{cc|cc}
+1 & 0 & \frac{1}{6} & \frac{1}{6} \\
+0 & -2 & - \frac{1}{6} & \frac{1}{3}
+\end{array}\right]
+\end{align}
+]
+
+---
+
+count: false
+
+.font2.center[
+Divide the second row by -2
+\begin{align}
+\left[\begin{array}{cc|cc}
+1 & 0 & \frac{1}{6} & \frac{1}{6} \\
+0 & 1 & \frac{1}{12} & - \frac{1}{6}
+\end{array}\right]
+\end{align}
+Now you have $I$ on the left and $A^{-1}$ on the right :)
+]
+
+---
+
+count: false
+
+.font2[
+- We call this method an .amber[elementary row operation]
+- Basically you can multiply your **rows** by any scalar
+- But you can only subtract / add one row with the other
+- Swapping the row is perfectly fine though
+]
+
+???
+
+This is one of the simplest method to get $A^{-1}$ in $m \times m$ matrices
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+# Solving the equation
+
+.font2[
+\begin{align}
+A^{-1} \cdot A \cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+A^{-1} \begin{bmatrix} 5 \\ 1 \end{bmatrix}
+\\
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+\begin{bmatrix}\frac{1}{6} & \frac{1}{6} \\ \frac{1}{12} & - \frac{1}{6}\end{bmatrix}
+\cdot \begin{bmatrix} 5 \\ 1 \end{bmatrix}
+\\
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} &=
+\begin{bmatrix} 1 \\ \frac{1}{4} \end{bmatrix}
+\end{align}
+]
+
+---
+
+class: bg-main3
+
+# Why using matrices?
+
+.font2[
+- Computers understand matrices as a mathematical construct
+- They can easily perform mathematical operation
+- Matrix is generalizable into a higher dimensional object, i.e. a tensor
+- Dot product $\to$ tensor product
+]
+
+--
+
+# Hardware-wise
+
+.font2[
+- .amber[CPU:] General arithmetic operation
+- .amber[GPU:] Matrix manipulation
+- .amber[TPU:] Tensor manipulation
+]
+
+---
+
+class: bg-main3
+
+# Are all matrices invertible?
+
+.font2[
+- No. Sorry to disappoint :(
+- Non-invertible matrix: regular / non-singular
+- Only invertible matrices provide .amber[unique solutions]
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Metric space
+
+---
+
+.font2[
+- A space where we consider the distance between two data points
+- Has a pair of objects, one for the set another for the distance
+- Some specific properties?
+]
+
+\begin{align}
+d: X \times X \to [0, \infty)
+\end{align}
+
+???
+
+- $X$ is a set of real numbers
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+Let\ (x, y) & \in X \\
+d(x, y) &= 0 \iff x = y \\
+d(x, y) & \geqslant 0 \iff x \neq y \\
+d(x, y) &= d(y, x) \\
+d(x, y) & \leqslant d(x, z) + d(z, y)
+\end{align}
+]
+
+???
+
+- Let a pair $(x, y)$ as a part of set $X$
+- Distance function $d$ may vary
+
+---
+
+layout: true
+class: bg-main3
+
+# Distance function
+
+.font2[
+- Different functions exist!
+- We need a measure to define how *dissimilar* our data points are
+]
+
+---
+
+???
+
+- Euclidean
+- Manhattan
+- Minkowski
+
+---
+
+count: false
+
+## Euclidean distance
+
+.font2[
+$$D = \sqrt{\displaystyle \sum_{i=1}^n (p_i - q_i)^2}$$
+
+- Measure the shortest distance in an .amber[Euclidean] space
+- Most commonly used distance measure
+]
+
+???
+
+$n$ is the number of dimension
+
+---
+
+count: false
+
+## Manhattan distance
+
+.font2[
+$$D = \displaystyle \sum_{i=1}{n} |p_i - q_i|$$
+
+- An absolute distance in an .amber[Euclidean] space
+- Optimally used in a higher dimension data
+]
+
+---
+
+count: false
+
+## Minkowski distance
+
+.font2[
+$$D = \bigg( \displaystyle \sum_{i=1}^n |p_i - q_i|^p \bigg)^{\frac{1}{p}}$$
+
+- Useful in a .amber[non-euclidean] space
+- Not a part of metric space, but still nice to know
+]
+
+???
+
+- $p$: Order of the norm
+- A more general form of the former two distance measures
+- When $p=1$, it behaves as a Manhattan distance
+- When $p=2$, it behaves as an Euclidean distance
+- Fun fact: Einstein's special relativity used Minkowski distance
+
+---
+
+layout: false
+count: false
+class: bg-main3 center middle
+
+# Comparison on distance measures
+
+<img src="https://www.researchgate.net/publication/329452521/figure/fig1/AS:700891866877954@1544117051744/A-comparison-of-the-actual-road-Euclidean-Minkowski-and-Manhattan-distances-between-two.png" width="60%">
+
+---
+
+class: bg-main3
+
+# Normed linear space
+
+.font2[
+- Non-negative map on the vector space
+- Formalization of the length of $x$
+- Utilized norm: a real-valued function
+]
+
+???
+
+Example: Hilbert space, $L^p$ space
+
+--
+
+# Inner product space
+
+.font2[
+- Basically a vector space with inner product
+- Mapping two vectors into a scalar
+- Inner product: a generalization of dot product
+]
+
+???
+
+Imagine inner product as a dot product without dimensionality constraint
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Linear algebra
+- .amber[Calculus]
+- Probability and statistics
+]]
+
+???
+
+Summary:
+- Linear algebra: a set of mathematical operations over specific spaces
+- Vector spaces: we deal a lot with matrices and tensors
+- Application: direct implementation is gradient descent
+- Algebra deals with relations
+
+---
+
+class: bg-main3
+
+# Calculus
+
+.font2[
+- Optimizing machine learning algorithm
+- Minimizing cost function
+- Finding extrema: minima or maxima?
+- Determine the weight in our model
+]
+
+???
+
+- Cost function: akin to $\epsilon$ when performing regression
+- Lower $\epsilon \to$ lower randomness
+
+---
+
+layout: true
+class: bg-main3
+
+# Gradient
+
+<img src="https://miro.medium.com/max/1200/1*9Fca3kpx3pVW8SaYz2pjpw.png" width="90%">
+
+---
+
+.font2[
+Partial derivatives generalization to find extremum
+]
+
+---
+
+count: false
+
+\begin{align}
+\nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix}
+\end{align}
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Linear algebra
+- Calculus
+- .amber[Probability and statistics]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Probability and statistics
+
+.font2[
+$$P(A|B) = P(A) \cdot P(B)$$
+
+- Both frequentist and Bayesian statistics revolve around conditional probability
+- Only Bayesian statistics allows updating prior belief on probability function
+- But, what is .amber[statistics in essence]?
+]
+
+---
+
+class: bg-main3 middle split-two
+
+## Population
+
+.amber[All] observable subjects inhabiting a certain location
+
+<br>
+
+--
+
+## Parameters
+
+Quantitative .amber[summary] of a population
+
+<br>
+
+--
+
+## Be more .amber[specific,] please?
+
+--
+
+.column[
+]
+
+.column[.vmiddle[
+### Notation and meanings
+
+$X$: Data element  
+$N$: Number of element  
+$p$: Proportion  
+$M$: .yellow[Median]  
+$\mu$: .yellow[Average]  
+$\sigma$: .yellow[Standard deviation]  
+$\sigma^2$: .yellow[Variance]  
+$\rho$: Correlation coefficient  
+]]
+
+---
+
+class: bg-main3 middle split-two
+
+## Sample
+
+A .red[subset] of an observable population
+
+<br>
+
+--
+
+## Statistics
+
+Quantitative .red[summary] of a sample
+
+<br>
+
+--
+
+## Be more .red[specific,] please?
+
+--
+
+.column[
+]
+
+.column[.vmiddle[
+### Notation and meanings
+
+$x$: Data element  
+$n$: Number of element  
+$\hat{p}$: Proportion  
+$m$: .deep-orange[Median]  
+$\bar{x}$: .deep-orange[Average]  
+$s$: .deep-orange[Standard deviation]  
+$s^2$: .deep-orange[Variance]  
+$r$: Correlation coefficient  
+]]
+
+---
+
+class: bg-main3
+
+.font2[
+# Probability
+
+- An .amber[event] $E$ occurring within a particular .red[sample space] $S$
+- .amber[Event]: Expected results
+- .red[Sample space]: All possible outcomes
+- Probability $P$ is a proportion of event divided by its sample space
+- Or mathematically:
+
+$$P(E=e) = \frac{E}{S}$$
+]
+
+---
+
+class: bg-main3
+
+# Random Variables
+
+.font2[
+Independent vs Identical? $\to$ I.I.D
+]
+
+--
+
+- All sampled random variables should be .amber[independent] from one another
+- Each sampling procedure have to be .amber[identical], as to produce similar probability
+
+--
+
+.font2[Considering I.I.D, can we do a better probability estimation?]
+
+--
+
+- If they are I.I.D, we can approximate the probability using:
+  - Probability .amber[Mass] Function (.amber[discrete] variable)
+  - Probability .amber[Density] Function (.amber[continuous] variable)
+
+--
+
+.font2[In math, please?]
+
+\begin{align}
+P(E=e) &= f(e) > 0: E \in S \tag{1} \\
+\displaystyle \sum_{e \in S} f(e) &= 1 \tag{2} \\
+P(E \in A) &= \displaystyle \sum_{e \in A} f(e) \tag{3}: A \subset S
+\end{align}
+
+???
+
+- The function is arbitrary, it can take on any form
+- There are myriad distributions
+- We will look at specific examples
+
+---
+
+class: bg-main3
+
+# Probability .amber[Mass] Function
+
+.font2[
+- Binomial: $X \sim B(n, p)$
+- Geometric: $X \sim G(p)$
+- Poisson: $X \sim P(\lambda)$
+]
+
+--
+
+.font2[.amber[Similarity:] All describes .amber[discrete] random variables following  Bernoulli trials]
+
+???
+
+Bernoulli trials:
+- All instances are independent
+- All instances have identical probability
+- Example: A coin flip, sampling with replacement
+
+---
+
+count: false
+class: bg-main3
+
+# Binomial distribution
+
+```{r plt.binom.n, echo=FALSE, out.width="90%"}
+event <- c(50, 100, 200)
+df <- lapply(event, function(n) {
+	pmf <- dbinom(1:n, n, 0.5)
+	data.frame(x=1:n, y=pmf, n=as.factor(n))
+}) %>% {do.call(rbind, .)}
+
+ggplot(df, aes(x=x, y=y, color=n)) +
+	geom_point() + geom_segment(aes(y=0, xend=x, yend=y)) + theme_minimal() +
+	labs(title="Binomial distribution with p=0.5 and different n", x="Number of trials", y="Probability")
+``` 
+
+.amber[Key question:] How many events to have given a certain probability $n$?
+
+---
+
+count: false
+class: bg-main3
+
+# Geometric distribution
+
+```{r plt.geom, echo=FALSE, out.width="90%"}
+
+prob <- seq(0.2, 0.8, 0.2)
+df <- lapply(prob, function(p) {
+	n <- 10
+	pmf <- dgeom(0:n, p)
+	data.frame(x=0:n, y=pmf, prob=as.factor(p))
+}) %>% {do.call(rbind, .)}
+
+ggplot(df, aes(x=x, y=y, color=prob)) + geom_point() + geom_line() + theme_minimal() +
+	scale_x_continuous(breaks=c(0:10)) +
+	labs(title="Geometric distribution with different value of p", x="Number of failures before the first success", y="Probability")
+```
+
+.amber[Key question:] How many failures before getting an event?
+
+---
+
+count: false
+class: bg-main3
+
+# Poisson distribution
+
+```{r plt.pois, echo=FALSE, out.width="90%"}
+lambda <- c(10, 20, 30, 50)
+df <- lapply(lambda, function(l) {
+	k <- 100
+	pmf <- dpois(1:k, l)
+	data.frame(x=1:k, y=pmf, lambda=as.factor(l))
+}) %>% {do.call(rbind, .)}
+
+ggplot(df, aes(x=x, y=y, color=lambda)) + geom_point() + geom_line() +
+	theme_minimal() + scale_x_continuous(breaks=seq(0, 100, 10)) +
+	labs(title="Poisson distribution with different lambdas", x="Number of events", y="Probability")
+```
+
+.amber[Key question:] What is the chance of having $n$ events given a $\lambda$ rate?
+
+---
+
+class: bg-main3
+
+# Probability .amber[Density] Function
+
+.font2[
+- Gamma: $X \sim \Gamma(\alpha, \beta)$
+- Exponential: $X \sim Exponential(\lambda)$
+- $\chi^2$: $X \sim \chi^2(\nu)$
+- Normal: $X \sim N(\mu, \sigma)$
+]
+
+--
+
+.font2[.amber[Similarity:] All describes .amber[continuous] random variables]
+
+---
+
+count: false
+class: bg-main3
+
+# Gamma distribution
+
+```{r plt.gamma, echo=FALSE, fig.height=4, out.width="100%"}
+
+shape <- c(1, 2, 5)
+df <- lapply(shape, function(alpha) {
+	n <- 1e3
+	pdf <- rgamma(n, shape=alpha, rate=5)
+	data.frame(x=pdf, shape=as.factor(alpha))
+}) %>% {do.call(rbind, .)}
+ggplot(df, aes(x=x, color=shape)) +
+	geom_histogram(aes(y=..density..), fill="gray", alpha=0, binwidth=5e-2) +
+	geom_density(size=1) + theme_minimal() +
+	scale_x_continuous(breaks=seq(0, 4, 0.2), limits=c(0, 4)) +
+	labs(title="Gamma distribution with rate=5 and different shapes", x="Time units", "Probability")
+
+```
+
+---
+
+count: false
+class: bg-main3
+
+# Exponential distribution
+
+```{r plt.exp, echo=FALSE, fig.height=4, out.width="100%"}
+rate <- c(1, 2, 5)
+df <- lapply(rate, function(lambda) {
+	n <- 1e3
+	pdf <- rexp(n, lambda)
+	data.frame(x=pdf, rate=as.factor(lambda))
+}) %>% {do.call(rbind, .)}
+ggplot(df, aes(x=x, color=rate)) +
+	geom_histogram(aes(y=..density..), fill="gray", alpha=0, binwidth=5e-2) +
+	geom_density(size=1) + theme_minimal() +
+	scale_x_continuous(breaks=seq(0, 4, 0.2), limits=c(0, 4)) +
+	labs(title="Exponential distribution with different lambdas", x="Time units", "Probability")
+```
+
+---
+
+count: false
+class: bg-main3
+
+# $\chi^2$ distribution
+
+```{r plt.chisq, echo=FALSE, fig.height=4, out.width="100%"}
+
+dof <- c(1, 3, 5)
+df <- lapply(dof, function(k) {
+	n <- 1e3
+	pdf <- rchisq(n, df=k)
+	data.frame(x=pdf, dof=as.factor(k))
+}) %>% {do.call(rbind, .)}
+ggplot(df, aes(x=x, color=dof)) +
+	geom_histogram(aes(y=..density..), fill="gray", alpha=0, binwidth=2e-1) +
+	geom_density(size=1) + theme_minimal() +
+	labs(title="Chi-square distribution with different degree of freedoms", x="Measured units", "Probability")
+
+```
+
+---
+
+count: false
+layout: true
+class: bg-main3
+
+# Normal distribution
+
+---
+
+count: false
+
+```{r plt.norm.mu, echo=FALSE, fig.height=4, out.width="100%"}
+
+mu <- c(1:3)
+df <- lapply(mu, function(u) {
+	n <- 1e3
+	pdf <- rnorm(n, mean=u, sd=1)
+	data.frame(x=pdf, mu=as.factor(u))
+}) %>% {do.call(rbind, .)}
+ggplot(df, aes(x=x, color=mu)) +
+	geom_histogram(aes(y=..density..), fill="gray", alpha=0, binwidth=2e-1) +
+	geom_density(size=1) + theme_minimal() +
+	labs(title="Normal distribution with fixed standard deviation and different mean", x="Measured unit", "Probability")
+
+```
+
+---
+
+count: false
+
+```{r plt.norm.sigma, echo=FALSE, fig.height=4, out.width="100%"}
+
+sigma <- c(1:3)
+df <- lapply(sigma, function(sd) {
+	n <- 1e3
+	pdf <- rnorm(n, mean=0, sd=sd)
+	data.frame(x=pdf, sigma=as.factor(sd))
+}) %>% {do.call(rbind, .)}
+ggplot(df, aes(x=x, color=sigma)) +
+	geom_histogram(aes(y=..density..), fill="gray", alpha=0, binwidth=2e-1) +
+	geom_density(size=1) + theme_minimal() +
+	labs(title="Normal distribution with fixed mean and different standard deviations", x="Measured unit", "Probability")
+
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Central Limit Theorem
+
+.font2[
+$$\bar{X} \xrightarrow{d} N \bigg(\mu, \frac{\sigma}{\sqrt{n}} \bigg) as\ n \to \infty$$
+]
+
+???
+
+$\xrightarrow{d}$ is a convergence of random variables
+
+--
+
+.font2[
+- So far, we have learnt sampling distributions
+- We are also able to compute the mean and standard deviation based on their parameters
+- It just happened that the sample mean follow a normal distribution
+- .amber[Central limit theorem] delineates such an occurrence
+- This rule applies to both .amber[discrete] and .amber[continuous] distribution
+]
+
+---
+
+class: bg-main3
+
+# Linear Model
+
+.font2[
+$$y = \beta_0 + \displaystyle \sum_{i=1}^n \beta_i x_i + \epsilon$$
+
+- Estimating $y$ as $f(x)$
+- Assumptions:
+  - Linearity between $y$ and $x_i$ at any index $i$
+  - Homoskedasticity
+  - Non-existent multicollinearity
+  - Normality of residual $\epsilon$
+]
+
+---
+
+class: bg-main3
+
+# Generalized Linear Model
+
+.font2[
+$$g(y) = \beta_0 + \displaystyle \sum_{i=1}^n \beta_i x_i + \epsilon$$
+
+- Estimating the output of $g(y)$ as $f(x)$
+- Assumptions:
+  - Linearity between $g(y)$ and $f(x)$
+  - Non-existent multicollinearity
+  - Homoskedasticity (more lenient compared to LM)
+]
+
+---
+
+class: bg-main3
+
+# What is $g(y)$?
+
+.font2[
+- A link function
+- Basically it transform $y$ into a continuous linear value
+- GLM with identity link function = LM
+- Depends on what distribution $y$ comes from
+]
+
+???
+
+- Binomial distribution: `logit` and `probit` (also termed a logistic regression)
+- Poisson distribution: `log` (log-linear regression), `identity`, `sqrt`
+- Other distro exists: inverse gaussian, cauchy, gamma, etc.
+
+---
+
+class: bg-main3
+
+# Regression in statistics
+
+.font2[
+- Depends on which distribution $y$ is coming from
+- Ordinary Least Squares determines the value of each parameter
+- Maximum Likelihood Estimator $\to$ slope and intercept $\beta_0$
+- Variate-Covariate matrix determines standard error $\to$ calulate p-value
+]

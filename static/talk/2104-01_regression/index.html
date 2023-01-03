@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intuition on Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="logo.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3[Intuition on .amber[Regression]]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+.right-logo[]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.font3.amber[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Basics on regression: LM]
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: false
+count: false
+class: bg-main3 hide-slide-number
+
+# Prior concepts to understand
+
+.font2[
+- Independent variable
+- Dependent variable
+- Variance-covariance matrix
+- Data Generating Process (.amber[DGP])
+]
+
+.right-logo[]
+
+???
+
+- IV = feature in ML
+- DV = target / label in ML
+- Variance-covariance matrix is a square matrix
+- The diagonal of var-covar matrix is the Variance
+- While the upper and lower triangles are the covariances
+
+---
+
+layout: false
+class: bg-main3
+
+# Basic on regression: .amber[LM]
+
+.font2[
+- LM stands for Linear Model
+- Relies on variance-covariance matrix
+- It extends .amber[correlation]
+- Describing linearity between IVs and DV
+]
+
+.right-logo[]
+
+---
+
+count: false
+class: bg-main3
+
+# What is .amber[linearity] anyway?
+
+.font2[
+- Relationship between two variables
+- A specific form of .amber[monotonic] relationships
+- Variables could be observable or inferrable (more on this on later sections)
+- .amber[Hint:] upwards and downwards .amber[slope]
+]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+# Monotonic relationship
+
+&lt;img src="index_files/figure-html/monotonic-1.jpeg" width="90%" /&gt;
+
+.right-logo[]
+
+--
+
+.font2[We will revisit this trend later :)]
+
+---
+
+count: false
+class: bg-main3
+
+# Linearity
+
+&lt;img src="index_files/figure-html/linear-1.jpeg" width="90%" /&gt;
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+# What does a model do?
+
+.right-logo[]
+
+---
+
+.center.font2[
+It transforms this...
+
+`\begin{bmatrix}
+\sigma_{1, 1} &amp; \cdots &amp; \sigma_{1, n} \\
+\vdots	      &amp; \ddots &amp; \vdots       \\
+\sigma_{n, 1} &amp; \cdots &amp; \sigma_{n ,n}
+\end{bmatrix}`
+
+]
+
+.center.font2[.amber[Hint:] This is a variance-covariance matrix]
+
+???
+
+- An input matrix of independent variables
+- This data contains `\(n\)` variables from `\(m\)` subjects
+- Each row maps to dependent variable `\(y_i\)`
+
+---
+
+count: false
+class: bg-main3
+
+.center.font2[
+...into this...
+
+`$$\displaystyle \beta_0 + \sum_{i=1}^n \beta_i X_i$$`
+]
+
+--
+
+.center.font2[
+...so that we can find `\(\color{orange}{\hat{y}}\)`
+]
+
+--
+
+.center.font2[Hold on, hold on...]
+
+---
+
+count: false
+
+.center[
+&lt;br&gt; &lt;br&gt;
+
+![](https://thinkingmeme.com/wp-content/uploads/2018/02/memesfaces9.jpg)
+
+.font2[
+Why `\(\color{orange}{\hat{y}}\)` and not `\(\color{orange}{y}\)` though?
+]
+]
+
+---
+
+count: false
+
+.font2[
+- A model provides a prediction
+- Thus the notation: `\(\color{orange}{\hat{y}}\)`
+- It explains the variability in .amber[DV] using variance-covariance matrix of
+  .amber[IVs]
+- Perfect linearity `\(\to\)` The trend of IV completely defines DV
+]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Linear Model
+
+---
+
+.font2[
+- Now, we understand what models do
+- We have been able to distinguish linear to monotonic trend
+- We will revisit linearity and fit in a model to our data :)
+]
+
+---
+
+## What we previously had
+
+&lt;img src="index_files/figure-html/linear-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## How about fitting our data to a model?
+
+&lt;img src="index_files/figure-html/linear.fit-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Summarizing the model
+
+
+```
+## 
+## Call:
+## lm(formula = y ~ x, data = tbl)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.05401 -0.44511 -0.01771  0.47374  0.96002 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.03011    0.14153  -0.213    0.832    
+## x            1.02265    0.04459  22.932   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.5845 on 198 degrees of freedom
+## Multiple R-squared:  0.7265,	Adjusted R-squared:  0.7251 
+## F-statistic: 525.9 on 1 and 198 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+count: false
+
+## Visual evaluation on the model
+
+&lt;img src="index_files/figure-html/linear.eval1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Statistical evaluation on the model
+
+
+```r
+# Residual normality
+mod %&gt;% residuals() %&gt;% nortest::ad.test()
+```
+
+```
+## 
+## 	Anderson-Darling normality test
+## 
+## data:  .
+## A = 2.1131, p-value = 2.183e-05
+```
+
+```r
+# Homogeneity of residual variance
+mod %&gt;% lmtest::hmctest()
+```
+
+```
+## 
+## 	Harrison-McCabe test
+## 
+## data:  .
+## HMC = 0.54445, p-value = 0.82
+```
+
+---
+
+count: false
+
+.center[
+.font2[How do we conclude our model?]
+
+&lt;img src="https://www.wallpaperup.com/uploads/wallpapers/2014/02/11/252308/c95c61be7a901ea649fa12ec08267ab6.jpg", width="50%"&gt;
+
+.amber.font2[Acceptable]
+]
+
+???
+
+- For most values, our model fit perfectly
+- For extreme values, the residual is seemingly not normally distributed
+- We need to take into account potential outliers
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# However...
+
+.font2[
+- .amber[Linear Model] only accepts linear trends
+- It could not correctly model monotonic relationship
+- Let alone .pink[non-monotonic] relationship :( 
+]
+
+--
+
+# What can we do?
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- .amber[Extending linearity: GLM]
+- Path Analysis
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Generalized Linear Model
+
+---
+
+.font2[
+- Introducing link function to the model
+- Link function will change the way our model predict the outcome
+- Link function .amber[*does not*] transform the data
+- It just defines how the model behave!
+]
+
+---
+
+## What we previously had
+
+&lt;img src="index_files/figure-html/monotonic-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## How about fitting our data to a .amber[linear] model?
+
+&lt;img src="index_files/figure-html/monotonic.fit1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+.center[
+.font2[Our model does not provide a proper fit!]
+
+&lt;img src="https://theawesomedaily.com/wp-content/uploads/2017/07/meme-faces-6-1.jpg" width="40%"&gt;
+
+.font2.amber[Okay, what's next?]
+]
+
+---
+
+## Fit the data into a .amber[polynomial] model
+
+&lt;img src="index_files/figure-html/monotonic.fit2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Visual evaluation
+
+&lt;img src="index_files/figure-html/monotonic.eval-1.jpeg" width="90%" /&gt;
+
+---
+
+## ...or use GLM: .amber[Poisson] regression
+
+&lt;img src="index_files/figure-html/glm.pois-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Visual evaluation
+
+&lt;img src="index_files/figure-html/glm.pois.eval-1.jpeg" width="90%" /&gt;
+
+---
+
+## Another cool stuff with GLM: .amber[Logistic] regression
+
+&lt;img src="index_files/figure-html/glm.binom1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Also with GLM: .amber[Probit] regression
+
+&lt;img src="index_files/figure-html/glm.binom2-1.jpeg" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# And .amber[many more] to count...
+
+.font2[
+.amber[Use cases:]
+
+- LM `\(\to\)` Linear trend
+- Poisson `\(\to\)` Rate of occurrence
+- Logistic `\(\to\)` True bernoulli trial (binomial outcome)
+- Probit `\(\to\)` Binomial outcome with underlying Gaussian process
+- Gamma `\(\to\)` Exponential growth / decay events
+- Quasi-poisson / binomial `\(\to\)` Poisson / Binomial DGP with overdispersion
+- Polynomial regression `\(\to\)` Non-linear data, unknown DGP
+]
+
+???
+
+Examples:
+
+- Poisson: Factors influencing weekly defecation rate
+- Logistic: Factors influencing a specific diagnosis (outcome in binomial)
+- Probit: Factors influencing drug response (outcome in binomial)
+- Gamma: Factors influencing required time in cell division
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Poisson regression
+
+&lt;img src="paper-1.png", width="65%"&gt;
+
+Rojanaworarit C, Wong JJ. Investigating the Source of a Disease Outbreak Based
+on Risk Estimation: A Simulation Study Comparing Risk Estimates Obtained From
+Logistic and Poisson Regression Applied to a Dichotomous Outcome. Ochsner
+Journal. 2019 Sep 21;19(3):220-6.
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Probit regression
+
+&lt;img src="paper-2.png", width="60%"&gt;
+
+Lei C, Sun X. Comparing lethal dose ratios using probit regression with
+arbitrary slopes. BMC Pharmacology and Toxicology. 2018 Dec;19(1):1-0.
+
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Quasi-poisson and negative binomial regression
+
+&lt;img src="paper-3.png", width="60%"&gt;
+
+Seyoum A, Zewotir T. Quasi-Poisson versus negative binomial regression models
+in identifying factors affecting initial CD4 cell count change due to
+antiretroviral therapy administered to HIV-positive adults in North–West
+Ethiopia (Amhara region). AIDS research and therapy. 2016 Dec;13(1):1-0.
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+.right-logo[]
+
+# Gamma regression
+
+&lt;img src="paper-4.png", width="55%"&gt;
+
+Mandal S, Arabi Belaghi R, Mahmoudi A, Aminnejad M. Stein‐type shrinkage
+estimators in gamma regression model with application to prostate cancer data.
+Statistics in medicine. 2019 Sep 30;38(22):4310-22.
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- .amber[Path Analysis]
+- A bit on Factor Analysis
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+class: bg-main3
+
+.right-logo[]
+
+# Excerpt on (Generalized) Linear Model
+
+.font2[
+## Pros
+
+- In (G)LM we can introduce .amber[multiple IVs] as predictors
+- We can also add moderating effect using .amber[interaction terms] between different IVs
+]
+
+???
+
+A model with multiple IVs is termed multivariable model / multiple regression
+
+--
+
+.font2[
+## Cons
+
+- We cannot address .pink[multiple DVs]
+- Although they are manageable with MAN(C)OVA
+- But neither are suitable to model .pink[non-linearity]
+- And none of the above can completely control .pink[mediating] variables
+]
+
+???
+
+A model with multiple DV is termed multivariate model
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Path Analysis
+
+---
+
+.font2[
+- Multiple input (IVs)
+- Multiple output (DVs)
+- Controlling the effect of mediating variables
+]
+
+---
+
+count: false
+
+## Mediating effect
+
+&lt;img src="index_files/figure-html/mediating-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Intermediary variables
+
+&lt;img src="index_files/figure-html/intermediary-1.jpeg" width="90%" /&gt;
+
+---
+
+layout: false
+class: bg-main3
+
+.right-logo[]
+
+# A few to consider
+
+.font2[
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+]
+
+???
+
+- Commonly used estimator: MLE
+- Only applicable to continuous data, and not quite robust
+- Robust MLE `\(\to\)` MLR
+- For discrete data `\(\to\)` Diagonally Weighted Least Square, Robust Weighted Least Square (WLSMV)
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- .amber[A bit on Factor Analysis]
+- Structural Equation Model
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Factor Analysis
+
+---
+
+.font2[
+- Imagine constructing an .amber[assessment form]
+- Such a form does not clearly indicate measurable objectives
+- Instead, it is a .amber[reflective] ideas on such measures
+- In other words, we conduct and .amber[indirect] measurement
+- How do we extend our concept on regression?
+]
+
+--
+
+.font2[.pink[Disclaimer:] This presentation only focuses on .pink[Confirmatory Factor Analysis]]
+
+---
+
+## Manifest to latent variables
+
+&lt;img src="index_files/figure-html/man2lat-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Multiple latent variables
+
+&lt;img src="index_files/figure-html/multi.latent-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Controlling for co-varying manifests
+
+&lt;img src="index_files/figure-html/covary.manifest-1.jpeg" width="90%" /&gt;
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Basics on regression: LM
+- Extending linearity: GLM
+- Path Analysis
+- A bit on Factor Analysis
+- .amber[Structural Equation Model]
+]]
+
+.right-logo[]
+
+---
+
+layout: true
+class: bg-main3
+
+.right-logo[]
+
+# Structural Equation Model
+
+---
+
+.font2[
+- Okay, factor analysis is pretty dope
+- Can we .amber[regress] those latent variables?
+- Or, how if we need to measure how it relates to .amber[other observables]?
+]
+
+--
+
+.font2[There comes .amber[SEM]: A structural equation model]
+
+---
+
+count: false
+
+## Regressing manifest
+
+&lt;img src="index_files/figure-html/sem1-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## Regressing to other variables
+
+&lt;img src="index_files/figure-html/sem2-1.jpeg" width="90%" /&gt;
+
+---
+
+count: false
+
+## In brief
+
+.font2[
+- Combines path and confirmatory factor analysis
+- We can control confounding variables, either presented as a manifest or latent
+- Highly useful in analyzing data with limited scope of observation
+- We can further extract relationship in a multilevel manner
+- Subgroup analysis is also feasible
+]
+
+---
+
+count: false
+
+.right-logo[]
+
+## ...is a powerful method, but
+
+.center[&lt;img src="https://sayingimages.com/wp-content/uploads/with-great-power-comes-meme.jpg" width="60%"&gt;]
+
+???
+
+- Estimators to use and its robustness
+- Goodness of fit indicators
+- Theoretical suitability
+- In case of causality: temporal dependency
+
+---
+
+count: false
+layout: false
+class: bg-main1 center middle hide-slide-number
+
+.right-logo[]
+
+.font5.amber[Query?]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"countIncrementalSlides": false,
+"highlightSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

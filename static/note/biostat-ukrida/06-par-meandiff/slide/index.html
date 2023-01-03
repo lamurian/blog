@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Parametric: Mean in Two Groups</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Aly Lamuri" />
+    <script src="index_files/header-attrs-2.3/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/shinobi.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[Parametric: .amber[Mean] in Two Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Mean difference]
+- One sample T-Test
+- Unpaired T-Test
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3 center middle
+
+# Concept recall
+
+.font2[
+`$$\frac{x - \bar{x}}{s} \sim N(0, 1) \tag{1}$$`
+
+`$$\bar{X} \xrightarrow{d} N(\mu, \frac{\sigma}{\sqrt{n}}) \tag{2}$$`
+]
+
+???
+
+- Scaling and centering data following a normal distribution results in a
+  standardized normal distribution (Z-distribution)
+- Central limit theorem: sample mean from any distribution will follow
+  normal distribution
+
+--
+
+.font2[
+With known `\(\mu\)` and `\(\sigma\)`, we can make a direct comparison
+]
+
+???
+
+Ideal: by knowing the parameter `\(\mu\)` and `\(\sigma\)`, we can directly compare our
+sample mean to its corresponding population
+
+--
+
+.font2[
+But...
+]
+
+--
+
+.font2[
+How if we don't know `\(\mu\)`?
+]
+
+???
+
+Solution: use its statistics `\(\bar{x}\)` as an estimate
+
+---
+
+layout: true
+class: bg-main3
+
+# Mean difference
+
+---
+
+.font2[
+- Simply `\(\bar{x} - \mu_0\)`
+- But there bound to be errors in our samples
+- What do we do?
+- An adjustment to .amber[standard error]
+]
+
+???
+
+- One-sample mean difference test: compare mean from our data to previously
+  reported mean in the population
+
+---
+
+count: false
+
+`\begin{align}
+SE &amp;= \frac{\sigma}{\sqrt{n}} \tag{Standard Error} \\
+\\
+z  &amp;= \frac{\bar{x} - \mu_0}{SE} \\
+   &amp;= \frac{\bar{x} - \mu_0}{^{\sigma}/\tiny{\sqrt{n}}} \tag{One-sample Test}
+\end{align}`
+
+???
+
+- `\(\mu_0\)` is the expected (hypothesized) mean, often it is something we acquire
+  from previous publications
+- `\(\sigma\)` is the **known** standard deviation in **population**
+
+--
+
+&lt;br&gt; &lt;br&gt;
+.font2[How do we get the p-value?]
+
+--
+
+(.amber[Hint:] Z-statistics follows the Z-distribution)
+
+???
+
+To get the p-value, we calculate acquired `\(z\)` statistics as a quantile of the
+Z-distribution
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+.font2[
+
+In a population of third-year electrical engineering students, we know the
+.amber[average final score] of a particular course is .pink[70]. In measuring
+students' comprehension, UKRIDA has established a standardized examination with
+a .amber[standard deviation] of .pink[10]. We are interested to see whether
+students registered to this year course have different average, where 18
+students averagely scored 75 on the final exam.
+
+]
+
+---
+
+.font2[
+`\begin{align}
+H_0 &amp;: \bar{x} = \mu_0 \\
+H_a &amp;: \bar{x} \neq \mu_0
+\end{align}`
+]
+
+---
+
+count: false
+
+.font2[
+`\begin{align}
+SE &amp;= \frac{10}{\sqrt{18}} &amp;= 2.36 \\
+z  &amp;= \frac{75 - 70}{2.36} &amp;= 2.12
+\end{align}`
+]
+
+---
+
+layout: false
+class: bg-main3
+count: false
+
+# Where does it located in Z-distribution?
+
+&lt;img src="index_files/figure-html/z.dist1-1.png" width="100%" /&gt;
+
+---
+
+count: false
+class: bg-main3
+
+# Where is it relative to the significance value?
+
+&lt;img src="index_files/figure-html/z.dist2-1.png" width="100%" /&gt;
+
+---
+
+count: false
+class: bg-main3
+
+# What is the p-value?
+
+.font2[
+- Recall the hypothesis `\(H_a: \bar{x} \neq \mu_0\)`
+- We need to conduct a two-tailed test to determine the p-value
+- First we find the cummulative probability of `\(z\)` which satisfies:
+
+`$$P(Z \leqslant 2.12\ |\ \mu,\sigma): Z \sim N(0, 1)$$`
+]
+
+--
+
+.font2[
+- Subtract `\(P(Z=z)\)` from 1
+- Multiply by 2
+]
+
+--
+
+
+```r
+2 * {1 - pnorm(2.12, 0, 1)}
+```
+
+```
+## [1] 0.034
+```
+
+---
+
+class: bg-main3
+
+# What do we learn?
+
+.font2[
+- Z-test requires the data to follow .amber[normal distribution]
+- We do not need to know the parameter `\(\mu \to\)` We can hypothesize the value
+- But we need the parameter `\(\sigma\)` to correctly compute `\(z\)`
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Any hidden message?
+
+.font2[
+- Yes!
+- Z-test assumes normality
+- So we need to perform goodness of fit or normality test
+]
+
+--
+
+.font2[
+What if we do not know `\(\sigma\)`?
+]
+
+--
+
+.font2[We are unable to use the Z-distribution]
+
+--
+
+.font2[Solution: use Student's T-distribution]
+
+---
+
+layout: true
+class: bg-main3
+
+# Student's T-distribution
+
+---
+
+`\begin{align}
+Let\ &amp; X \sim t_\nu \tag{Notation} \\
+P(X=x) &amp;= \frac{\Gamma \big( \frac{\nu+1}{2} \big)}{\sqrt{\nu \pi}\ \Gamma \big( \frac{\nu}{2} \big)} \bigg( 1 + \frac{x^2}{\nu} \bigg) \tag{PDF} \\
+\nu &amp;= n - 1 \\
+\\
+Let\ &amp; T \sim t_\nu \\
+T &amp;= Z \sqrt{\frac{\nu}{V}} \tag{Relationship}
+\end{align}`
+
+--
+
+.font2[
+- `\(T:\)` T-distribution with `\(\nu\)` degree of freedom
+- `\(Z:\)` A standardized normal distribution
+- `\(V:\)` A `\(\chi^2\)` distribution with `\(\nu\)` degree of freedom
+]
+
+???
+
+- Importance: Use in parametric mean difference between two groups
+- Student's T-distribution only depends on 1 parameter: `\(\nu\)` degree of freedom
+- Degree of freedom is total subjects subtracted by 1
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/t.dist-1.png" width="100%" /&gt;
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- .amber[One sample T-Test]
+- Unpaired T-Test
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# One sample T-Test
+
+.font2[
+- Similar to one sample Z-test
+- Applied to data with unknown `\(\sigma\)`
+- Use `\(s\)` as an estimate of the population parameter
+
+`$$t = \frac{\bar{x}-\mu}{^s \big/ \tiny{\sqrt{n}}}$$`
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+
+```r
+set.seed(1)
+x &lt;- rnorm(20, mean=120, sd=20)
+```
+
+---
+
+
+```r
+summary(x)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    75.7   112.3   127.2   123.8   135.2   151.9
+```
+
+```r
+sd(x)
+```
+
+```
+## [1] 18.3
+```
+
+---
+
+count: false
+
+.font2[
+- We let `\(x \sim N(120, 20)\)`
+- But our `\(\bar{x}\)` is 123.81
+- With an `\(s\)` of 18.265
+- And a `\(\nu\)` of 19
+- Does our sample differ from the population?
+]
+
+---
+
+count: false
+
+## Formulate the hypothesis
+
+.font2[
+`\begin{align}
+H_0 &amp;: \bar{x} = 120 \\
+H_a &amp;: \bar{x} \neq 120
+\end{align}`
+]
+
+---
+
+count: false
+
+## Determine the t-statistics
+
+.font2[
+`$$t=\frac{\bar{x}-\mu}{^s \big/ \tiny{\sqrt{n}}}$$`
+]
+
+
+```r
+t &lt;- {{mean(x) - 120} / {sd(x) / sqrt(20)}} %T&gt;% print()
+```
+
+```
+## [1] 0.933
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+## Locate `\(t\)` statistics in the T-distribution
+
+&lt;img src="index_files/figure-html/plt.one.sample1-1.png" width="100%" /&gt;
+
+---
+
+count: false
+class: bg-main3
+
+## P-value in a one-tailed test
+
+&lt;img src="index_files/figure-html/plt.one.sample2-1.png" width="100%" /&gt;
+
+
+```r
+1 - pt(t, df=19)
+```
+
+```
+## [1] 0.181
+```
+
+---
+
+count: false
+class: bg-main3
+
+## P-value in a two-tailed test
+
+&lt;img src="index_files/figure-html/plt.one.sample3-1.png" width="100%" /&gt;
+
+
+```r
+2 * {1 - pt(t, df=19)}
+```
+
+```
+## [1] 0.363
+```
+
+---
+
+count: false
+class: bg-main3
+
+# How is the result in `R`?
+
+
+```r
+t.test(x, mu=120)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  x
+## t = 0.9, df = 19, p-value = 0.4
+## alternative hypothesis: true mean is not equal to 120
+## 95 percent confidence interval:
+##  115 132
+## sample estimates:
+## mean of x 
+##       124
+```
+
+--
+
+## Conclusion
+
+- Fail to reject `\(H_0\)`
+- `\(\bar{x} = \mu_0 = 120\)`
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- .amber[Unpaired T-Test]
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Unpaired T-Test
+
+.font2[
+- T-Test conducted on two sample groups
+- Aims to determine significance on the mean difference
+- Types: .amber[Student's] and .amber[Welch's] T-Test
+- Assumes .amber[normality] *or* a large sample size
+- Also robust in non-normal data, .pink[*unless*] highly-skewed or have outliers
+]
+
+???
+
+- Problem with robustness: we often use simulation with specified parameters
+- But we don't know such parameters in real-world data
+- It's more acceptable when we don't violate the normality assumption
+
+--
+
+.font2[
+`\begin{align}
+H_0 &amp;: \bar{x}_1 - \bar{x}_2 = d \\
+H_a &amp;: \bar{x}_1 - \bar{x}_2 \neq d \\
+d &amp;= \mu_1 - \mu_2 = 0
+\end{align}`
+]
+
+???
+
+In a unique case, we may find `\(d \neq 0\)`
+
+---
+
+class: bg-main3
+
+# Student's T-Test
+
+.font2[
+- T-Test with a pooled variance
+- .amber[Requires:] Equal variance in two samples (tested with Levene's test)
+- Uses pooled variance `\(\to\)` compute statistics and the degree of freedom
+]
+
+--
+
+`\begin{align}
+t &amp;= \frac{\bar{x}_1 - \bar{x}_2 - d}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \tag{Statistics} \\
+s_p &amp;= \sqrt{\frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{\nu}} \tag{Pooled variance} \\
+\nu &amp;= n_1 + n_2 - 2 \tag{Degree of freedom}
+\end{align}`
+
+--
+
+.font2[Often, our data violate the equal variance assumption]
+
+.font2[.amber[Solution:] Welch's T-Test]
+
+---
+
+class: bg-main3
+
+# Welch's T-Test
+
+`\begin{align}
+t &amp;= \frac{\bar{x}_1 - \bar{x}_2 - d} {\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \tag{Statistics} \\
+\nu &amp;= \frac{(n_1-1)(n_2-1)}{(n_2-1)C^2 + (1-C^2)(n_1-1)} \tag{Degree of freedom} \\
+\\
+C &amp;= \frac{\frac{s_1^2}{n_1}}{\frac{s_1^2}{n_1} \frac{s_2^2}{n_2}}
+\end{align}`
+
+--
+
+.font2[
+For the record:
+- Still assumes .amber[normality]!
+- Not-normally distributed data still accepted .pink[if] the sample size is .amber[large enough]
+- How large is large enough? Re-check previous discussions on the .amber[CLT]
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+Suppose we are collecting data on body height. Our population of interest will
+be students registered in UKRIDA, where we categorize sex as female and male.
+We acquire a normally distributed data from both sexes, where:
+
+- `\(female \sim N(155, 15)\)`
+- `\(male \sim N(170, 12)\)`
+
+We have a sample of 25 females and 30 males, and would like conduct a
+hypothesis test on mean difference.
+]
+
+---
+
+count: false
+
+
+```r
+set.seed(5)
+tbl &lt;- data.frame(
+	"height" = c(rnorm(30, 170, 8), rnorm(25, 155, 16)),
+	"sex" = c(rep("male", 30), rep("female", 25))
+)
+
+tapply(tbl$height, tbl$sex, summary)
+```
+
+```
+## $female
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     123     146     154     158     173     190 
+## 
+## $male
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     152     165     168     170     177     184
+```
+
+```r
+tapply(tbl$height, tbl$sex, sd)
+```
+
+```
+## female   male 
+##  17.98   7.93
+```
+
+---
+
+count: false
+
+&lt;img src="index_files/figure-html/two.sample.t2-1.png" width="100%" /&gt;
+
+???
+
+Does it follow the normal distribution?
+
+---
+
+count: false
+
+
+```r
+tapply(tbl$height, tbl$sex, shapiro.test)
+```
+
+```
+## $female
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  X[[i]]
+## W = 1, p-value = 0.7
+## 
+## 
+## $male
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  X[[i]]
+## W = 1, p-value = 0.2
+```
+
+???
+
+Yes, each group follows a normal distribution
+
+---
+
+
+```r
+car::leveneTest(tbl$height ~ tbl$sex)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value  Pr(&gt;F)    
+## group  1    14.3 0.00039 ***
+##       53                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+--
+
+.font2[Levene's test suggests heterogenous variance (hint: significant p-value)]
+
+---
+
+
+```r
+t.test(height ~ sex, data=tbl, var.equal=FALSE)
+```
+
+```
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  height by sex
+## t = -3, df = 32, p-value = 0.004
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.87  -4.07
+## sample estimates:
+## mean in group female   mean in group male 
+##                  158                  170
+```
+
+.font2[Perform Welch's T-Test since sampled variances are not equal]
+
+---
+
+
+```r
+t.test(height ~ sex, data=tbl, var.equal=TRUE)
+```
+
+```
+## 
+## 	Two Sample t-test
+## 
+## data:  height by sex
+## t = -3, df = 53, p-value = 0.002
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -19.27  -4.67
+## sample estimates:
+## mean in group female   mean in group male 
+##                  158                  170
+```
+
+.font2[Student's T-Test, to demonstrate type-I error inflation (hint: look at the p-value)]
+
+???
+
+- The p-value is *much lower* compared to Welch's T-Test
+- A low p-value does not mean a bad outcome per se, but we need to be cautious
+- Especially when we have violation on required assumptions
+- Always be wary of statistical error!
+
+---
+
+&lt;img src="index_files/figure-html/two.sample.t7-1.png" width="100%" /&gt;
+
+???
+
+- Visualizing your findings is important
+- Both figures give similar information, but conveyed in different fashions
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- Unpaired T-Test
+- .amber[Paired T-Test]
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Paired T-Test
+
+.font2[
+- Previous analysis implicitly assumes .pink[independence]
+- Some observations may violate such an assumption
+- Cases:
+  - Difference between multiple measurements
+  - Probability events where each instance influence another
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Measuring mean differences
+
+---
+
+.font2[
+- Two-sample T-Test does not take into account difference within subjects
+- In fact, it is a violation of its stringent assumption
+- To measure difference within same subjects, we need to reduce the complexity
+]
+
+---
+
+count: false
+
+.font2[
+- Suppose `\(\mu_1\)` and `\(\mu_2\)` represent measurement in `\(t_1\)` and `\(t_2\)`
+- Both measures represent same subject (within comparison)
+- We can calculate the difference between both samples:
+
+`$$\mu_d = \mu_1 - \mu_2$$`
+]
+
+---
+
+count: false
+
+.font2[
+- Now we only need to take into account one sample differences
+- We hypothesize:
+
+`\begin{align}
+H_0 &amp;: \mu_d = 0 \\
+H_a &amp;: \mu_d \neq 0
+\end{align}`
+]
+
+--
+
+.font2[
+- Sounds familiar?
+- Because it is!
+- We can apply .amber[one-sample T-Test] to `\(\mu_d\)`
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+
+In the current investigation, we are looking for the effect of a certain
+anti-hipertensive drug. First we measure the blood pressure baseline, then
+prescribe the drug to all subjects. Then, we re-measure the blood pressure
+after one month. Each subject has a unique identifier, so we can specify mean
+differences within paired samples. Suppose we have the following scenario in 30
+sampled subjects:
+
+- `\(X_1 \sim N(140, 12)\)`
+- `\(X_2 \sim N(130, 17)\)`
+
+]
+
+---
+
+count: false
+
+.font2.center[
+Set our hypotheses:
+
+`\begin{align}
+H_0 &amp;: \bar{x}_d = 0 \\
+H_a &amp;: \bar{x}_d \neq 0
+\end{align}`
+]
+
+---
+
+count: false
+
+
+```r
+set.seed(1)
+tbl &lt;- data.frame(
+	"bp" = c(rnorm(30, 140, 12), rnorm(30, 133, 17)),
+	"time" = c(rep("Before", 30), rep("After", 30)) %&gt;%
+		factor(levels=c("Before", "After"))
+)
+
+# Measure the mean of mean difference
+md &lt;- with(tbl, bp[time=="Before"] - bp[time=="After"])
+
+# Calculate t-statistics
+t &lt;- {mean(md)} / {sd(md) / sqrt(30)} %T&gt;% print()
+```
+
+```
+## [1] 3.12
+```
+
+```r
+# Obtain p-value for a two-sided test
+2 * {1 - pt(t, df=29)}
+```
+
+```
+## [1] 0.076
+```
+
+---
+
+count: false
+
+
+```r
+# Comparison to built-in one-sample T-Test
+t.test(md, mu=0)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  md
+## t = 2, df = 29, p-value = 0.08
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -0.64 12.10
+## sample estimates:
+## mean of x 
+##      5.73
+```
+
+---
+
+count: false
+
+
+```r
+# Comparison to built-in paired T-Test
+t.test(bp ~ time, data=tbl, paired=TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  bp by time
+## t = 2, df = 29, p-value = 0.08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.64 12.10
+## sample estimates:
+## mean of the differences 
+##                    5.73
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Choosing an .amber[appropriate] statistical test
+
+.font2[
+- Both T-Test and Z-Test assume normality
+]
+
+--
+
+.font2[
+- One-sample test:
+  - Known `\(\sigma \to\)` use Z-Test
+  - Unknown `\(\sigma \to\)` use one-sample T-Test
+]
+
+--
+
+.font2[
+- Two-sample test `\(\to\)` do Levene's test
+  - Equal variance: Student's method (pooled variance)
+  - Unequal variance: Welch's method
+]
+
+--
+
+.font2[
+- Paired T-Test: Basically one-sample T-Test on sampled differences
+]
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- Unpaired T-Test
+- Paired T-Test
+- .amber[Effect size]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Effect size
+
+.font2[
+- Concept recall: statistical power
+- Related topics: sample size and significance level
+]
+
+`\begin{align}
+d &amp;= \frac{\bar{x}_1 - \bar{x}_2}{s_p} \tag{Cohen's D} \\
+s_p &amp;= \sqrt{\frac{(s_1^2 + s_2^2)}{2}} \tag{Pooled SD}
+\end{align}`
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+
+```r
+set.seed(1)
+tbl &lt;- data.frame(
+	"bp" = c(rnorm(30, 140, 12), rnorm(30, 133, 17)),
+	"time" = c(rep("Before", 30), rep("After", 30)) %&gt;%
+		factor(levels=c("Before", "After"))
+)
+
+# Measure the mean of mean difference
+md &lt;- with(tbl, bp[time=="Before"] - bp[time=="After"])
+
+# Calculate t-statistics
+t &lt;- {mean(md)} / {sd(md) / sqrt(30)} %T&gt;% print()
+```
+
+```
+## [1] 3.12
+```
+
+```r
+# Obtain p-value for a two-sided test
+2 * {1 - pt(t, df=29)}
+```
+
+```
+## [1] 0.076
+```
+
+---
+
+count: false
+
+
+```r
+# Calculate pooled standard deviation
+sp &lt;- sqrt({with(tbl,
+	tapply(bp, time, var, simplify=FALSE)) %&gt;% {do.call(add, .)}
+} / 2) %T&gt;% print()
+```
+
+```
+## [1] 12.4
+```
+
+```r
+# Measure Cohen's distance
+{with(tbl,
+	tapply(bp, time, mean, simplify=FALSE)) %&gt;% {do.call(subtract, .)}
+} / sp
+```
+
+```
+## [1] 0.464
+```
+
+---
+
+count: false
+
+
+```r
+# Calculate power using the `psych` package
+d &lt;- psych::cohen.d(tbl ~ time) %T&gt;% print()
+```
+
+```
+## Call: psych::cohen.d(x = tbl ~ time)
+## Cohen d statistic of difference between two means
+##    lower effect upper
+## bp -0.99  -0.47  0.05
+## 
+## Multivariate (Mahalanobis) distance between groups
+## [1] 0.47
+## r equivalent of difference between two means
+##    bp 
+## -0.23
+```
+
+---
+
+
+```r
+# Power analysis using previous information
+pwr::pwr.t.test(n=30, d=d$cohen.d[[2]], sig.level=0.05, type="paired")
+```
+
+```
+## 
+##      Paired t test power calculation 
+## 
+##               n = 30
+##               d = 0.472
+##       sig.level = 0.05
+##           power = 0.704
+##     alternative = two.sided
+## 
+## NOTE: n is number of *pairs*
+```
+
+---
+
+layout: false
+count: false
+class: bg-main1 center middle font5 hide-slide-number
+
+.amber[Query?]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

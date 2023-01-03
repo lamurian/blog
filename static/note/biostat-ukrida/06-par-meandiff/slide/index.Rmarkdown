@@ -1,0 +1,982 @@
+---
+title: "Parametric: Mean in Two Groups"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["shinobi", "ninjutsu"]
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "ggpubr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+class: bg-main1 hide-slide-number split-70
+count: false
+
+.column[.right.vmiddle.content[
+.font3[Parametric: .amber[Mean] in Two Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Mean difference]
+- One sample T-Test
+- Unpaired T-Test
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3 center middle
+
+# Concept recall
+
+.font2[
+$$\frac{x - \bar{x}}{s} \sim N(0, 1) \tag{1}$$
+
+$$\bar{X} \xrightarrow{d} N(\mu, \frac{\sigma}{\sqrt{n}}) \tag{2}$$
+]
+
+???
+
+- Scaling and centering data following a normal distribution results in a
+  standardized normal distribution (Z-distribution)
+- Central limit theorem: sample mean from any distribution will follow
+  normal distribution
+
+--
+
+.font2[
+With known $\mu$ and $\sigma$, we can make a direct comparison
+]
+
+???
+
+Ideal: by knowing the parameter $\mu$ and $\sigma$, we can directly compare our
+sample mean to its corresponding population
+
+--
+
+.font2[
+But...
+]
+
+--
+
+.font2[
+How if we don't know $\mu$?
+]
+
+???
+
+Solution: use its statistics $\bar{x}$ as an estimate
+
+---
+
+layout: true
+class: bg-main3
+
+# Mean difference
+
+---
+
+.font2[
+- Simply $\bar{x} - \mu_0$
+- But there bound to be errors in our samples
+- What do we do?
+- An adjustment to .amber[standard error]
+]
+
+???
+
+- One-sample mean difference test: compare mean from our data to previously
+  reported mean in the population
+
+---
+
+count: false
+
+\begin{align}
+SE &= \frac{\sigma}{\sqrt{n}} \tag{Standard Error} \\
+\\
+z  &= \frac{\bar{x} - \mu_0}{SE} \\
+   &= \frac{\bar{x} - \mu_0}{^{\sigma}/\tiny{\sqrt{n}}} \tag{One-sample Test}
+\end{align}
+
+???
+
+- $\mu_0$ is the expected (hypothesized) mean, often it is something we acquire
+  from previous publications
+- $\sigma$ is the **known** standard deviation in **population**
+
+--
+
+<br> <br>
+.font2[How do we get the p-value?]
+
+--
+
+(.amber[Hint:] Z-statistics follows the Z-distribution)
+
+???
+
+To get the p-value, we calculate acquired $z$ statistics as a quantile of the
+Z-distribution
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+.font2[
+
+In a population of third-year electrical engineering students, we know the
+.amber[average final score] of a particular course is .pink[70]. In measuring
+students' comprehension, UKRIDA has established a standardized examination with
+a .amber[standard deviation] of .pink[10]. We are interested to see whether
+students registered to this year course have different average, where 18
+students averagely scored 75 on the final exam.
+
+]
+
+---
+
+.font2[
+\begin{align}
+H_0 &: \bar{x} = \mu_0 \\
+H_a &: \bar{x} \neq \mu_0
+\end{align}
+]
+
+---
+
+count: false
+
+.font2[
+\begin{align}
+SE &= \frac{10}{\sqrt{18}} &= 2.36 \\
+z  &= \frac{75 - 70}{2.36} &= 2.12
+\end{align}
+]
+
+---
+
+layout: false
+class: bg-main3
+count: false
+
+# Where does it located in Z-distribution?
+
+```{r z.dist1, echo=FALSE}
+
+x <- seq(-3, 3, 0.01); y <- dnorm(x, 0, 1)
+tbl <- data.frame(x, y, color=ifelse(x==2.12, "blue", "gray50"), size=ifelse(x==2.12, 3, 0))
+z.dist <- ggplot(tbl, aes(x=x, y=y)) + geom_line() +
+	geom_point(color=tbl$color, size=tbl$size) +
+	labs(x="Measured values", y="Probability") +
+	theme_minimal()
+z.dist
+
+```
+
+---
+
+count: false
+class: bg-main3
+
+# Where is it relative to the significance value?
+
+```{r z.dist2, echo=FALSE}
+
+z.dist + geom_vline(xintercept=c(-1.96, 1.96), color="red", linetype=3, size=1.5)
+
+``` 
+
+---
+
+count: false
+class: bg-main3
+
+# What is the p-value?
+
+.font2[
+- Recall the hypothesis $H_a: \bar{x} \neq \mu_0$
+- We need to conduct a two-tailed test to determine the p-value
+- First we find the cummulative probability of $z$ which satisfies:
+
+$$P(Z \leqslant 2.12\ |\ \mu,\sigma): Z \sim N(0, 1)$$
+]
+
+--
+
+.font2[
+- Subtract $P(Z=z)$ from 1
+- Multiply by 2
+]
+
+--
+
+```{r z.dist3}
+2 * {1 - pnorm(2.12, 0, 1)}
+```
+
+---
+
+class: bg-main3
+
+# What do we learn?
+
+.font2[
+- Z-test requires the data to follow .amber[normal distribution]
+- We do not need to know the parameter $\mu \to$ We can hypothesize the value
+- But we need the parameter $\sigma$ to correctly compute $z$
+]
+
+---
+
+count: false
+class: bg-main3
+
+# Any hidden message?
+
+.font2[
+- Yes!
+- Z-test assumes normality
+- So we need to perform goodness of fit or normality test
+]
+
+--
+
+.font2[
+What if we do not know $\sigma$?
+]
+
+--
+
+.font2[We are unable to use the Z-distribution]
+
+--
+
+.font2[Solution: use Student's T-distribution]
+
+---
+
+layout: true
+class: bg-main3
+
+# Student's T-distribution
+
+---
+
+\begin{align}
+Let\ & X \sim t_\nu \tag{Notation} \\
+P(X=x) &= \frac{\Gamma \big( \frac{\nu+1}{2} \big)}{\sqrt{\nu \pi}\ \Gamma \big( \frac{\nu}{2} \big)} \bigg( 1 + \frac{x^2}{\nu} \bigg) \tag{PDF} \\
+\nu &= n - 1 \\
+\\
+Let\ & T \sim t_\nu \\
+T &= Z \sqrt{\frac{\nu}{V}} \tag{Relationship}
+\end{align}
+
+--
+
+.font2[
+- $T:$ T-distribution with $\nu$ degree of freedom
+- $Z:$ A standardized normal distribution
+- $V:$ A $\chi^2$ distribution with $\nu$ degree of freedom
+]
+
+???
+
+- Importance: Use in parametric mean difference between two groups
+- Student's T-distribution only depends on 1 parameter: $\nu$ degree of freedom
+- Degree of freedom is total subjects subtracted by 1
+
+---
+
+count: false
+
+```{r t.dist, echo=FALSE}
+
+x <- seq(-3, 3, 0.01)
+dof <- c(5, 10, 20)
+y <- lapply(dof, function(dof) dt(x, df=dof)) %>% unlist()
+tbl <- data.frame(x=rep(x, length(dof)), y=y, dof=factor(rep(dof-1, each=length(x)), levels=dof-1))
+
+ggplot(tbl, aes(x=x, y=y, color=dof)) + geom_line() + theme_minimal() +
+	labs(x="Measured values", y="Probability")
+
+```
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- .amber[One sample T-Test]
+- Unpaired T-Test
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# One sample T-Test
+
+.font2[
+- Similar to one sample Z-test
+- Applied to data with unknown $\sigma$
+- Use $s$ as an estimate of the population parameter
+
+$$t = \frac{\bar{x}-\mu}{^s \big/ \tiny{\sqrt{n}}}$$
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+```{r one.sample.t1}
+set.seed(1)
+x <- rnorm(20, mean=120, sd=20)
+```
+
+---
+
+```{r one.sample.t2}
+summary(x)
+sd(x)
+```
+
+---
+
+count: false
+
+.font2[
+- We let $x \sim N(120, 20)$
+- But our $\bar{x}$ is `r mean(x)`
+- With an $s$ of `r sd(x)`
+- And a $\nu$ of `r 20 - 1`
+- Does our sample differ from the population?
+]
+
+---
+
+count: false
+
+## Formulate the hypothesis
+
+.font2[
+\begin{align}
+H_0 &: \bar{x} = 120 \\
+H_a &: \bar{x} \neq 120
+\end{align}
+]
+
+---
+
+count: false
+
+## Determine the t-statistics
+
+.font2[
+$$t=\frac{\bar{x}-\mu}{^s \big/ \tiny{\sqrt{n}}}$$
+]
+
+```{r one.sample.t3}
+t <- {{mean(x) - 120} / {sd(x) / sqrt(20)}} %T>% print()
+```
+
+---
+
+layout: false
+count: false
+class: bg-main3
+
+## Locate $t$ statistics in the T-distribution
+
+```{r plt.one.sample1, echo=FALSE, fig.height=4}
+
+tbl.x <- seq(-3, 3, 0.001)
+tbl.y <- dt(tbl.x, df=19)
+color <- ifelse(round(tbl.x, 3)==round(t, 3), "blue", "grey50")
+size <- ifelse(round(tbl.x, 3)==round(t, 3), 3, 0)
+tbl <- data.frame(x=tbl.x, y=tbl.y, color, size)
+
+one.sample <- ggplot(tbl, aes(x=x, y=y)) + geom_point(color=color, size=size) + geom_line() +
+	theme_minimal() + labs(title="T-Distribution", x="T Statistics", y="Probability")
+one.sample
+
+```
+
+---
+
+count: false
+class: bg-main3
+
+## P-value in a one-tailed test
+
+```{r plt.one.sample2, echo=FALSE, fig.height=4}
+one.sample + geom_vline(xintercept=qt(0.95, df=19), linetype=3, size=1.5, color="red")
+```
+
+```{r one.sample.t4}
+1 - pt(t, df=19)
+```
+
+---
+
+count: false
+class: bg-main3
+
+## P-value in a two-tailed test
+
+```{r plt.one.sample3, echo=FALSE, fig.height=4}
+one.sample + geom_vline(xintercept=c(qt(0.025, df=19), qt(0.975, df=19)), linetype=3, size=1.5, color="red")
+```
+
+```{r one.sample.t5}
+2 * {1 - pt(t, df=19)}
+```
+
+---
+
+count: false
+class: bg-main3
+
+# How is the result in `R`?
+
+```{r one.sample.t6}
+t.test(x, mu=120)
+```
+
+--
+
+## Conclusion
+
+- Fail to reject $H_0$
+- $\bar{x} = \mu_0 = 120$
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- .amber[Unpaired T-Test]
+- Paired T-Test
+- Effect size
+]]
+
+---
+
+class: bg-main3
+
+# Unpaired T-Test
+
+.font2[
+- T-Test conducted on two sample groups
+- Aims to determine significance on the mean difference
+- Types: .amber[Student's] and .amber[Welch's] T-Test
+- Assumes .amber[normality] *or* a large sample size
+- Also robust in non-normal data, .pink[*unless*] highly-skewed or have outliers
+]
+
+???
+
+- Problem with robustness: we often use simulation with specified parameters
+- But we don't know such parameters in real-world data
+- It's more acceptable when we don't violate the normality assumption
+
+--
+
+.font2[
+\begin{align}
+H_0 &: \bar{x}_1 - \bar{x}_2 = d \\
+H_a &: \bar{x}_1 - \bar{x}_2 \neq d \\
+d &= \mu_1 - \mu_2 = 0
+\end{align}
+]
+
+???
+
+In a unique case, we may find $d \neq 0$
+
+---
+
+class: bg-main3
+
+# Student's T-Test
+
+.font2[
+- T-Test with a pooled variance
+- .amber[Requires:] Equal variance in two samples (tested with Levene's test)
+- Uses pooled variance $\to$ compute statistics and the degree of freedom
+]
+
+--
+
+\begin{align}
+t &= \frac{\bar{x}_1 - \bar{x}_2 - d}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \tag{Statistics} \\
+s_p &= \sqrt{\frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{\nu}} \tag{Pooled variance} \\
+\nu &= n_1 + n_2 - 2 \tag{Degree of freedom}
+\end{align}
+
+--
+
+.font2[Often, our data violate the equal variance assumption]
+
+.font2[.amber[Solution:] Welch's T-Test]
+
+---
+
+class: bg-main3
+
+# Welch's T-Test
+
+\begin{align}
+t &= \frac{\bar{x}_1 - \bar{x}_2 - d} {\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \tag{Statistics} \\
+\nu &= \frac{(n_1-1)(n_2-1)}{(n_2-1)C^2 + (1-C^2)(n_1-1)} \tag{Degree of freedom} \\
+\\
+C &= \frac{\frac{s_1^2}{n_1}}{\frac{s_1^2}{n_1} \frac{s_2^2}{n_2}}
+\end{align}
+
+--
+
+.font2[
+For the record:
+- Still assumes .amber[normality]!
+- Not-normally distributed data still accepted .pink[if] the sample size is .amber[large enough]
+- How large is large enough? Re-check previous discussions on the .amber[CLT]
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+Suppose we are collecting data on body height. Our population of interest will
+be students registered in UKRIDA, where we categorize sex as female and male.
+We acquire a normally distributed data from both sexes, where:
+
+- $female \sim N(155, 15)$
+- $male \sim N(170, 12)$
+
+We have a sample of 25 females and 30 males, and would like conduct a
+hypothesis test on mean difference.
+]
+
+---
+
+count: false
+
+```{r two.sample.t1}
+
+set.seed(5)
+tbl <- data.frame(
+	"height" = c(rnorm(30, 170, 8), rnorm(25, 155, 16)),
+	"sex" = c(rep("male", 30), rep("female", 25))
+)
+
+tapply(tbl$height, tbl$sex, summary)
+tapply(tbl$height, tbl$sex, sd)
+```
+
+---
+
+count: false
+
+```{r two.sample.t2, echo=FALSE}
+
+ggplot(tbl, aes(x=height, y=..density.., color=sex)) +
+	geom_histogram(alpha=0.2, binwidth=2) + geom_density() +
+	theme_minimal()
+
+```
+
+???
+
+Does it follow the normal distribution?
+
+---
+
+count: false
+
+```{r two.sample.t3}
+tapply(tbl$height, tbl$sex, shapiro.test)
+```
+
+???
+
+Yes, each group follows a normal distribution
+
+---
+
+```{r two.sample.t4}
+car::leveneTest(tbl$height ~ tbl$sex)
+```
+
+--
+
+.font2[Levene's test suggests heterogenous variance (hint: significant p-value)]
+
+---
+
+```{r two.sample.t5}
+t.test(height ~ sex, data=tbl, var.equal=FALSE)
+```
+
+.font2[Perform Welch's T-Test since sampled variances are not equal]
+
+---
+
+```{r two.sample.t6}
+t.test(height ~ sex, data=tbl, var.equal=TRUE)
+```
+
+.font2[Student's T-Test, to demonstrate type-I error inflation (hint: look at the p-value)]
+
+???
+
+- The p-value is *much lower* compared to Welch's T-Test
+- A low p-value does not mean a bad outcome per se, but we need to be cautious
+- Especially when we have violation on required assumptions
+- Always be wary of statistical error!
+
+---
+
+```{r two.sample.t7, echo=FALSE}
+
+plt.1 <- ggviolin(
+	tbl, x="sex", y="height", color="#5E81AC", fill="#5E81AC", width=0.5,
+	add="mean_ci", add.params=list(color="white"),
+	title="Welch's Method"
+) + stat_compare_means(label.y=210, method="t.test") + theme_minimal()
+
+plt.2 <- ggboxplot(
+	tbl, x="sex", y="height", color="#5E81AC", fill="#5E81AC", width=0.4,
+	add="dotplot", add.params=list(color="#3B4252", binwidth=1),
+	title="Student's Method"
+) + stat_compare_means(label.y=210, method="t.test", method.args=list(var.equal=TRUE)) + theme_minimal()
+
+ggarrange(plt.1, plt.2, ncol=2, common.legend=TRUE)
+
+```
+
+???
+
+- Visualizing your findings is important
+- Both figures give similar information, but conveyed in different fashions
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- Unpaired T-Test
+- .amber[Paired T-Test]
+- Effect size
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Paired T-Test
+
+.font2[
+- Previous analysis implicitly assumes .pink[independence]
+- Some observations may violate such an assumption
+- Cases:
+  - Difference between multiple measurements
+  - Probability events where each instance influence another
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Measuring mean differences
+
+---
+
+.font2[
+- Two-sample T-Test does not take into account difference within subjects
+- In fact, it is a violation of its stringent assumption
+- To measure difference within same subjects, we need to reduce the complexity
+]
+
+---
+
+count: false
+
+.font2[
+- Suppose $\mu_1$ and $\mu_2$ represent measurement in $t_1$ and $t_2$
+- Both measures represent same subject (within comparison)
+- We can calculate the difference between both samples:
+
+$$\mu_d = \mu_1 - \mu_2$$
+]
+
+---
+
+count: false
+
+.font2[
+- Now we only need to take into account one sample differences
+- We hypothesize:
+
+\begin{align}
+H_0 &: \mu_d = 0 \\
+H_a &: \mu_d \neq 0
+\end{align}
+]
+
+--
+
+.font2[
+- Sounds familiar?
+- Because it is!
+- We can apply .amber[one-sample T-Test] to $\mu_d$
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+.font2[
+
+In the current investigation, we are looking for the effect of a certain
+anti-hipertensive drug. First we measure the blood pressure baseline, then
+prescribe the drug to all subjects. Then, we re-measure the blood pressure
+after one month. Each subject has a unique identifier, so we can specify mean
+differences within paired samples. Suppose we have the following scenario in 30
+sampled subjects:
+
+- $X_1 \sim N(140, 12)$
+- $X_2 \sim N(130, 17)$
+
+]
+
+---
+
+count: false
+
+.font2.center[
+Set our hypotheses:
+
+\begin{align}
+H_0 &: \bar{x}_d = 0 \\
+H_a &: \bar{x}_d \neq 0
+\end{align}
+]
+
+---
+
+count: false
+
+```{r paired.t1}
+
+set.seed(1)
+tbl <- data.frame(
+	"bp" = c(rnorm(30, 140, 12), rnorm(30, 133, 17)),
+	"time" = c(rep("Before", 30), rep("After", 30)) %>%
+		factor(levels=c("Before", "After"))
+)
+
+# Measure the mean of mean difference
+md <- with(tbl, bp[time=="Before"] - bp[time=="After"])
+
+# Calculate t-statistics
+t <- {mean(md)} / {sd(md) / sqrt(30)} %T>% print()
+
+# Obtain p-value for a two-sided test
+2 * {1 - pt(t, df=29)}
+
+```
+
+---
+
+count: false
+
+```{r paired.t2}
+# Comparison to built-in one-sample T-Test
+t.test(md, mu=0)
+```
+
+---
+
+count: false
+
+```{r paired.t3}
+# Comparison to built-in paired T-Test
+t.test(bp ~ time, data=tbl, paired=TRUE)
+```
+
+---
+
+layout: false
+class: bg-main3
+
+# Choosing an .amber[appropriate] statistical test
+
+.font2[
+- Both T-Test and Z-Test assume normality
+]
+
+--
+
+.font2[
+- One-sample test:
+  - Known $\sigma \to$ use Z-Test
+  - Unknown $\sigma \to$ use one-sample T-Test
+]
+
+--
+
+.font2[
+- Two-sample test $\to$ do Levene's test
+  - Equal variance: Student's method (pooled variance)
+  - Unequal variance: Welch's method
+]
+
+--
+
+.font2[
+- Paired T-Test: Basically one-sample T-Test on sampled differences
+]
+
+---
+
+template: overview
+
+.bg-main1.column[.vmiddle.content[
+- Mean difference
+- One sample T-Test
+- Unpaired T-Test
+- Paired T-Test
+- .amber[Effect size]
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Effect size
+
+.font2[
+- Concept recall: statistical power
+- Related topics: sample size and significance level
+]
+
+\begin{align}
+d &= \frac{\bar{x}_1 - \bar{x}_2}{s_p} \tag{Cohen's D} \\
+s_p &= \sqrt{\frac{(s_1^2 + s_2^2)}{2}} \tag{Pooled SD}
+\end{align}
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r paired.t1}
+```
+
+---
+
+count: false
+
+```{r cohen.1}
+# Calculate pooled standard deviation
+sp <- sqrt({with(tbl,
+	tapply(bp, time, var, simplify=FALSE)) %>% {do.call(add, .)}
+} / 2) %T>% print()
+
+# Measure Cohen's distance
+{with(tbl,
+	tapply(bp, time, mean, simplify=FALSE)) %>% {do.call(subtract, .)}
+} / sp
+```
+
+---
+
+count: false
+
+```{r cohen.2}
+# Calculate power using the `psych` package
+d <- psych::cohen.d(tbl ~ time) %T>% print()
+```
+
+---
+
+```{r power}
+# Power analysis using previous information
+pwr::pwr.t.test(n=30, d=d$cohen.d[[2]], sig.level=0.05, type="paired")
+```
+
+---
+
+layout: false
+count: false
+class: bg-main1 center middle font5 hide-slide-number
+
+.amber[Query?]

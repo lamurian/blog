@@ -1,0 +1,4 @@
+http://lamurian.rbind.io/*              https://lamurian.rbind.io/:splat                301!
+https://lamurian.netlify.com/*          https://lamurian.rbind.io/:splat                301!
+https://lamurian.rbind.io/post/*        https://lamurian.rbind.io/blog/:splat           301!
+https://lamurian.rbind.io/opus/*        https://lamurian.rbind.io/publication/:splat    301!

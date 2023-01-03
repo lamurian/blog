@@ -1,0 +1,406 @@
+---
+title: "Non-parametric: Differences in Multiple Groups"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      hightlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "ggplot2", "kableExtra")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE, error=FALSE,
+	dev="png", dpi=300, fig.width=10, fig.height=5, out.width="100%"
+)
+options(digits=3)
+```
+
+count: false
+class: bg-main1 hide-slide-number split-70
+
+.column[.right.vmiddle.content[
+.font3[.amber[Differences] in Multiple Groups]
+]]
+
+.bg-main4.column[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+name: overview
+layout: true
+class: bg-main4 middle split-30 hide-slide-number
+
+.column[.vmiddle.right.content[
+.amber.font3[Overview]
+]]
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- .amber[Unpaired test]
+- Paired test
+- Final thoughts
+- Conceptual remarks
+- Case examples
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Unpaired test
+
+.font2[
+- Kruskal-Wallis H Test
+- Differences in multiple groups
+- Analogous to one-way ANOVA (.amber[not] its alternative!)
+]
+
+???
+
+- ANOVA is not sensitive to non-normality, unless the data is highly skewed
+- Kruskal-Wallis is often overused in that regard
+- Kruskal-Wallis is somewhat limited as you cannot assign multiple independent
+  variables nor adjusting for covariates
+
+---
+
+count: false
+class: bg-main3
+
+# Assumptions and limitations
+
+.font2[
+- I.I.D
+- Does not assume normality
+- Requires homogeneous intergroup variances
+]
+
+???
+
+- Just like ANOVA, Kruskal-Wallis requires a homogeneous intergroup variances
+- When the data presents with a heterogeneous intergroup variance,
+  Kruskal-Wallis performs worse than ANOVA
+- In such a case, please consider using Welch's ANOVA (`oneway.test` in `R`)
+- Welch's method is not available for factorial ANOVA
+
+---
+
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Pool and sort all data element
+- Assign rank to sorted data
+- Adjust ranks on tied data
+- Calculate H statistics
+]
+
+--
+
+.font2[
+$$ H = \left[ \frac{12}{\color{orange}{n}(\color{orange}{n}+1)} \displaystyle \sum_{i=1}^\color{red}{k} \frac{\color{yellow}{R}_i^2}{\color{orange}{n}_i} \right] - 3 (\color{orange}{n}+1) $$
+]
+
+???
+
+- Only need to understand three arguments
+- $n$: Total observed value
+- $k$: Total number of groups
+- $R$: Rank from pooled data
+
+--
+
+.font2[
+$$H \sim \chi^2(k-1)$$
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r unpaired1}
+# CO2 dataset in R
+str(DNase)
+```
+
+???
+
+- We will use `DNase` dataset
+- It is a result obtained from an ELISA assay 
+- `Run`: The assay run
+- `conc`: Protein concentration
+- `density`: Optical density in the assay
+
+---
+
+count: false
+
+```{r unpaired2}
+with(DNase, tapply(density, Run, shapiro.test)) %>%
+	lapply(broom::tidy) %>% lapply(data.frame) %>% {do.call(rbind, .)} %>%
+	knitr::kable() %>% kable_minimal()
+```
+
+---
+
+count: false
+
+```{r unpaired3}
+with(DNase, car::leveneTest(conc, Run))
+```
+
+---
+
+count: false
+
+```{r unpaired4}
+kruskal.test(conc ~ Run, data=DNase)
+rstatix::kruskal_effsize(conc ~ Run, data=DNase)
+```
+
+---
+
+count: false
+
+```{r unpaired5}
+dunn.test::dunn.test(DNase$conc, DNase$Run)
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Unpaired test
+- .amber[Paired test]
+- Final thoughts
+- Conceptual remarks
+- Case examples
+]]
+
+---
+
+layout: false
+class: bg-main3
+
+# Paired test
+
+.font2[
+- Analogous to repeated measure ANOVA
+- Calculate .amber[*within*] subject differences
+- Compare .amber[*between*] group differences  
+]
+
+---
+
+class: bg-main3
+
+# Procedure
+
+.font2[
+- Rank observation in the same subjects
+- Sum all ranks within the same group
+- Calculate the statistics
+]
+
+--
+
+.font2[
+$$ Q = \left[ \frac{12 \color{red}{N}}{\color{red}{N} \color{yellow}{k} ( \color{yellow}{k}+1)} \displaystyle \sum_{i=1}^{\color{yellow}{k}} \color{orange}{R}_i^2 \right] - 3 \color{red}{N}( \color{yellow}{k}+1) $$
+]
+
+???
+
+- $N$: Number of rows (block)
+- $k$: Number of columns (treatment / repetition)
+- $R$: Ranked values
+
+--
+
+.font2[
+$$Q \sim \chi^2(k-1)$$
+]
+
+---
+
+layout: true
+class: bg-main3
+
+# Example, please?
+
+---
+
+```{r paired1}
+str(warpbreaks)
+```
+
+---
+
+count: false
+
+```{r paired2}
+wp <- aggregate(warpbreaks$breaks,
+	by = list(
+		w = warpbreaks$wool,
+		t = warpbreaks$tension
+	), FUN = mean
+)
+friedman.test(x ~ w | t, data=wp)
+rstatix::friedman_effsize(x ~ w | t, data=wp)
+```
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Unpaired test
+- Paired test
+- .amber[Final thoughts]
+- Conceptual remarks
+- Case examples
+]]
+
+???
+
+- We have learnt most of the basics for statistical test, both in parametric
+  and non-parametric approaches
+- We may need to contemplate what we have learnt so far
+
+---
+
+layout: false
+class: bg-main3
+
+# Excerpts on non-parametric test
+
+.font2[
+- Limited if compared to parametric tests
+- Whenever possible, use parametric tests
+- However, the non-parametric test is better in ordinal data
+]
+
+???
+
+- In the case of having an ordinal data as your dependent variable, parametric
+  test is practically unusable
+- We use parametric tests to handle numeric data
+
+---
+
+class: bg-main3
+
+# Parametric test with non-normal data?
+
+.font2[
+- You may consider this approach
+- Need a substantially large sample size
+- Please be careful with skewed data
+- .amber[Homogeneity] of intergroup variances is an important assumption!
+]
+
+---
+
+class: bg-main3
+
+# Further analysis after ANOVA
+
+.font2[
+- Post-hoc analysis is a must
+- ANOVA is an explanatory statistical model
+- Residual analysis to test model goodness of fit
+- Assumption:
+  - .amber[Residual] normality
+  - Homogeneity of .amber[residual] variances
+]
+
+???
+
+- In residual analyses, we need to satisfy both assumptions
+- You can check normality using a QQ-plot or statistical test
+- Homogeneous residual variance is homoscedasticity
+- Test for homoscedasticity: Breusch-Pagan or Harrison-McCabe test
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Unpaired test
+- Paired test
+- Final thoughts
+- .amber[Conceptual remarks]
+- Case examples
+]]
+
+---
+
+class: bg-main3
+
+# Conceptual remarks
+
+.font2[
+- Distribution: discrete and continuous
+- Hypotheses: $H_0$ and $H_1$
+- Statistical tests
+- Independent and dependent variables
+]
+
+???
+
+- Mention about binomial, Poisson, normal, and $\chi^2$ distribution
+- Explain more on differences between independent and dependent variables
+
+---
+
+class: bg-main3
+
+# What test should we use?
+
+.font2[
+- Categoric DV and categoric IV
+- Numeric DV and categoric IV (2 groups)
+- Numeric DV and categoric IV (>2 groups)
+]
+
+???
+
+- How about numeric DV and numeric IV?
+- And how if we have categoric DV and numeric IV?
+
+---
+
+template: overview
+count: false
+
+.bg-main1.column[.vmiddle.content[
+- Unpaired test
+- Paired test
+- Final thoughts
+- Conceptual remarks
+- .amber[Case examples]
+]]
+

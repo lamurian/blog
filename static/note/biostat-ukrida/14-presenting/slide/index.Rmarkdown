@@ -1,0 +1,145 @@
+---
+title: "Quizes"
+author: Aly Lamuri
+output:
+  xaringan::moon_reader:
+    css: ["shinobi", "ninjutsu"]
+    seal: false
+    self_contained: false
+    nature:
+      ratio: "16:9"
+      countIncrementalSlides: false
+      highlightLines: true
+---
+
+count: false
+class: bg-main1 split-70 hide-slide-number
+
+```{r init, echo=FALSE}
+pkgs <- c("magrittr", "kableExtra", "ggplot2", "ggpubr")
+pkgs.load <- sapply(pkgs, library, character.only=TRUE)
+knitr::opts_chunk$set(echo=T, eval=T, message=F, warning=F, error=F,
+	fig.width=10, fig.height=6, out.width="90%", dev="png", dpi=300
+)
+options(digits=2)
+```
+
+.column[.vmiddle.right.content[
+.font3[.amber[Quizes] on Biostatistics]
+]]
+
+.column.bg-main4[.vmiddle.content[
+.amber[Aly Lamuri]  
+Indonesia Medical Education and Research Institute
+]]
+
+---
+
+class: bg-main3
+
+.font2[
+# Question 1
+
+Suppose we are collecting data from a group of student. The average height of
+.amber[10] students is .amber[170] cm. If we were to omit two entries whose
+height $h = 170$, what is the current average of our data?
+]
+
+--
+
+.font2[
+Recall: $\mu = \frac{1}{n} \displaystyle \sum_{i=1}^n x_i$
+]
+
+???
+
+Clue:
+- $\mu < 170$
+- $\mu = 170$
+- $\mu > 170$
+
+---
+
+class: bg-main3
+
+.font2[
+# Question 2
+
+How do we best describe the relation of power and statistical error?
+]
+
+--
+
+.font2[
+Recall: $\alpha$ and $\beta$ in the probability distribution
+]
+
+???
+
+Clue:
+- Power is $1-\beta$
+- Type-I statistical error is $1 - \alpha$
+- Type-II statistical error is $\beta$
+
+---
+
+class: bg-main3
+
+.font2[
+# Question 3
+
+How should we interpret the *p*-value?
+]
+
+--
+
+.font2[
+Recall: *p*-value as the probability of correctly accepting the $H_0$
+]
+
+---
+
+class: bg-main3
+
+.font2[
+# Question 4
+
+Suppose we have a nominal data with .amber[two] categories as our independent
+variable (IV), and another nominal data with yet also .amber[two] categories as
+our dependent variable (DV). Assume both data are I.I.D (.amber[unpaired]),
+briefly explain what test we could consider and why.
+]
+
+--
+
+.font2[
+Recall:
+- Pearson's $\chi^2$
+- Fisher's exact test
+]
+
+???
+
+## Further question!
+
+- When and why should we use a binomial test?
+- What to do with paired data?
+
+---
+
+class: bg-main3
+
+.font2[
+# Question 5
+
+Kindly explain about parametric and non-parametric mean difference test.
+]
+
+--
+
+.font2[
+- T-Test: one sample, paired and unpaired
+- Wilcoxon test: one sample, paired and unpaired
+- ANOVA
+- Kruskwal-Wallis and Friedman
+]
